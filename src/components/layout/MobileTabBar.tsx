@@ -19,7 +19,7 @@ const tab =
   'grid size-11 place-items-center rounded-full text-text-secondary transition-colors hover:text-text-accent data-[status=active]:text-primary'
 
 const menuLink =
-  'flex min-h-11 items-center gap-3 rounded-[var(--radius-control)] px-3 text-body-md text-text-primary hover:bg-secondary data-[status=active]:font-bold data-[status=active]:text-text-accent'
+  'flex min-h-11 items-center gap-3 rounded-control px-3 text-body-md text-text-primary hover:bg-secondary data-[status=active]:font-bold data-[status=active]:text-text-accent'
 
 function MobileMenu() {
   const [open, setOpen] = useState(false)
@@ -38,7 +38,7 @@ function MobileMenu() {
           <Menu aria-hidden="true" className="size-6" strokeWidth={2} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-[var(--radius-panel)] border-line bg-card px-5 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+      <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-panel border-line bg-card px-5 pt-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
         <SheetHeader className="p-0">
           <SheetTitle className="text-body-lg font-bold tracking-figma text-text-primary">KURIO</SheetTitle>
           <SheetDescription className="text-caption text-text-secondary">Menu de navegação</SheetDescription>
@@ -46,17 +46,17 @@ function MobileMenu() {
         <nav aria-label="Menu">
           <ul className="flex flex-col gap-1">
             <li>
-              <Link to="/" activeOptions={{ exact: true, includeHash: true }} className={menuLink} onClick={close}>
+              <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
                 <House aria-hidden="true" className="size-5" /> Início
               </Link>
             </li>
             <li>
-              <Link to="/" hash="mercado" activeOptions={{ exact: true, includeHash: true }} className={menuLink} onClick={close}>
+              <Link to="/" hash="mercado" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
                 <ShoppingCart aria-hidden="true" className="size-5" /> Mercado
               </Link>
             </li>
             <li>
-              <Link to="/" hash="busca" activeOptions={{ exact: true, includeHash: true }} className={menuLink} onClick={close}>
+              <Link to="/" hash="busca" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
                 <Search aria-hidden="true" className="size-5" /> Buscar NFTs
               </Link>
             </li>
@@ -116,10 +116,10 @@ export function MobileTabBar() {
   const cart = useCart()
   return (
     <nav aria-label="Navegação inferior" className="fixed inset-x-0 bottom-0 z-40 md:hidden">
-      <div className="relative mx-auto h-tabbar max-w-[480px] rounded-t-[var(--radius-panel)] bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgb(0_0_0/0.35)]">
+      <div className="relative mx-auto h-tabbar max-w-[480px] rounded-t-panel bg-card pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_24px_rgb(0_0_0/0.35)]">
         <ul className="grid h-full grid-cols-5 items-center px-4">
           <li className="grid place-items-center">
-            <Link to="/" activeOptions={{ exact: true, includeHash: true }} aria-label="Início" className={tab}>
+            <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} aria-label="Início" className={tab}>
               <House aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.5} />
             </Link>
           </li>

@@ -81,15 +81,15 @@ export function SiteFooter() {
             <section
               key={h.letter}
               aria-labelledby={`footer-hl-${i}`}
-              className={i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4'}
+              className={`grid grid-cols-[3rem_1fr] gap-x-4 md:block ${i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4'}`}
             >
-              <span aria-hidden="true" className="grid size-[74px] place-items-center rounded-full bg-primary text-heading font-bold text-primary-foreground">
+              <span aria-hidden="true" className="row-span-2 grid size-12 place-items-center rounded-full bg-primary text-body-lg font-bold text-primary-foreground md:size-[74px] md:text-heading">
                 {h.letter}
               </span>
-              <h2 id={`footer-hl-${i}`} className="mt-3 text-[17px] leading-6 font-bold text-text-primary">
+              <h2 id={`footer-hl-${i}`} className="text-[17px] leading-6 font-bold text-text-primary md:mt-3">
                 {h.title}
               </h2>
-              <p className="mt-2 text-body-sm text-text-secondary">{h.text}</p>
+              <p className="mt-1 text-body-sm text-text-secondary md:mt-2">{h.text}</p>
             </section>
           ))}
           <section aria-labelledby="footer-newsletter" className="lg:border-l lg:border-primary lg:pl-4">
@@ -105,12 +105,12 @@ export function SiteFooter() {
                 type="email"
                 disabled
                 placeholder="digite seu e-mail..."
-                className="h-10 min-w-0 flex-1 rounded-l-[var(--radius-control)] bg-secondary px-3 text-body text-text-primary placeholder:text-text-secondary disabled:cursor-not-allowed"
+                className="h-10 min-w-0 flex-1 rounded-l-control bg-secondary px-3 text-body text-text-primary placeholder:text-text-secondary disabled:cursor-not-allowed"
               />
               <button
                 type="submit"
                 disabled
-                className="h-10 rounded-r-[var(--radius-control)] bg-primary px-4 text-body-lg font-bold text-primary-foreground disabled:cursor-not-allowed"
+                className="h-10 rounded-r-control bg-primary px-4 text-body-lg font-bold text-primary-foreground disabled:cursor-not-allowed"
               >
                 Enviar
               </button>
@@ -136,7 +136,7 @@ export function SiteFooter() {
             <h2 id="footer-profile" className={headingClass}>
               Meu perfil
             </h2>
-            <ul className="mt-2 flex flex-col gap-2.5">
+            <ul className="mt-2 flex flex-col gap-2">
               {profileLinks.map((l) => (
                 <li key={l.label}>
                   <FooterItem link={l} />
@@ -148,7 +148,7 @@ export function SiteFooter() {
             <h2 id="footer-help" className={headingClass}>
               Central de ajuda
             </h2>
-            <ul className="mt-2 flex flex-col gap-2.5">
+            <ul className="mt-2 flex flex-col gap-2">
               {helpLinks.map((l) => (
                 <li key={l.label}>
                   <FooterItem link={l} />
@@ -160,7 +160,7 @@ export function SiteFooter() {
             <h2 id="footer-collections" className={headingClass}>
               Coleções
             </h2>
-            <ul className="mt-2 flex flex-col gap-2.5">
+            <ul className="mt-2 flex flex-col gap-2">
               {collectionLinks.map((c) => (
                 <li key={c.category}>
                   <Link to="/" search={{ categories: [c.category] }} className={linkClass}>
@@ -179,7 +179,7 @@ export function SiteFooter() {
                     to="/em-breve"
                     search={{ secao: 'redes-sociais' }}
                     aria-label={`${label} (em breve)`}
-                    className="grid size-8 place-items-center rounded-[var(--radius-control)] border border-primary text-primary hover:bg-secondary"
+                    className="grid size-8 place-items-center rounded-control border border-primary text-primary hover:bg-secondary"
                   >
                     <Icon />
                   </Link>
@@ -187,7 +187,7 @@ export function SiteFooter() {
               ))}
             </ul>
             <h2 className={`${headingClass} mt-6`}>Carteiras compatíveis</h2>
-            <p className="mt-2 inline-block rounded-[var(--radius-control)] border border-line-soft bg-surface-dark px-2.5 py-1.5 text-tiny font-bold tracking-wide text-primary">
+            <p className="mt-2 inline-block rounded-control border border-line-soft bg-surface-dark px-2.5 py-1.5 text-tiny font-bold tracking-wide text-primary">
               METAMASK · WALLETCONNECT · COINBASE
             </p>
           </div>

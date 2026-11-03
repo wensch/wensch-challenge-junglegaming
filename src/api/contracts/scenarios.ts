@@ -208,10 +208,16 @@ export function isScenarioName(v: string): v is ScenarioName {
  * Declared here so tests type their calls without importing src/mocks.
  */
 export interface MockControl {
-  reset(): Promise<void>
+  /** Restores the seed and selects `scenarios` (default: `['default']`). v1.1.0: optional argument. */
+  reset(scenarios?: ScenarioName[]): Promise<void>
   setScenarios(names: ScenarioName[]): void
   getScenarios(): ScenarioName[]
-  /** Server-side Socket.IO emit (frames go through socket.io-client). `userId` targets one user's sockets. */
+  /**
+   * Server-side Socket.IO emit (frames go through socket.io-client). `userId` targets one user's sockets.
+   * `payload` is expected to be the FULL envelope of events.ts (`RealtimeEvent`: id, type, resource,
+   * version, userId?, occurredAt, data). It stays `unknown` on purpose so tests can also send
+   * malformed payloads and assert the client drops them.
+   */
   emit(event: 'nft.updated' | 'order.updated', payload: unknown, opts?: { userId?: string }): void
   /** Mutate catalog state and broadcast the matching nft.updated (keeps REST and events consistent). */
   updateNft(nftId: string, patch: { price?: string; editions?: { id: string; price?: string; available?: number }[] }): void

@@ -52,7 +52,7 @@ export function cartLabel(count: number) {
 }
 
 const navLink =
-  'relative flex h-full items-start pt-0.5 text-body-md font-medium text-text-primary transition-colors hover:text-text-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-primary after:opacity-0 data-[status=active]:font-bold data-[status=active]:text-text-accent data-[status=active]:after:opacity-100'
+  'relative flex h-full items-start pt-0.5 text-body-md font-normal text-text-primary transition-colors hover:text-text-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-primary after:opacity-0 data-[status=active]:font-bold data-[status=active]:text-text-accent data-[status=active]:after:opacity-100'
 
 function AccountMenu() {
   const session = useSession()
@@ -62,7 +62,7 @@ function AccountMenu() {
 
   if (!session.data) {
     return (
-      <Button asChild className="h-[35px] w-[100px] gap-1.5 rounded-[var(--radius-control)] px-2.5 text-body-md font-medium">
+      <Button asChild className="h-[35px] w-[100px] gap-1.5 rounded-control px-2.5 text-body-md font-medium">
         <Link to="/login">
           <LogIn aria-hidden="true" className="size-5" strokeWidth={1.75} />
           Entrar
@@ -75,7 +75,7 @@ function AccountMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-[35px] max-w-[180px] gap-1.5 rounded-[var(--radius-control)] border-primary px-2.5 text-body-sm">
+        <Button variant="outline" className="h-[35px] max-w-[180px] gap-1.5 rounded-control border-primary px-2.5 text-body-sm">
           <User aria-hidden="true" className="size-5" strokeWidth={1.75} />
           <span className="truncate">{user.displayName}</span>
           <span className="sr-only">: abrir menu da conta</span>
@@ -123,12 +123,12 @@ export function SiteHeader() {
           <nav aria-label="Principal" className="absolute inset-y-0 left-1/2 -translate-x-1/2">
             <ul className="flex h-full gap-6 lg:gap-10">
               <li>
-                <Link to="/" activeOptions={{ exact: true, includeHash: true }} className={navLink}>
+                <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={navLink}>
                   Início
                 </Link>
               </li>
               <li>
-                <Link to="/" hash="mercado" activeOptions={{ exact: true, includeHash: true }} className={navLink}>
+                <Link to="/" hash="mercado" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={navLink}>
                   Mercado
                 </Link>
               </li>
@@ -146,10 +146,10 @@ export function SiteHeader() {
           </nav>
 
           <div className="ml-auto flex h-[35px] items-center gap-6">
-            <Link to="/" hash="busca" aria-label="Buscar NFTs" className="grid size-9 place-items-center rounded-[var(--radius-control)] text-text-primary hover:text-text-accent">
+            <Link to="/" hash="busca" aria-label="Buscar NFTs" className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
               <Search aria-hidden="true" className="size-6" strokeWidth={1.75} />
             </Link>
-            <Link to="/cart" aria-label={cartLabel(cart.data?.itemCount ?? 0)} className="grid size-9 place-items-center rounded-[var(--radius-control)] text-text-primary hover:text-text-accent">
+            <Link to="/cart" aria-label={cartLabel(cart.data?.itemCount ?? 0)} className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
               <CartBadgeIcon />
             </Link>
             <AccountMenu />

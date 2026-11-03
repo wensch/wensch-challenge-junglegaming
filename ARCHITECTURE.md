@@ -1,7 +1,7 @@
 # ARCHITECTURE — Marketplace de NFTs (KURIO)
 
 Requisitos oficiais: [docs/challenge.md](docs/challenge.md). Este documento registra contratos, políticas e decisões **no momento em que são tomadas**.
-Contratos: **v1.0.0, congelados** em 2026-11-03 (`src/api/contracts`). Qualquer mudança exige entrada em [Changelog de contratos](#14-changelog-de-contratos).
+Contratos: **v1.1.0, congelados** (v1.0.0 em 2026-11-03; v1.1.0 em 2026-11-03, F1c) (`src/api/contracts`). Qualquer mudança exige entrada em [Changelog de contratos](#14-changelog-de-contratos).
 
 ## 1. Camadas
 
@@ -57,17 +57,18 @@ Base: `VITE_API_URL` (`/api`). Tabela tipada em `src/api/contracts/endpoints.ts`
 | | getOrder | GET `/orders/:orderId` | — | `Order` | NOT_FOUND, FORBIDDEN |
 | | listOrders | GET `/orders?status=` | — | `{ items: Order[] }` | — |
 | Perfil | getProfile | GET `/profile` | — | `Profile` | — |
-| | updateProfile | PATCH `/profile` | `UpdateProfileRequest` (+ `version`) | `Profile` | VALIDATION, EMAIL_TAKEN |
+| | updateProfile | PATCH `/profile` | `UpdateProfileRequest` (+ `version`) | `Profile` | VALIDATION, EMAIL_TAKEN, CONFLICT_VERSION |
 | | uploadAvatar | PUT `/profile/avatar` | multipart `file` (PNG/JPEG/WebP ≤ 2 MB) | `Profile` | VALIDATION |
 | | removeAvatar | DELETE `/profile/avatar` | — | `Profile` | — |
 | | changePassword | POST `/profile/password` | `{ currentPassword, newPassword, confirmPassword }` | 204 | VALIDATION (`currentPassword` incorreta vem em fieldErrors) |
 | Carteiras | listWallets | GET `/wallets` | — | `{ primary, secondary }` | — |
 | | createWallet | POST `/wallets` | `CreateWalletRequest` (slot) | `Wallet` (201) | VALIDATION (inclui slot ocupado) |
-| | updateWallet | PATCH `/wallets/:walletId` | `UpdateWalletRequest` (+ `version`) | `Wallet` | VALIDATION, NOT_FOUND, FORBIDDEN |
+| | updateWallet | PATCH `/wallets/:walletId` | `UpdateWalletRequest` (+ `version`) | `Wallet` | VALIDATION, NOT_FOUND, FORBIDDEN, CONFLICT_VERSION |
 | | connectWallet | POST `/wallets/:walletId/connect` | `{ network }` | `WalletConnection` (`connected` \| `rejected`) | NOT_FOUND, FORBIDDEN |
 | | disconnectWallet | DELETE `/wallets/:walletId/connection` | — | 204 | NOT_FOUND |
 
 Todo endpoint `session` pode responder UNAUTHENTICATED/SESSION_EXPIRED; todo endpoint pode falhar com TRANSIENT.
+`POST /orders` exige `Idempotency-Key` UUID v4: ausente/inválida → `422 VALIDATION` com `fieldErrors['Idempotency-Key']` (v1.1.0). O cliente valida a chave antes de enviar (`ordersApi.createOrder`).
 
 ### 2.3 Erros (`src/api/contracts/errors.ts`)
 Corpo: `{ error: { code, message, requestId?, ...campos por código } }` (união discriminada por `code`).
@@ -82,6 +83,7 @@ Corpo: `{ error: { code, message, requestId?, ...campos por código } }` (união
 | CONFLICT_AVAILABILITY | 409 | `items[{ nftId, editionId, requested, available }]` | Estoque insuficiente/esgotado |
 | QUOTE_STALE | 409 | `quote` (nova), `changes[]` | Cotação enviada difere da atual |
 | IDEMPOTENCY_CONFLICT | 409 | `orderId` | Mesma chave, body diferente |
+| CONFLICT_VERSION (v1.1.0) | 409 | `resource { kind: profile\|wallet, id }`, `currentVersion` | `version` enviado no PATCH /profile ou PATCH /wallets/:id não é o atual (concorrência otimista); a UI recarrega o recurso e pede nova confirmação |
 | EMAIL_TAKEN | 409 | `fieldErrors.email` | Cadastro/perfil |
 | COUPON_INVALID | 422 | `couponCode` | |
 | COUPON_EXPIRED | 422 | `couponCode`, `expiredAt` | |
@@ -123,7 +125,8 @@ Payload inválido (zod) é descartado e logado; nunca quebra a UI.
 - **Expiração** (TTL absoluto `expiresAt`; cenários `session.expired` / `session.expire-on-checkout`): interceptor Axios em `401 SESSION_EXPIRED` dispara `sessionExpired` uma única vez (deduplicado entre requisições paralelas) → executa o *teardown* (abaixo) → navega para `/login?redirect=<href atual>&reason=expired`. `401 UNAUTHENTICATED` de `/auth/login` é erro de formulário, não expiração.
 - **Contexto preservado**: rascunho do checkout (dados do colecionador, carteira, rede) e a tentativa de compra (`Idempotency-Key` + fingerprint) ficam em `sessionStorage` com chave por `userId`; ao relogar com o **mesmo** usuário o checkout retoma; com outro usuário os rascunhos alheios são ignorados e apagados. O carrinho é servidor-side e permanece.
 - **Teardown** (logout, expiração, troca de usuário): `socket.disconnect()` + remoção de listeners → `queryClient.cancelQueries({ queryKey: ['u'] })` → `removeQueries({ queryKey: ['u'] })` → limpa `['session']` e rascunhos → `POST /auth/logout` (best-effort no logout) → reconecta socket como visitante.
-- **Senhas**: nunca guardadas em claro; o mock armazena hash PBKDF2 (WebCrypto) com salt por usuário. Credenciais exclusivamente fictícias (README).
+- **Implementação (F1c)**: `src/session/store.ts` (token/expiresAt e `guestId` validados com zod ao ler; token localmente expirado é descartado sem rede; rascunhos por usuário com prefixo `kurio.u.<userId>.`), `src/queries/session.ts` (`sessionQueryOptions`, `teardownSession(qc, 'logout'|'expired'|'switch')`, `establishSession(qc, session)` para S2), `src/api/client.ts` (`setSessionExpiredHandler`; disparo **uma vez por token** expirado). O `GET /session` do boot usa `silentSessionExpiry`: token vencido no boot só vira visitante, sem fluxo de reautenticação. Na expiração os rascunhos do **mesmo** usuário ficam (retomar checkout); no logout todos são apagados. `redirect` é sempre revalidado com `safeRedirectSchema` antes de navegar (guard e handler de expiração).
+- **Senhas**: nunca guardadas em claro; o mock armazena hash SHA-256 (WebCrypto `crypto.subtle.digest`) de `salt + senha`, com salt por usuário (como pede o briefing). Em produção real seria um KDF lento (Argon2/scrypt/PBKDF2) no servidor. Credenciais exclusivamente fictícias (README).
 
 ## 5. Estado do carrinho
 
@@ -156,14 +159,16 @@ Payload inválido (zod) é descartado e logado; nunca quebra a UI.
 | `['guest', guestId, 'cart']` / `['u', userId, 'cart']` | 10 s | invalidada por mutations e eventos |
 | `['guest'|'u', …, 'quote', network]` | 0 | `gcTime` curto; refeita ao abrir carrinho/revisão e após eventos |
 | `['u', userId, 'favorites']` | 5 min | otimista + rollback |
-| `['u', userId, 'orders', orderId]` | 0 enquanto `pending`, ∞ quando terminal | `refetchInterval` 5 s **apenas** enquanto pending e socket desconectado (fallback) |
+| `['u', userId, 'orders', 'detail', orderId]` | 0 enquanto `pending`, ∞ quando terminal | `refetchInterval` 5 s **apenas** enquanto pending e socket desconectado (fallback) |
 | `['u', userId, 'orders','list', status]` | 0 | recuperação de pedido pendente |
 | `['u', userId, 'profile']`, `['u', userId, 'wallets']` | 5 min | |
 
-- **Retries**: queries repetem até 2× **somente** se `ApiError.retryable` (TRANSIENT), backoff exponencial 500 ms → 4 s (respeita `retryAfterMs`). 4xx nunca repetem. Mutations: `retry: 0`, exceto `createOrder` (reenvio com a mesma Idempotency-Key em TRANSIENT). `refetchOnWindowFocus` ligado; `refetchOnReconnect` ligado.
+- **Retries**: queries repetem até 2× **somente** se `ApiError.retryable` (TRANSIENT) **e** a falha é de transporte/5xx (`status` 0 ou ≥ 500) — um 2xx fora do contrato vira TRANSIENT/server mas não é repetido; backoff exponencial 500 ms → 4 s (respeita `retryAfterMs`). 4xx nunca repetem. Mutations: `retry: 0`, exceto `createOrder` (reenvio com a mesma Idempotency-Key em TRANSIENT). `refetchOnWindowFocus` ligado; `refetchOnReconnect` ligado.
 - **Invalidação após mutations**: carrinho → `cart` + `quote`; cupom → `cart` + `quote`; favorito → `favorites`; pedido confirmado → `cart` + `orders`; perfil → `profile` + `['session']` (nome/avatar no header); carteira → `wallets`.
 - **Respostas fora de ordem**: chave por parâmetros + `AbortSignal`; resposta de chave antiga nunca sobrescreve a atual.
 - **Timeout Axios**: 10 s.
+- **Normalização (F1c, `src/api/client.ts`)**: corpo de erro validado com `apiErrorBodySchema`; fora do contrato → classificado só pelo status (401/403/404 → código correspondente; demais → TRANSIENT/server com o status real). Sem resposta → TRANSIENT `network` ou `timeout` (status 0). `CanceledError` (abort) é o único erro que não vira `ApiError`. Body JSON é validado com o schema de request **antes** de sair (falha → `ApiError VALIDATION` com `fieldErrors` dos issues do zod, status 0). Resposta 2xx que falha no schema → log + TRANSIENT/server com o status 2xx (não repetida). Headers por requisição: `X-Request-Id` (UUID), `Authorization` ou `X-Guest-Id` conforme `auth` da tabela, `Idempotency-Key` em `createOrder`.
+- **Query keys (F1c)**: `src/queries/keys.ts` é o único lugar que soletra keys; o detalhe de pedido usa `['u', userId, 'orders', 'detail', orderId]` para não colidir com `['u', userId, 'orders', 'list', status]`. `queryKeys.owner({kind:'user'|'guest'})` gera `cart`/`quote` de usuário ou visitante.
 
 ## 8. Reconciliação REST ↔ Socket.IO
 
@@ -174,6 +179,8 @@ Payload inválido (zod) é descartado e logado; nunca quebra a UI.
 5. **Aplicação**: `setQueryData` pontual (detalhe, cards das listas, pedido) + `invalidateQueries` do que o servidor calcula (carrinho, cotação, recibo).
 6. **Reconexão**: no `connect` subsequente ao primeiro (ou `io.on('reconnect')`), `invalidateQueries` dos recursos ativos: `['nfts']`, carrinho, cotação, pedidos pendentes. A verdade após um buraco de eventos é sempre o REST.
 7. **Ciclo de vida**: listeners registrados em efeitos/serviço com cleanup (`off`) e `socket.disconnect()` no teardown.
+
+Implementação (F1c): `src/realtime/reconcile.ts` (`createReconciler`: lógica pura sobre o `QueryClient`, devolve `applied | invalid | duplicate | foreign | stale`; a versão conhecida é `max(mapa de eventos, version em cache)`, então respostas REST já protegem contra eventos atrasados sem chamada extra a `noteVersion`) e `src/realtime/socket.ts` (`createRealtimeManager`/`realtime`: um socket por vez; `start()` fecha o anterior; frames de um socket já substituído são ignorados; `onEvent` entrega só eventos `applied`, para anúncios `aria-live` das slices). `RealtimeBridge` (na raiz) reabre o socket quando o token muda e expõe um `<div hidden data-testid="realtime-probe">` com `data-status/user/connections/applied/last-event/last-outcome` — gancho de teste somente leitura, sem interação e fora da árvore de acessibilidade.
 
 ## 9. Isolamento por usuário
 
@@ -210,7 +217,7 @@ Catálogo tipado em `src/api/contracts/scenarios.ts` (`SCENARIOS`, sem dados). S
 | `payment.hold` | §7 pedido pendente | Pendente até `__mock.settleOrder` |
 | `wallet.reject` | §3 recusa de carteira | `{ status: 'rejected' }` |
 
-Superfície de controle (`MockControl`): `reset`, `setScenarios`, `getScenarios`, `emit`, `updateNft` (altera estado **e** emite o evento correspondente), `drop`, `settleOrder`. Testes disparam eventos só por ela — os frames atravessam o `socket.io-client`, nunca o cache.
+Superfície de controle (`MockControl`): `reset(scenarios?)` (v1.1.0: seleciona os cenários junto com o reset), `setScenarios`, `getScenarios`, `emit`, `updateNft` (altera estado **e** emite o evento correspondente), `drop`, `settleOrder`. Testes disparam eventos só por ela — os frames atravessam o `socket.io-client`, nunca o cache. O `payload` de `emit` deve ser o **envelope completo** de `events.ts` (`RealtimeEvent`); o tipo continua `unknown` de propósito, para testes negativos (payload inválido precisa ser descartado pelo cliente). Testes usam `tests/fixtures.ts` (`mock`, `boot(url, scenarios?)`), que isola storage por teste e reseta o mock antes de carregar o app.
 
 ## 11. Transporte de tempo real e limitações (spike 1)
 
@@ -229,13 +236,28 @@ Transporte: MSW `ws.link(VITE_SOCKET_URL)` + `@mswjs/socket.io-binding@0.2.0` (e
 - Stepper de quantidade limitado a `maxQuantity` da edição; edição esgotada aparece desabilitada com texto (não só cor).
 - No pagamento, os campos de carteira do layout (rede, tipo, endereço) são preenchidos a partir da carteira cadastrada escolhida ("Usar outra carteira?" alterna para a secundária); sem carteira cadastrada, CTA leva a `/wallets` preservando o checkout.
 - Ações fora do escopo (Criadores, Aprenda, Atividade, Ofertas, Arquivos baixados, Suporte, newsletter, login social) não simulam sucesso: ficam desabilitadas/rotuladas "Em breve" ou levam a uma página que declara indisponibilidade. Detalhe por slice.
+- **Shell (F1c)**: links fora do escopo do header/rodapé/menu levam a `/em-breve?secao=<id>` (lista fechada em `src/components/layout/sections.ts`), que diz "ainda não está disponível… Nenhuma ação foi realizada". Newsletter do rodapé: campo e botão **desabilitados** com aviso "Newsletter em breve". Rotas ainda não implementadas mostram só título + "Em construção — etapa X" (TEL-11), sem dados nem controles falsos.
+- **Navegação**: "Início" → `/`; "Mercado" → `/#mercado`; lupa → `/#busca` (a slice de catálogo ancora/foca a busca); carrinho com badge `itemCount` vindo do `GET /cart` (sem requisição para visitante que nunca criou carrinho). Logado: botão com o nome abre menu (perfil, carteiras, lista de interesse, Sair). Foco vai para o `h1` a cada página; skip link "Pular para o conteúdo".
+- **Search params do catálogo**: defaults são removidos da URL (`stripSearchParams`), então `/` continua `/`. Listas usam a serialização padrão do TanStack Router (JSON na query); a S1 pode trocar para `a,b` via `parseSearch/stringifySearch` — o schema aceita ambos.
+- **Tema**: tokens do Figma em `@theme` (`src/index.css`): cores (`ink`, `surface-card`, `surface-dark`, `line`, `line-soft`, `brand`, `brand-secondary`, `text-accent`, `text-primary`, `text-secondary`, `elevated`), escala tipográfica (`text-display` … `text-micro`), `tracking-figma` (0.1em), `max-w-page` (1200), `px-gutter`, `h-header` (45), `h-tabbar` (95), raios `rounded-control` (4) / `rounded-card` (20) / `rounded-panel` (28). Os tokens semânticos do shadcn (`primary`, `card`, `muted`, `border`, `ring`…) apontam para essa paleta; tema único escuro (`color-scheme: dark`). `destructive` (#FF8A73) não existe no Figma: escolhido por contraste ≥ 4.5:1. `cn()` usa `tailwind-merge` estendido com esses tokens (sem isso `text-body-md` era tratado como cor e apagava `text-primary-foreground` — achado do axe).
+- **Fonte**: Roboto Mono variável (100–700), subsets latin + latin-ext, self-hosted em `public/fonts` (OFL, licença junto), `font-display: swap` e `preload` do subset latin.
+- **Movimento**: `.skeleton-shimmer` (Skeleton do shadcn adaptado) e todas as animações/transições são neutralizadas em `prefers-reduced-motion: reduce`.
+- **shadcn**: `components.json` (radix-nova), componentes base em `src/components/ui`: button, input, label, dialog, sheet, select, sonner (sem `next-themes`, tema fixo escuro), skeleton, separator, dropdown-menu. Textos "Close" traduzidos para "Fechar".
 
 ## 13. Desvios do Figma
 
-_(vazio por ora — cada desvio é registrado aqui no momento em que acontece, com frame, motivo e alternativa.)_
+| # | Frame / nó | Desvio | Motivo | Alternativa |
+|---|---|---|---|---|
+| D1 | Mobile / Início — Tab Bar (70395:245), botão central (15:5529) | O glifo de "scanner" do botão central foi trocado por ícone de menu e o botão abre o menu completo (Sheet) | O Figma não define ação para o scanner; abaixo de `md` não há header, então Mercado/Criadores/Aprenda/Entrar ficariam inalcançáveis | Se o design definir o scanner, o menu migra para outro ponto e o botão volta ao glifo original |
+| D2 | Mobile / Início — Tab Bar | Fundo com cantos arredondados + anel da cor da página ao redor do botão central, em vez do recorte curvo (vector 15:5504) | Recorte em SVG por viewport acrescenta complexidade sem ganho funcional; o anel reproduz o "entalhe" visualmente | Exportar o vector do Figma e usá-lo como máscara |
+| D3 | Rodapé (instância Footer 70492:696) em mobile | Não há frame mobile do rodapé; layout derivado: destaques em lista (ícone 48 px à esquerda), faixa da marca empilhada, links em 2 colunas, mesmo conteúdo | Ausência de frame | — |
+| D4 | Rodapé — newsletter | Campo e botão "Enviar" desabilitados + texto "Newsletter em breve" | Fora do escopo; o desafio proíbe simular sucesso | Habilitar quando houver endpoint |
+| D5 | Rodapé — redes sociais | Ícones desenhados à mão (`brand-icons.tsx`) no estilo lucide; levam a `/em-breve?secao=redes-sociais` | lucide-react 1.x removeu ícones de marca; não há perfis reais | Trocar por SVG oficiais das marcas se exigido |
+| D6 | Header desktop | Entre 768 e 1199 px o header usa gutter de 24 px e gap de nav menor (24 px); em ≥ 1200 px segue o Figma (coluna de 1200, gap 40 px) | Não há frame tablet | — |
 
 ## 14. Changelog de contratos
 
 | Versão | Data | Mudança | Motivo | Impacto |
 |---|---|---|---|---|
 | 1.0.0 | 2026-11-03 | Versão inicial congelada: common, errors, auth, nfts, favorites, cart, quote, orders, profile, wallets, events, endpoints, scenarios | F1a | — |
+| 1.1.0 | 2026-11-03 | (a) Novo código `CONFLICT_VERSION` (409, `resource { kind: 'profile'\|'wallet', id }`, `currentVersion`) em `errors.ts`; adicionado a `errors` de `updateProfile` e `updateWallet`. (b) `MockControl.reset(scenarios?: ScenarioName[])`. (c) Documentado: `MockControl.emit` recebe o envelope completo de `events.ts` (tipo segue `unknown` para testes negativos). (d) Documentado em `endpoints.ts`/§2.2: `Idempotency-Key` UUID obrigatório em `POST /orders`; ausente/inválido → 422 VALIDATION `fieldErrors['Idempotency-Key']`. (e) §4: hash de senha do mock é SHA-256 + salt (texto anterior dizia PBKDF2). | Propostas do agente de mocks (F1b) aceitas na F1c. Conflito de versão como VALIDATION em `fieldErrors.version` apontaria para um campo que não existe no formulário; código dedicado permite "recarregar e confirmar de novo" | Aditivo para o cliente (união discriminada ganha um membro). **Mocks**: trocar `validationFail({ version })` por `errorBody({ code: 'CONFLICT_VERSION', … })` em `handlers/profile.ts` e `handlers/wallets.ts`. Demais itens já implementados pelo mock |

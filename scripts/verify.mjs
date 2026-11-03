@@ -1,5 +1,6 @@
 // Single quality gate: typecheck -> lint -> build -> Playwright functional (desktop+mobile) -> visual -> axe.
-// Stops at the first failure and writes reports/verify-latest.md.
+// Stops at the first failure and writes reports/verify-latest.md. Each Playwright step keeps its own
+// HTML report in playwright-report/<step> (uploaded by CI).
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, writeFileSync } from 'node:fs'
 
@@ -16,7 +17,7 @@ let ok = true
 for (const [name, cmd] of steps) {
   const t0 = Date.now()
   console.log(`\n▶ ${name}: ${cmd}`)
-  const r = spawnSync(cmd, { stdio: 'inherit', shell: true, env: { ...process.env, PW_SKIP_BUILD: name === 'build' ? '' : '1' } })
+  const r = spawnSync(cmd, { stdio: 'inherit', shell: true, env: { ...process.env, PW_SKIP_BUILD: name === 'build' ? '' : '1', PLAYWRIGHT_HTML_OUTPUT_DIR: `playwright-report/${name}` } })
   const secs = ((Date.now() - t0) / 1000).toFixed(1)
   results.push(`| ${name} | ${r.status === 0 ? 'PASS' : 'FAIL'} | ${secs}s | \`${cmd}\` |`)
   if (r.status !== 0) { ok = false; break }

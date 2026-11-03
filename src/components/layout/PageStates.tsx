@@ -26,7 +26,7 @@ function PageFrame({ title, children, eyebrow }: { title: string; children: Reac
 export function UnderConstruction({ title, slice }: { title: string; slice?: string }) {
   return (
     <PageFrame title={title} eyebrow="KURIO">
-      <p role="status" className="rounded-[var(--radius-control)] border border-line-soft bg-card px-4 py-3 text-body text-text-secondary">
+      <p role="status" className="rounded-control border border-line-soft bg-card px-4 py-3 text-body text-text-secondary">
         Em construção{slice ? ` — esta tela será entregue na etapa ${slice}` : ''}.
       </p>
       <Link to="/" className="text-body-md font-medium text-text-accent underline-offset-4 hover:underline">
@@ -40,7 +40,7 @@ export function NotFoundPage() {
   return (
     <PageFrame title="Página não encontrada" eyebrow="Erro 404">
       <p className="text-body text-text-secondary">O endereço acessado não existe ou foi removido.</p>
-      <Button asChild className="h-10 rounded-[var(--radius-control)] px-5 text-body-md font-bold">
+      <Button asChild className="h-10 rounded-control px-5 text-body-md font-bold">
         <Link to="/">Explorar o mercado</Link>
       </Button>
     </PageFrame>
@@ -55,7 +55,7 @@ export function RouteErrorPage({ error }: { error: unknown }) {
       <p role="alert" className="text-body text-text-secondary">
         {message}
       </p>
-      <Button className="h-10 rounded-[var(--radius-control)] px-5 text-body-md font-bold" onClick={() => void router.invalidate()}>
+      <Button className="h-10 rounded-control px-5 text-body-md font-bold" onClick={() => void router.invalidate()}>
         Tentar novamente
       </Button>
     </PageFrame>
