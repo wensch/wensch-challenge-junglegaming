@@ -1,1 +1,187 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* ---------------------------------------------------------------------------
+ * Fonts: Roboto Mono (variable, 100–700) self-hosted in /public/fonts (SIL OFL, see LICENSE file).
+ * Only latin + latin-ext subsets (pt-BR). font-display: swap avoids invisible text.
+ * ------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("/fonts/roboto-mono-latin-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/roboto-mono-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("/fonts/roboto-mono-latin-ext-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/roboto-mono-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------------------------------------------------
+ * Figma tokens (docs/figma.md, variables of frame 2:2). Raw brand palette + type scale.
+ * ------------------------------------------------------------------------- */
+@theme {
+  --color-ink: #140d0a;
+  --color-surface-card: #241612;
+  --color-surface-dark: #38220f;
+  --color-line: #3f2319;
+  --color-line-soft: #55321f;
+  --color-brand: #d28a4c;
+  --color-brand-secondary: #b39463;
+  --color-text-accent: #e89b55;
+  --color-text-primary: #f7f3ec;
+  --color-text-secondary: #cfb28c;
+  --color-elevated: #fbfbfb;
+
+  /* Type scale (size / line-height) used in the frames. */
+  --text-display: 43px;
+  --text-display--line-height: 70px;
+  --text-heading: 24px;
+  --text-heading--line-height: 32px;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 24px;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 20px;
+  --text-body: 15px;
+  --text-body--line-height: 20px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 22px;
+  --text-caption: 13px;
+  --text-caption--line-height: 22px;
+  --text-caption-sm: 12px;
+  --text-caption-sm--line-height: 14px;
+  --text-tiny: 10px;
+  --text-tiny--line-height: 12px;
+  --text-micro: 9px;
+  --text-micro--line-height: 10px;
+
+  /* Figma `letterSpacing: 10` (percent). */
+  --tracking-figma: 0.1em;
+
+  /* Layout: 1200 px content column (120 px gutters at 1440). */
+  --container-page: 75rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-header: 2.8125rem; /* 45 px header row */
+  --spacing-tabbar: 5.9375rem; /* 95 px mobile tab bar */
+
+  /* Radii seen in the frames: 4 px buttons/fields, 20 px mobile cards, full pills. */
+  --radius-control: 4px;
+  --radius-card: 20px;
+  --radius-panel: 28px;
+
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+  @keyframes shimmer {
+    0% { background-position: -150% 0; }
+    100% { background-position: 250% 0; }
+  }
+}
+
+/* shadcn semantic tokens mapped onto the Figma palette. */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Single dark theme (the Figma has no light variant). */
+:root {
+  color-scheme: dark;
+  --background: #140d0a;
+  --foreground: #f5f1eb;
+  --card: #241612;
+  --card-foreground: #f7f3ec;
+  --popover: #241612;
+  --popover-foreground: #f7f3ec;
+  --primary: #d28a4c;
+  --primary-foreground: #140d0a;
+  --secondary: #38220f;
+  --secondary-foreground: #f7f3ec;
+  --muted: #38220f;
+  --muted-foreground: #cfb28c;
+  --accent: #38220f;
+  --accent-foreground: #e89b55;
+  /* Not in the Figma variables; chosen for >= 4.5:1 on ink and card surfaces. */
+  --destructive: #ff8a73;
+  --border: #3f2319;
+  --input: #55321f;
+  --ring: #e89b55;
+  --radius: 0.375rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    min-height: 100dvh;
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Skeleton shimmer; static under reduced motion. */
+  .skeleton-shimmer {
+    background-image: linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--color-brand) 14%, transparent) 50%, transparent 100%);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: var(--animate-shimmer);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+    background-image: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
