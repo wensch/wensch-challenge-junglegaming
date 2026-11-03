@@ -131,8 +131,13 @@ export function settleOrder(orderId: string, status: 'confirmed' | 'declined'): 
     })
     const cart = meta && getCart(meta.ownerKey)
     if (cart) {
-      const bought = new Set(order.receipt.lines.map((l) => l.cartLineId))
-      cart.lines = cart.lines.filter((l) => !bought.has(l.id))
+      // Subtract what was bought: units added to the cart after checkout stay in it.
+      const bought = new Map<string, number>()
+      for (const l of order.receipt.lines) bought.set(l.cartLineId, (bought.get(l.cartLineId) ?? 0) + l.quantity)
+      cart.lines = cart.lines.flatMap((l) => {
+        const qty = l.quantity - (bought.get(l.id) ?? 0)
+        return qty > 0 ? [{ ...l, quantity: qty }] : []
+      })
       if (cart.lines.length === 0) cart.couponCode = null
       touchCart(cart)
     }

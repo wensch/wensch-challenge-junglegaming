@@ -5,16 +5,84 @@
  * Covers: all 24 scenarios, reset, persistence after reload, idempotency, per-user event isolation.
  */
 import { randomUUID } from 'node:crypto'
+import { createRequire } from 'node:module'
+import { dirname, join } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
+import type { ApiErrorCode, QuoteChange } from '../../src/api/contracts'
 import { SCENARIO_NAMES, type ScenarioName } from '../../src/api/contracts/scenarios'
 
+const SOCKET_CLIENT_BUNDLE = join(dirname(createRequire(import.meta.url).resolve('socket.io-client')), '..', '..', 'dist', 'socket.io.min.js')
 const SOCKET_URL = 'wss://realtime.nft-mock.local' // VITE_SOCKET_URL (.env)
 const ALICE = { email: 'alice@example.test', password: 'Senha@123' }
 const BOB = { email: 'bob@example.test', password: 'Senha@456' }
 const NFT = { id: 'nft_004', edition: 'ed_004_1' } // open edition: plenty of stock, maxPerOrder 10
 const COLLECTOR = { displayName: 'Alice Colecionadora', username: 'alice', profileName: 'alice', email: 'alice@example.test', ensName: 'alice.eth', referralCode: 'ALICE-2026' }
 
-type Json = Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+/**
+ * Response body as seen by these smoke tests: the union of the fields they read, typed with the contracts
+ * (declared as present for brevity: which ones exist depends on the endpoint, and each test asserts what it reads).
+ */
+interface Json {
+  id: string
+  type: string
+  status: string
+  version: number
+  token: string
+  price: string
+  discount: string
+  couponCode: string | null
+  avatarUrl: string | null
+  connectionId: string
+  itemCount: number
+  orderable: boolean
+  displayName: string
+  username: string
+  email: string
+  ensName: string
+  walletAlias: string
+  profileName: string
+  referralCode: string
+  label: string
+  network: string
+  address: string
+  nftIds: string[]
+  user: Json
+  meta: Json
+  total: number
+  facets: Json
+  categories: unknown[]
+  data: Json
+  resource: Json
+  kind: string
+  items: Json[]
+  editions: Json[]
+  lines: Json[]
+  adjusted: unknown[]
+  issues: unknown[]
+  cart: Json
+  owner: Json
+  primary: Json
+  receipt: Json
+  unitPrice: string
+  available: number
+  currentVersion: number
+  error: Json
+  code: ApiErrorCode
+  message: string
+  fieldErrors: Record<string, string[]>
+  quote: Json
+  changes: QuoteChange[]
+  transaction: Json | null
+  declineReason: string | null
+  soldOut: boolean
+  name: string
+  category: string
+  isNew: boolean
+  slot: string
+  secondary: Json | null
+  userId: string
+  hash: string
+}
 interface Res<T = Json> {
   status: number
   body: T
@@ -70,7 +138,7 @@ async function login(page: Page, who: { email: string; password: string }) {
 }
 
 async function openSocket(page: Page, name: string, token: string | null) {
-  if (!(await page.evaluate(() => 'io' in window))) await page.addScriptTag({ path: 'node_modules/socket.io-client/dist/socket.io.min.js' })
+  if (!(await page.evaluate(() => 'io' in window))) await page.addScriptTag({ path: SOCKET_CLIENT_BUNDLE })
   await page.evaluate(
     ({ name, token, url }) => {
       const w = window as unknown as { io: (u: string, o: unknown) => { on: (e: string, f: (p: unknown) => void) => void }; __probes?: Record<string, { status: string; events: Json[] }> }
@@ -292,8 +360,8 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
     const c = await checkout(page, ['checkout.price-changed'])
     await openSocket(page, 'p', c.token)
     const [ev] = await waitEvent(page, 'p', (e) => e.type === 'nft.updated' && e.resource.id === NFT.id)
-    const before = c.quote.lines[0].unitPrice as string
-    expect(ev!.data.editions[0].price).not.toBe(before)
+    const before = c.quote.lines[0]!.unitPrice as string
+    expect(ev!.data.editions[0]!.price).not.toBe(before)
     const r = await postOrder(page, c)
     expect(r.status).toBe(409)
     expect(r.body.error.code).toBe('QUOTE_STALE')
@@ -313,7 +381,7 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
     expect(r.body.error.code).toBe('CONFLICT_AVAILABILITY')
     expect(r.body.error.items[0]).toMatchObject({ nftId: NFT.id, editionId: NFT.edition, available: 0 })
     const cart = await api(page, 'GET', '/cart', { token: c.token })
-    expect(cart.body.lines[0].status).toBe('sold_out') // items preserved
+    expect(cart.body.lines[0]!.status).toBe('sold_out') // items preserved
   },
   'order.timeout-after-create': async (page) => {
     const c = await checkout(page, ['order.timeout-after-create'])
@@ -329,27 +397,27 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
   'payment.confirmed': async (page) => {
     const c = await checkout(page, ['payment.confirmed'])
     await openSocket(page, 'p', c.token)
-    const stockBefore = ((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0].available as number)
+    const stockBefore = ((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0]!.available as number)
     const r = await postOrder(page, c)
     expect(r.status).toBe(201)
     expect(r.body.status).toBe('pending')
     const [ev] = await waitEvent(page, 'p', (e) => e.type === 'order.updated' && e.data.status === 'confirmed')
-    expect(ev!.data.transaction.hash).toMatch(/^0x[a-f0-9]{64}$/)
+    expect(ev!.data.transaction!.hash).toMatch(/^0x[a-f0-9]{64}$/)
     const order = await api(page, 'GET', `/orders/${r.body.id}`, { token: c.token })
     expect(order.body).toMatchObject({ status: 'confirmed', version: 2 })
     expect((await api(page, 'GET', '/cart', { token: c.token })).body.lines).toHaveLength(0)
-    expect((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0].available).toBe(stockBefore - 2)
+    expect((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0]!.available).toBe(stockBefore - 2)
   },
   'payment.declined': async (page) => {
     const c = await checkout(page, ['payment.declined'])
     await openSocket(page, 'p', c.token)
-    const stockBefore = ((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0].available as number)
+    const stockBefore = ((await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0]!.available as number)
     const r = await postOrder(page, c)
     const [ev] = await waitEvent(page, 'p', (e) => e.type === 'order.updated' && e.data.status === 'declined')
     expect(ev!.data.declineReason).toBeTruthy()
     expect((await api(page, 'GET', `/orders/${r.body.id}`, { token: c.token })).body.status).toBe('declined')
     expect((await api(page, 'GET', '/cart', { token: c.token })).body.lines).toHaveLength(1) // cart preserved
-    await expect.poll(async () => (await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0].available).toBe(stockBefore) // stock released
+    await expect.poll(async () => (await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0]!.available).toBe(stockBefore) // stock released
   },
   'payment.hold': async (page) => {
     const c = await checkout(page, ['payment.hold'])
@@ -506,9 +574,9 @@ test.describe('state and lifecycle', () => {
     expect(again.body.adjusted).toEqual([])
     expect((await api(page, 'GET', '/cart', { guest })).body.itemCount).toBe(0) // guest cart is gone
 
-    const line = merged.body.cart.lines[0]
+    const line = merged.body.cart.lines[0]!
     const upd = await api(page, 'PATCH', `/cart/items/${line.id}`, { token, body: { quantity: 1 } })
-    expect(upd.body.lines[0]).toMatchObject({ quantity: 1, status: 'ok' })
+    expect(upd.body.lines[0]!).toMatchObject({ quantity: 1, status: 'ok' })
     expect((await api(page, 'DELETE', `/cart/items/${line.id}`, { token })).body.lines).toEqual([])
     expect((await api(page, 'DELETE', `/cart/items/${line.id}`, { token })).status).toBe(404)
   })
@@ -520,7 +588,9 @@ test.describe('state and lifecycle', () => {
     const patch = { displayName: 'Alice Nova', username: 'alice', email: ALICE.email, ensName: 'alice.eth', walletAlias: 'Minha carteira', version: profile.version }
     const ok = await api(page, 'PATCH', '/profile', { token, body: patch })
     expect(ok.body).toMatchObject({ displayName: 'Alice Nova', version: profile.version + 1 })
-    expect((await api(page, 'PATCH', '/profile', { token, body: patch })).status).toBe(422) // stale version
+    const stale = await api(page, 'PATCH', '/profile', { token, body: patch })
+    expect(stale.status).toBe(409)
+    expect(stale.body.error).toMatchObject({ code: 'CONFLICT_VERSION', resource: { kind: 'profile' }, currentVersion: ok.body.version })
     expect((await api(page, 'PATCH', '/profile', { token, body: { ...patch, version: ok.body.version, email: BOB.email } })).body.error.code).toBe('EMAIL_TAKEN')
 
     const avatar = await page.evaluate(async (t) => {
@@ -544,7 +614,7 @@ test.describe('state and lifecycle', () => {
 
     const wallets = (await api(page, 'GET', '/wallets', { token })).body
     expect(wallets.primary.slot).toBe('primary')
-    expect(wallets.secondary.slot).toBe('secondary')
+    expect(wallets.secondary!.slot).toBe('secondary')
     const newWallet = { slot: 'primary', displayName: 'Alice', label: 'Outra', profileName: 'alice', network: 'solana', address: '7EqQdEULxWcraVx3mXKFjc84LhCkMGZCkRuDpvcMwJeK', type: 'coinbase', referralCode: 'ALICE-2026', email: ALICE.email, ensName: 'alice.eth' }
     expect((await api(page, 'POST', '/wallets', { token, body: newWallet })).body.error.fieldErrors.slot).toBeTruthy() // slot taken
     expect((await api(page, 'POST', '/wallets', { token, body: { ...newWallet, address: '0x123' } })).status).toBe(422)
@@ -572,7 +642,7 @@ test.describe('state and lifecycle', () => {
     // Receipt is an immutable snapshot even if the catalog changes afterwards.
     await page.evaluate(() => window.__mock!.updateNft('nft_004', { price: '50' }))
     const order = await api(page, 'GET', `/orders/${first.body.id}`, { token: c.token })
-    expect(order.body.receipt.lines[0].unitPrice).toBe(c.quote.lines[0].unitPrice)
+    expect(order.body.receipt.lines[0]!.unitPrice).toBe(c.quote.lines[0]!.unitPrice)
     // A wallet that belongs to somebody else is rejected.
     const bob = await login(page, BOB)
     expect((await postOrder(page, { token: bob.token, body: { ...c.body, walletId: 'wal_001' }, key: randomUUID() })).body.error.code).toBe('FORBIDDEN')
@@ -617,5 +687,101 @@ test.describe('state and lifecycle', () => {
     // Server-side drop closes the sockets.
     await page.evaluate(() => window.__mock!.drop())
     await expect.poll(() => probeStatus(page, 'alice')).toBe('disconnected')
+  })
+
+  test('two tabs share one DB: no last-write-wins, no id collisions, revoked sessions close their sockets', async ({ page, context }) => {
+    await boot(page)
+    const { token } = await login(page, ALICE)
+    await openSocket(page, 'alice', token)
+    expect(await probeStatus(page, 'alice')).toBe('connected')
+
+    const tabB = await context.newPage() // same context: shares localStorage
+    await tabB.goto('/')
+    await tabB.waitForFunction(() => !!window.__mock)
+
+    // Ids generated concurrently in two tabs do not collide.
+    const regA = await api(page, 'POST', '/auth/register', { body: { email: 'tab-a@example.test', username: 'taba', password: 'Senha@123', confirmPassword: 'Senha@123' } })
+    const regB = await api(tabB, 'POST', '/auth/register', { body: { email: 'tab-b@example.test', username: 'tabb', password: 'Senha@123', confirmPassword: 'Senha@123' } })
+    expect([regA.status, regB.status]).toEqual([201, 201])
+    expect(regA.body.user.id).not.toBe(regB.body.user.id)
+    // Both registrations survive (A sees B's user and vice-versa).
+    expect((await api(page, 'POST', '/auth/login', { body: { email: 'tab-b@example.test', password: 'Senha@123' } })).status).toBe(200)
+    expect((await api(tabB, 'POST', '/auth/login', { body: { email: 'tab-a@example.test', password: 'Senha@123' } })).status).toBe(200)
+
+    // Logout in A is visible in B; B's later writes do not resurrect the session in A.
+    expect((await api(page, 'POST', '/auth/logout', { token })).status).toBe(204)
+    expect((await api(tabB, 'GET', '/session', { token })).status).toBe(401)
+    expect((await api(tabB, 'POST', '/auth/login', { body: BOB })).status).toBe(200) // any persist() from B
+    await page.reload()
+    await page.waitForFunction(() => !!window.__mock)
+    expect((await api(page, 'GET', '/session', { token })).status).toBe(401)
+    await tabB.close()
+  })
+
+  test('revoked and expired sessions lose their sockets and stop receiving events', async ({ page }) => {
+    await boot(page)
+    const alice = await login(page, ALICE)
+    const alice2 = await login(page, ALICE)
+    await openSocket(page, 'logout', alice.token)
+    await openSocket(page, 'expire', alice2.token)
+    expect(await probeStatus(page, 'logout')).toBe('connected')
+    expect(await probeStatus(page, 'expire')).toBe('connected')
+
+    await api(page, 'POST', '/auth/logout', { token: alice.token })
+    await expect.poll(() => probeStatus(page, 'logout')).toBe('disconnected')
+
+    await setScenarios(page, ['session.expired'])
+    await page.evaluate(() => window.__mock!.emit('order.updated', { id: 'evt_after_expiry', type: 'order.updated' }))
+    await expect.poll(() => probeStatus(page, 'expire')).toBe('disconnected')
+    expect((await probeEvents(page, 'expire')).some((e) => e.id === 'evt_after_expiry')).toBe(false)
+  })
+
+  test('password change revokes the other sessions of the user', async ({ page }) => {
+    await boot(page)
+    const current = await login(page, ALICE)
+    const other = await login(page, ALICE)
+    const bob = await login(page, BOB)
+    const pw = { currentPassword: ALICE.password, newPassword: 'Nova@12345', confirmPassword: 'Nova@12345' }
+    expect((await api(page, 'POST', '/profile/password', { token: current.token, body: pw })).status).toBe(204)
+    expect((await api(page, 'GET', '/session', { token: current.token })).status).toBe(200)
+    expect((await api(page, 'GET', '/session', { token: other.token })).status).toBe(401)
+    expect((await api(page, 'GET', '/session', { token: bob.token })).status).toBe(200)
+  })
+
+  test('wallet update with a stale version answers 409 CONFLICT_VERSION', async ({ page }) => {
+    await boot(page)
+    const { token } = await login(page, ALICE)
+    const w = (await api(page, 'GET', '/wallets', { token })).body.primary
+    const { id, version, ...rest } = w
+    const patch = { displayName: rest.displayName, label: 'Renomeada', profileName: rest.profileName, network: rest.network, address: rest.address, type: rest.type, referralCode: rest.referralCode, email: rest.email, ensName: rest.ensName, version }
+    expect((await api(page, 'PATCH', `/wallets/${id}`, { token, body: patch })).status).toBe(200)
+    const stale = await api(page, 'PATCH', `/wallets/${id}`, { token, body: patch })
+    expect(stale.status).toBe(409)
+    expect(stale.body.error).toMatchObject({ code: 'CONFLICT_VERSION', resource: { kind: 'wallet', id }, currentVersion: version + 1 })
+  })
+
+  test('confirming an order subtracts the receipt quantities from the cart (later additions stay)', async ({ page }) => {
+    await boot(page)
+    const c = await checkout(page, ['payment.hold'])
+    const order = await postOrder(page, c)
+    expect(order.status).toBe(201)
+    await api(page, 'POST', '/cart/items', { token: c.token, body: { nftId: NFT.id, editionId: NFT.edition, quantity: 1 } }) // after checkout
+    await page.evaluate((id) => window.__mock!.settleOrder(id, 'confirmed'), order.body.id)
+    const cart = await api(page, 'GET', '/cart', { token: c.token })
+    expect(cart.body.lines).toHaveLength(1)
+    expect(cart.body.lines[0]!).toMatchObject({ nftId: NFT.id, quantity: 1 })
+  })
+
+  test('a corrupted or wrong-version persisted DB is discarded and reseeded', async ({ page }) => {
+    await boot(page)
+    await page.evaluate(() => localStorage.setItem('mock:db:v1', '{"schema":1,"users":"nope"}'))
+    await page.reload()
+    await page.waitForFunction(() => !!window.__mock)
+    expect((await api(page, 'GET', '/nfts')).body.meta.total).toBe(60)
+    await login(page, ALICE)
+    await page.evaluate(() => localStorage.setItem('mock:db:v1', JSON.stringify({ schema: 99 })))
+    await page.reload()
+    await page.waitForFunction(() => !!window.__mock)
+    await login(page, ALICE)
   })
 })

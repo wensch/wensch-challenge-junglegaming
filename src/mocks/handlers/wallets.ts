@@ -41,7 +41,9 @@ export const walletHandlers = [
   route('updateWallet', ({ auth, params, body }) => {
     const wallet = owned(params.walletId!, auth.user!.id, isActive('auth.forbidden'))
     if (isActive('forms.server-validation')) validationFail({ label: ['Este apelido já está em uso'] })
-    if (body.version !== wallet.version) validationFail({ version: ['A carteira foi alterada em outro lugar. Recarregue e tente novamente'] }, 'Conflito de versão')
+    if (body.version !== wallet.version) {
+      fail({ code: 'CONFLICT_VERSION', message: 'A carteira foi alterada em outro lugar. Recarregue e tente novamente.', resource: { kind: 'wallet', id: wallet.id }, currentVersion: wallet.version })
+    }
     const duplicate = db().wallets.some((w) => w.userId === wallet.userId && w.id !== wallet.id && w.address.toLowerCase() === body.address.toLowerCase())
     if (duplicate) validationFail({ address: ['Este endereço já está cadastrado'] })
     const { alternateAddress, ...fields } = body

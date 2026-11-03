@@ -194,7 +194,7 @@ export function route<N extends EndpointName>(name: N, handler: (ctx: Ctx<N>) =>
       if (def.response === null) return new HttpResponse(null, { status: 204 })
       const out = def.response.safeParse(data)
       if (!out.success) {
-        console.error(`[mock] response of ${name} violates its contract`, out.error.issues, data)
+        console.error(`[mock] response of ${name} violates its contract`, out.error.issues)
         return HttpResponse.json({ error: { code: 'TRANSIENT', message: 'Resposta simulada inválida (contrato).', reason: 'server' } }, { status: 500 })
       }
       return HttpResponse.json(out.data as JsonBodyType, { status: ctx.status })

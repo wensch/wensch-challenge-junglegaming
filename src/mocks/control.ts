@@ -11,8 +11,7 @@ import { clearLater } from './timers'
 
 declare global {
   interface Window {
-    /** Spike-era overload `emit(event, payload, rawToken)` is kept until 00-spike.spec.ts is replaced. */
-    __mock?: MockControl & { emit(event: string, payload: unknown, rawToken: string): void }
+    __mock?: MockControl
   }
 }
 
@@ -44,12 +43,5 @@ export const control: MockControl = {
 }
 
 export function installControl(): void {
-  window.__mock = {
-    ...control,
-    // Spike-era signature: third argument is a raw token string.
-    emit(event: string, payload: unknown, third?: string | { userId?: string }) {
-      if (typeof third === 'string') emitRaw(event, payload, { token: third })
-      else emitRaw(event, payload, { userId: third?.userId })
-    },
-  } as NonNullable<Window['__mock']>
+  window.__mock = control
 }
