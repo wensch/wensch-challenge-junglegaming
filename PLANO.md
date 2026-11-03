@@ -67,7 +67,7 @@ Regras-chave:
 Dependências: F1 (fundação) → {S-catálogo, S-conta, S-checkout} em paralelo (checkout depende de contratos de carrinho + auth básico) → F3.
 
 ### F1 — Fundação (arquiteto-contratos + plataforma-mocks, sequencial)
-1. Contratos zod de todos os recursos + envelopes de evento + `ApiError` (codes: VALIDATION, UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, CONFLICT_AVAILABILITY, QUOTE_STALE, IDEMPOTENCY_CONFLICT, TRANSIENT). **Congelados** antes das telas.
+1. Contratos zod de todos os recursos + envelopes de evento + `ApiError` (12 códigos na v1.0.0: VALIDATION, UNAUTHENTICATED, SESSION_EXPIRED, FORBIDDEN, NOT_FOUND, CONFLICT_AVAILABILITY, QUOTE_STALE, IDEMPOTENCY_CONFLICT, EMAIL_TAKEN, COUPON_INVALID, COUPON_EXPIRED, TRANSIENT; a v1.1.0 acrescenta CONFLICT_VERSION — ver Changelog de contratos no ARCHITECTURE.md). **Congelados** antes das telas.
 2. Mock DB + seed + persistência + reset; cenários; control API; handlers REST completos; realtime.
 3. Axios client, QueryClient (política documentada), router com `_authed`, layout (header/footer Figma), 404.
 4. Tokens Figma → `@theme`; shadcn init; fontes locais.

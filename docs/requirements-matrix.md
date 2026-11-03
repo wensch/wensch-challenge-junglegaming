@@ -18,12 +18,12 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| STK-1 | React + TypeScript | — | |
-| STK-2 | TanStack Router em rotas, search params e proteção de fluxos privados (§4) | — | |
-| STK-3 | TanStack Query em consultas, mutations e sincronização de cache (§4) | — | |
-| STK-4 | Todas as chamadas REST via Axios (§4) | — | |
-| STK-5 | Socket.IO em tempo real | parcial | spike |
-| STK-6 | Tailwind CSS + shadcn/ui adaptado à identidade (§8) | — | |
+| STK-1 | React + TypeScript | OK | `npx tsc -b --noEmit` verde (strict, exactOptionalPropertyTypes); verify F1c |
+| STK-2 | TanStack Router em rotas, search params e proteção de fluxos privados (§4) | parcial | src/routes/* (file-based, router-plugin), `validateSearch` (catálogo/detalhe/auth), `_authed.beforeLoad`; 00-smoke "rota privada", "deep link". Telas reais: S1–S3 |
+| STK-3 | TanStack Query em consultas, mutations e sincronização de cache (§4) | parcial | src/queries/{client,keys,session,cart}.ts (retry só TRANSIENT, `['u', userId]`); realtime/reconcile.ts usa setQueryData/invalidate. Mutations: slices |
+| STK-4 | Todas as chamadas REST via Axios (§4) | parcial | src/api/client.ts (instância única) + src/api/endpoints/* (todas as linhas de `endpoints`, validação zod da resposta) |
+| STK-5 | Socket.IO em tempo real | parcial | src/realtime/socket.ts + reconcile.ts; 00-smoke "tempo real" (connect, applied/duplicate/stale/invalid/foreign, reconexão) via `window.__mock.emit` |
+| STK-6 | Tailwind CSS + shadcn/ui adaptado à identidade (§8) | parcial | src/index.css `@theme` (tokens Figma), components.json + src/components/ui/* (radix-nova adaptado); 91-a11y-shell |
 | STK-7 | MSW para REST e eventos | parcial | spike |
 | STK-8 | Playwright E2E + regressão visual | — | |
 | STK-9 | Lighthouse | — | |
@@ -90,7 +90,7 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | CON-1 | Cadastro, login, logout e sessão integrados à API simulada | — | |
-| CON-2 | Checkout, perfil, carteiras, favoritos e pedidos exigem autenticação | — | |
+| CON-2 | Checkout, perfil, carteiras, favoritos e pedidos exigem autenticação | parcial | Guard `_authed` cobre checkout, orders/$id, profile, wallets, favorites; 00-smoke "rota privada redireciona" (wallets) e "com sessão" (profile). Login real: S2 |
 | CON-3 | Sessão recuperável após refresh | — | |
 | CON-4 | Expiração durante navegação e checkout, preservando contexto para retomada | — | |
 | CON-5 | Logout/troca de usuário limpa cache privado e subscriptions | — | |
@@ -108,9 +108,9 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 | INT-4 | Cancelamento/descarte de respostas obsoletas | — | |
 | INT-5 | Isolamento por usuário e por parâmetros | — | |
 | INT-6 | Recuperação de falhas sem duplicar operações | — | |
-| INT-7 | Rotas inexistentes e acesso direto a qualquer tela | — | |
+| INT-7 | Rotas inexistentes e acesso direto a qualquer tela | OK | 00-smoke "404 para rota inexistente e id malformado", "deep link e refresh"; vercel.json rewrite SPA |
 | INT-8 | Atualização otimista com rollback (≥1) | — | |
-| INT-9 | Política de cache, retries e sincronização documentada | — | |
+| INT-9 | Política de cache, retries e sincronização documentada | OK | ARCHITECTURE.md §7 (staleTime por key, retries, invalidação) + src/queries/client.ts |
 
 ## Contratos REST (§5)
 
@@ -170,7 +170,7 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | UI-1 | Fidelidade: tipografia, cores, espaçamentos, hierarquia, imagens, proporções | — | |
-| UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | — | |
+| UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | Layout 1440/390: header + tab bar + footer (90-visual-shell desktop+mobile). 768 e telas: slices |
 | UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | — | |
 | A11Y-1 | Navegação por teclado e foco visível | — | |
 | A11Y-2 | Controle de foco em diálogos e drawers | — | |
@@ -197,10 +197,10 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 | E2E-10 | Duplicados/antigos, desconexão, pedido pendente | — | |
 | E2E-11 | Teclado, foco de diálogos, validação | — | |
 | E2E-12 | Skeletons em lentidão, falha e retry | — | |
-| E2E-13 | Chromium desktop + mobile | parcial | playwright.config.ts |
+| E2E-13 | Chromium desktop + mobile | OK | playwright.config.ts (desktop 1440 + Pixel 7 390); verify F1c roda as duas |
 | E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | — | |
 | E2E-15 | Estado isolado; controle de relógio, latência e eventos | parcial | spike (page.clock) |
-| E2E-16 | Relatório HTML e traces de falha | parcial | playwright.config.ts |
+| E2E-16 | Relatório HTML e traces de falha | OK | reporter html + trace retain-on-failure; playwright-report/<etapa> por passo do verify; .github/workflows/verify.yml publica relatório e traces |
 
 ## Performance (§10)
 
@@ -218,9 +218,9 @@ Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente 
 |---|---|---|---|
 | DEL-1 | Código, lockfile, assets, mocks, fixtures, testes, configs de auditoria | — | |
 | DEL-2 | Deploy público == código; mocks e tempo real funcionando | — | |
-| DEL-3 | Acesso direto e refresh no ambiente publicado | parcial | spike local (vite preview) |
+| DEL-3 | Acesso direto e refresh no ambiente publicado | parcial | 00-smoke "deep link e refresh" contra `vite preview`; produção após deploy do F1c |
 | DEL-4 | README: setup, env, credenciais, cenários/reset, comandos, reprodução de falhas | — | |
 | DEL-5 | ARCHITECTURE: contratos, eventos, sessão, carrinho, cache, reconciliação, limitações, UX, desvios Figma | — | |
-| DEL-6 | Comandos: dev c/ mocks, build, preview, typecheck, lint, Playwright, Lighthouse | parcial | package.json |
+| DEL-6 | Comandos: dev c/ mocks, build, preview, typecheck, lint, Playwright, Lighthouse | parcial | package.json scripts; `npm run lighthouse` ainda sem lighthouse/run.mjs (F4) |
 | DEL-7 | Executa de checkout limpo sem serviços privados | — | |
 | DEL-8 | README declara uso de IA | — | |

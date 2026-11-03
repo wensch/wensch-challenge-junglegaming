@@ -75,6 +75,8 @@ export const endpoints = {
   createQuote: { method: 'POST', path: '/quotes', auth: 'guest', body: createQuoteRequestSchema, response: quoteSchema, status: 200, errors: ['VALIDATION'] },
 
   // --- Orders (API-6, API-10) ---
+  // `Idempotency-Key` is REQUIRED and must be a UUID; missing/invalid -> 422 VALIDATION with
+  // fieldErrors['Idempotency-Key'] (v1.1.0). Same key + same body -> 200 with the same order.
   createOrder: {
     method: 'POST',
     path: '/orders',
@@ -90,7 +92,7 @@ export const endpoints = {
 
   // --- Profile (API-7) ---
   getProfile: { method: 'GET', path: '/profile', auth: 'session', response: profileSchema, status: 200, errors: [] },
-  updateProfile: { method: 'PATCH', path: '/profile', auth: 'session', body: updateProfileRequestSchema, response: profileSchema, status: 200, errors: ['VALIDATION', 'EMAIL_TAKEN'] },
+  updateProfile: { method: 'PATCH', path: '/profile', auth: 'session', body: updateProfileRequestSchema, response: profileSchema, status: 200, errors: ['VALIDATION', 'EMAIL_TAKEN', 'CONFLICT_VERSION'] },
   uploadAvatar: { method: 'PUT', path: '/profile/avatar', auth: 'session', body: 'multipart', response: profileSchema, status: 200, errors: ['VALIDATION'] },
   removeAvatar: { method: 'DELETE', path: '/profile/avatar', auth: 'session', response: profileSchema, status: 200, errors: [] },
   changePassword: { method: 'POST', path: '/profile/password', auth: 'session', body: changePasswordRequestSchema, response: null, status: 204, errors: ['VALIDATION'] },
@@ -98,7 +100,7 @@ export const endpoints = {
   // --- Wallets (API-8) ---
   listWallets: { method: 'GET', path: '/wallets', auth: 'session', response: walletsResponseSchema, status: 200, errors: [] },
   createWallet: { method: 'POST', path: '/wallets', auth: 'session', body: createWalletRequestSchema, response: walletSchema, status: 201, errors: ['VALIDATION'] },
-  updateWallet: { method: 'PATCH', path: '/wallets/:walletId', auth: 'session', body: updateWalletRequestSchema, response: walletSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND', 'FORBIDDEN'] },
+  updateWallet: { method: 'PATCH', path: '/wallets/:walletId', auth: 'session', body: updateWalletRequestSchema, response: walletSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND', 'FORBIDDEN', 'CONFLICT_VERSION'] },
   connectWallet: { method: 'POST', path: '/wallets/:walletId/connect', auth: 'session', body: connectWalletRequestSchema, response: walletConnectionSchema, status: 200, errors: ['NOT_FOUND', 'FORBIDDEN'] },
   disconnectWallet: { method: 'DELETE', path: '/wallets/:walletId/connection', auth: 'session', response: null, status: 204, errors: ['NOT_FOUND'] },
 } as const satisfies Record<string, EndpointDef>
