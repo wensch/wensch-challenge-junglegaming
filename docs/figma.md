@@ -15,12 +15,12 @@
 | Desktop / Pagamento | 11:2862 | 1440×1657 | `/checkout` | design/ref/desktop-pagamento.png |
 | Desktop / Confirmação de Pedido | 11:4385 | 1440×1657 | `/orders/$id` | design/ref/desktop-confirmacao.png |
 | Desktop / Login | 9:115 | 1440×1981 | `/login` | design/ref/desktop-login.png |
-| Desktop / Cadastro | 9:1022 | 1440×1981 | `/register` | **pendente** (limite do MCP) |
+| Desktop / Cadastro | 9:1022 | 1440×1981 | `/register` | design/ref/desktop-cadastro.png (+ @2x, + desktop-cadastro-modal@2x.png) |
 | Desktop / Perfil do Colecionador | 9:1238 | 1440×1080 | `/profile` | design/ref/desktop-perfil.png |
-| Desktop / Carteiras | 9:1670 | 1440×1080 | `/wallets` | **pendente** (limite do MCP) |
+| Desktop / Carteiras | 9:1670 | 1440×1080 | `/wallets` | design/ref/desktop-carteiras.png (+ @2x) |
 | Mobile / Início | 14:5226 | 414×896 | `/` | design/ref/mobile-inicio.png |
 | Mobile / Detalhes do NFT | 15:5536 | 414×896 | `/nft/$id` | design/ref/mobile-detalhe.png |
-| Mobile / Carrinho de NFTs | 16:360 | 414×896 | `/cart` | **pendente** (limite do MCP) |
+| Mobile / Carrinho de NFTs | 16:360 | 414×896 | `/cart` | design/ref/mobile-carrinho.png |
 | Mobile / Pagamento | 16:748 | 414×896 | `/checkout` | design/ref/mobile-pagamento.png |
 | Mobile / Login | 16:1022 | 414×896 | `/login` | design/ref/mobile-login.png |
 | Mobile / Cadastro | 16:1228 | 414×896 | `/register` | design/ref/mobile-cadastro.png |
@@ -50,8 +50,9 @@ Display 43/70 Bold · Heading 24 Bold · Body Large 18 (Bold lh16/24, Regular lh
 (`letterSpacing: 10` no Figma = 10% → `0.1em`.)
 
 ## Assets
-- O catálogo reutiliza 5 ilustrações (macacos: óculos/jaqueta verde, chapéu/moletom roxo, gorila/gola alta, fones laranja, + variações). Plano: exportar do Figma em 2x; se o limite do MCP impedir, recortar do PNG 1x do frame de Início (hero ~450px) e registrar a substituição em ARCHITECTURE.md.
-- Ícones (busca, carrinho, redes sociais): lucide-react equivalente; documentar.
+Originais exportados do Figma pelo usuário em `design/assets/` (a app usa versões WebP otimizadas geradas em `public/nft/`):
+artwork-03@2x, artwork-08@2x, artwork-09@2x (500×500); artwork-04, -05, -10 (250×250); artwork-06 (224×286); artwork-18 (310×366); collection-02 (100×100).
+- Ícones (busca, carrinho, redes sociais): lucide-react equivalente; documentar em ARCHITECTURE.md.
 
 ## Limitação de acesso
 O MCP do Figma no plano Starter atingiu o limite de chamadas após ~17 chamadas (2026-11-03). Frames pendentes e assets em 2x precisam de: nova janela de limite, export manual pelo usuário (Export → PNG 2x para `design/ref/` e imagens para `public/nft/`), ou REST API do Figma com token pessoal do usuário.
