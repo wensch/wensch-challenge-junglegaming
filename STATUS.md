@@ -44,10 +44,13 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 |---|---|---|
 | F1a contratos + ARCHITECTURE + money + lint | arquiteto-contratos | **OK** — contratos v1.0.0 congelados, verify GREEN, merge d9b3727 |
 | F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | **OK** — 60 NFTs, 31 rotas, 24 cenários, 70 testes verdes; merge c6b7d16 |
-| F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) | arquiteto-contratos | em andamento (volta 1) |
-| Gates (fidelidade ‖ qa ‖ segurança → revisor) | — | pendente |
+| F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) + contratos v1.1.0 | arquiteto-contratos | **OK** — merge 6a48902 |
+| verify em main (6a48902) | orquestrador | **GREEN** — typecheck, lint, build, e2e, visual 4/4, a11y 9/9 (+1 skip intencional) |
+| Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | em andamento → reports/fundacao/ |
+| Revisor sênior | revisor-frontend-senior | aguardando gates |
+| Pendente p/ volta 2 | plataforma-mocks | trocar VALIDATION→CONFLICT_VERSION (profile/wallets); remover restos do spike |
 
 ## Próximo passo
-Integrar F1b + F1c em `main`, rodar verify, despachar gates (fidelidade ‖ QA ‖ segurança → revisor).
+Aguardar os 3 gates, rodar revisor sênior, aplicar correções (volta 2) junto com o ajuste dos mocks.
 
 Decisões de F1a aceitas pelo orquestrador: recusa de carteira = 200 `{status:'rejected'}`; recurso alheio = 403 FORBIDDEN; token em localStorage (trade-off documentado em ARCHITECTURE §4); 12 códigos de erro (PLANO será atualizado em F1c).
