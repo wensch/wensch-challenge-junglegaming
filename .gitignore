@@ -16,3 +16,4 @@ lighthouse/.tmp
 *.tsbuildinfo
 
 .claude/worktrees/
+reports/**/test-results/
