@@ -13,3 +13,4 @@ lighthouse/.tmp
 !.env.development
 
 .vercel
+*.tsbuildinfo
