@@ -48,7 +48,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | verify em main (6a48902) | orquestrador | **GREEN** — typecheck, lint, build, e2e, visual 4/4, a11y 9/9 (+1 skip intencional) |
 | Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | **CHANGES_REQUESTED** ×3 — [fidelidade](reports/fundacao/fidelidade-visual.md) · [qa](reports/fundacao/qa-features.md) · [segurança](reports/fundacao/seguranca.md) · [BUGS](BUGS.md) |
 | Revisor sênior volta 1 | revisor-frontend-senior | **CHANGES_REQUESTED** — 25 achados (5 altos) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
-| Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | em andamento (PW_PORT 4175) |
+| Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | **OK** — verify GREEN, R2 passa; merge 3d52cf7. Obs.: `latency.variable` falhou 1× com 6 workers (175 ms vs limite 150 ms), possível flake |
 | Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, etc. | arquiteto-contratos | em andamento (PW_PORT 4176) |
 
 ## Próximo passo
