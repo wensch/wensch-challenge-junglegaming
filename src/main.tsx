@@ -5,8 +5,8 @@ import './index.css'
 // load. Hence the app is imported dynamically only after the worker starts.
 async function enableMocks() {
   if (import.meta.env.VITE_ENABLE_MOCKS !== 'true') return
-  const { worker } = await import('./mocks/browser')
-  await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
+  const { startMocks } = await import('./mocks/browser')
+  await startMocks()
 }
 
 await enableMocks()
