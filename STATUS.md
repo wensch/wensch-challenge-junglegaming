@@ -42,10 +42,12 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 ## Fase 1 — fundacao
 | Etapa | Agente | Status |
 |---|---|---|
-| F1a contratos + ARCHITECTURE + money + lint | arquiteto-contratos | em andamento (volta 1) |
-| F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | aguardando F1a |
-| F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) | arquiteto-contratos | aguardando F1a |
+| F1a contratos + ARCHITECTURE + money + lint | arquiteto-contratos | **OK** — contratos v1.0.0 congelados, verify GREEN, merge d9b3727 |
+| F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | em andamento (volta 1) |
+| F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) | arquiteto-contratos | em andamento (volta 1) |
 | Gates (fidelidade ‖ qa ‖ segurança → revisor) | — | pendente |
 
 ## Próximo passo
-Concluir F1a, mesclar em `main`, despachar F1b ‖ F1c.
+Integrar F1b + F1c em `main`, rodar verify, despachar gates (fidelidade ‖ QA ‖ segurança → revisor).
+
+Decisões de F1a aceitas pelo orquestrador: recusa de carteira = 200 `{status:'rejected'}`; recurso alheio = 403 FORBIDDEN; token em localStorage (trade-off documentado em ARCHITECTURE §4); 12 códigos de erro (PLANO será atualizado em F1c).
