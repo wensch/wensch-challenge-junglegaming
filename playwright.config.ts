@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const CI = !!process.env.CI
+// PW_PORT lets parallel worktrees run the suite without reusing each other's preview server.
+const PORT = process.env.PW_PORT ?? '4173'
+const LOCAL_URL = `http://localhost:${PORT}`
+const PREVIEW = `npx vite preview --port ${PORT} --strictPort`
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -8,7 +12,7 @@ export default defineConfig({
   forbidOnly: CI,
   retries: CI ? 1 : 0,
   reporter: [['html', { open: 'never' }], ['list']],
-  use: { baseURL: process.env.BASE_URL ?? 'http://localhost:4173', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
+  use: { baseURL: process.env.BASE_URL ?? LOCAL_URL, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   // Baselines are per platform (font rasterization differs between Windows and Linux).
   snapshotPathTemplate: 'tests/__screenshots__/{platform}/{projectName}/{testFileName}/{arg}{ext}',
   expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled', caret: 'hide' } },
@@ -20,5 +24,5 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } } },
   ],
   // BASE_URL points the suite at a deployed build (e.g. production smoke) and skips the local server.
-  ...(process.env.BASE_URL ? {} : { webServer: { command: process.env.PW_SKIP_BUILD ? 'npm run preview' : 'npm run build && npm run preview', url: 'http://localhost:4173', reuseExistingServer: !CI, timeout: 180_000 } }),
+  ...(process.env.BASE_URL ? {} : { webServer: { command: process.env.PW_SKIP_BUILD ? PREVIEW : `npm run build && ${PREVIEW}`, url: LOCAL_URL, reuseExistingServer: !CI, timeout: 180_000 } }),
 })
