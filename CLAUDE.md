@@ -8,6 +8,12 @@ Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/chal
 - Ciclo por slice: implementar → (fidelidade-visual ‖ qa-features ‖ seguranca) → revisor-frontend-senior → corrigir. Máximo 3 voltas; depois registrar em `ESCALATIONS.md` e seguir.
 - Reportar somente via `STATUS.md` e `reports/<slice>/<agente>.md`.
 
+## Git
+- Commits e PRs **sem** trailers `Co-Authored-By` ou "Generated with": tudo no nome do usuário (pedido explícito).
+- Remoto: https://github.com/wensch/wensch-challenge-junglegaming · Produção: https://wensch-challenge-junglegaming.vercel.app
+- Smoke em produção: `BASE_URL=<url> npx playwright test`.
+- Antes de commitar: `npx tsc -b --noEmit && npx eslint .` precisa passar.
+
 ## Integridade (inegociável)
 - Nunca consultar forks, PRs ou soluções de outros candidatos do repositório do desafio.
 - Apenas dados e credenciais fictícios. Nenhum segredo no repositório.
@@ -29,6 +35,7 @@ Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/chal
 - O binding ignora o payload de CONNECT; o mock lê `auth.token` do frame bruto `40{...}`.
 - Só namespace padrão, eventos de texto, sem acks (limitação do binding) → usar `transports: ['websocket']`.
 - Versões fixadas: `typescript@6.0.3` (typescript-eslint não suporta TS7), `msw@2.15.0` (binding exige MSW 2).
+- Figma: usar a cópia `ua5xsyQarfBRq7v7ZxWXPr`; o MCP tem limite de chamadas (plano Starter). Economize: prefira `.spike/figma-meta.xml` e `design/ref/`.
 - No Windows, Playwright usa `npm run build && npm run preview` como webServer na porta 4173.
 
 ## Definition of Done (por slice)

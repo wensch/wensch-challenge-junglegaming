@@ -117,8 +117,8 @@ A restrição "escreve só em `reports/`" é aplicada por hook (`.claude/hooks/g
 | Risco | Status | Contingência |
 |---|---|---|
 | MSW + socket.io-client | **Resolvido no spike** (ver STATUS) | — ; limitações documentadas |
-| Figma sem acesso via MCP (exige edição) | **Aberto** | usuário duplica o arquivo para seus drafts; alternativa: PNGs exportados em `design/ref/` |
-| Deploy bloqueado (publicação externa requer aprovação) | **Aberto** | aguardando aprovação para repo privado + Vercel Git; alternativa: usuário faz `vercel login` |
+| Figma: limite de chamadas do MCP (plano Starter) | **Aberto** | metadados XML + PNGs 1x já salvos; recorte de assets; export manual pelo usuário |
+| Deploy | **Resolvido** | produção em wensch-challenge-junglegaming.vercel.app |
 | Vercel CLI no Windows (EPERM em symlink) | Conhecido | deploy via Git integration ou Developer Mode do Windows |
 | Lighthouse Performance com MSW (SW + bundle de mocks) | Esperado | mocks em chunk separado e lazy; medir honestamente e justificar |
 | TS 7 / MSW 3 | Evitado | versões fixadas; documentado |
@@ -135,7 +135,7 @@ A restrição "escreve só em `reports/`" é aplicada por hook (`.claude/hooks/g
 | 38–44 | F5 release, checkout limpo |
 | 44–48 | buffer |
 
-## 8. Skills e plugins candidatos (nenhum instalado ainda)
+## 8. Skills e plugins (instalados após revisão: shadcn, playwright-cli, playwright-best-practices, accessibility)
 
 Já disponíveis no ambiente (sem instalar nada): `vercel-react-best-practices`, `web-design-guidelines`, `ui-ux-pro-max:ui-styling` (shadcn/Tailwind), `code-review`, `security-review`, `frontend-design`.
 

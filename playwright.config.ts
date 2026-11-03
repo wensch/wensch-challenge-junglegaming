@@ -11,5 +11,5 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 390, height: 844 } } },
   ],
   // BASE_URL points the suite at a deployed build (e.g. production smoke) and skips the local server.
-  webServer: process.env.BASE_URL ? undefined : { command: process.env.PW_SKIP_BUILD ? 'npm run preview' : 'npm run build && npm run preview', url: 'http://localhost:4173', reuseExistingServer: !process.env.CI, timeout: 180_000 },
+  ...(process.env.BASE_URL ? {} : { webServer: { command: process.env.PW_SKIP_BUILD ? 'npm run preview' : 'npm run build && npm run preview', url: 'http://localhost:4173', reuseExistingServer: !process.env.CI, timeout: 180_000 } }),
 })
