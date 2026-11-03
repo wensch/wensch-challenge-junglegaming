@@ -41,13 +41,33 @@ export async function findSession(token: string | null | undefined): Promise<Ses
   return { status: 'ok', session, user, token }
 }
 
+const sessionListeners = new Set<() => void>()
+/** Realtime subscribes here to drop sockets of revoked or expired sessions. */
+export function onSessionsChanged(fn: () => void): void {
+  sessionListeners.add(fn)
+}
+function notifySessionsChanged(): void {
+  for (const fn of sessionListeners) fn()
+}
+
+// Sessions are matched by token hash (not identity): the DB object may have been replaced by another tab's write.
 export function revokeSession(session: SessionRec): void {
-  db().sessions = db().sessions.filter((s) => s !== session)
+  db().sessions = db().sessions.filter((s) => s.tokenHash !== session.tokenHash)
   persist()
+  notifySessionsChanged()
+}
+
+/** Revokes every session of the user except the one identified by `keepTokenHash`. */
+export function revokeOtherSessions(userId: string, keepTokenHash: string): void {
+  db().sessions = db().sessions.filter((s) => s.userId !== userId || s.tokenHash === keepTokenHash)
+  persist()
+  notifySessionsChanged()
 }
 
 /** Marks a session as expired right now (simulated). */
 export function expireSession(session: SessionRec): void {
-  session.expiresAt = new Date(Date.now() - 1000).toISOString()
+  const live = db().sessions.find((s) => s.tokenHash === session.tokenHash) ?? session
+  live.expiresAt = new Date(Date.now() - 1000).toISOString()
   persist()
+  notifySessionsChanged()
 }

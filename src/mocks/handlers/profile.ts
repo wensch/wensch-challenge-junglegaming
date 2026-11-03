@@ -3,6 +3,7 @@ import { hashPassword, newSalt } from '../crypto'
 import { db, nowIso, persist, type UserRec } from '../db'
 import { fail, route, validationFail } from '../http'
 import { isActive } from '../scenario-state'
+import { revokeOtherSessions } from '../sessions'
 
 export const profileOf = (u: UserRec): Profile => ({
   userId: u.id,
@@ -35,7 +36,9 @@ export const profileHandlers = [
   route('updateProfile', ({ auth, body }) => {
     const me = auth.user!
     if (isActive('forms.server-validation')) validationFail({ username: ['Este nome de usuário não está disponível'] })
-    if (body.version !== me.version) validationFail({ version: ['O perfil foi alterado em outro lugar. Recarregue e tente novamente'] }, 'Conflito de versão')
+    if (body.version !== me.version) {
+      fail({ code: 'CONFLICT_VERSION', message: 'O perfil foi alterado em outro lugar. Recarregue e tente novamente.', resource: { kind: 'profile', id: me.id }, currentVersion: me.version })
+    }
     const email = body.email.trim().toLowerCase()
     if (db().users.some((u) => u.id !== me.id && u.email === email)) {
       fail({ code: 'EMAIL_TAKEN', message: 'Este e-mail já está cadastrado.', fieldErrors: { email: ['Este e-mail já está cadastrado'] } })
@@ -51,9 +54,11 @@ export const profileHandlers = [
     if (!(file instanceof File)) validationFail({ [AVATAR_FIELD]: ['Envie um arquivo de imagem'] })
     if (!(AVATAR_MIME_TYPES as readonly string[]).includes(file.type)) validationFail({ [AVATAR_FIELD]: ['Use PNG, JPEG ou WebP'] })
     if (file.size > AVATAR_MAX_BYTES) validationFail({ [AVATAR_FIELD]: ['Imagem maior que 2 MB'] })
-    auth.user!.avatarUrl = await toDataUrl(file)
-    bump(auth.user!)
-    return profileOf(auth.user!)
+    const url = await toDataUrl(file)
+    const live = db().users.find((u) => u.id === auth.user!.id) ?? auth.user!
+    live.avatarUrl = url
+    bump(live)
+    return profileOf(live)
   }),
 
   route('removeAvatar', ({ auth }) => {
@@ -66,9 +71,13 @@ export const profileHandlers = [
     const me = auth.user!
     if (isActive('forms.server-validation')) validationFail({ newPassword: ['Esta senha é muito comum. Escolha outra'] })
     if ((await hashPassword(body.currentPassword, me.salt)) !== me.passwordHash) validationFail({ currentPassword: ['Senha atual incorreta'] })
-    me.salt = newSalt()
-    me.passwordHash = await hashPassword(body.newPassword, me.salt)
-    bump(me)
+    const salt = newSalt()
+    const passwordHash = await hashPassword(body.newPassword, salt)
+    const live = db().users.find((u) => u.id === me.id) ?? me
+    Object.assign(live, { salt, passwordHash })
+    bump(live)
+    // Other sessions of this user are no longer valid after a password change.
+    revokeOtherSessions(live.id, auth.session!.tokenHash)
     return undefined
   }),
 ]

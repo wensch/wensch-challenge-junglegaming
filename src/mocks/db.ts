@@ -2,6 +2,7 @@
  * In-memory mock database. State is a plain JSON-serializable object persisted to localStorage under a
  * versioned key; `persist()` is called after every mutation. Types come from the frozen contracts.
  */
+import { z } from 'zod'
 import type { Coupon, Edition, Network, NftDetail, Order, Quote, Wallet } from '@/api/contracts'
 
 export const DB_VERSION = 1
@@ -99,10 +100,72 @@ export interface DbState {
   idempotency: Record<string, { bodyHash: string; orderId: string }>
 }
 
+const rec = z.looseObject({})
+const recWithId = z.looseObject({ id: z.string() })
+/** Structural validation of what comes back from localStorage (deep shapes are guaranteed by the writers). */
+const persistedSchema = z.looseObject({
+  schema: z.literal(DB_VERSION),
+  seq: z.record(z.string(), z.number()),
+  nfts: z.array(recWithId),
+  coupons: z.array(rec),
+  users: z.array(recWithId),
+  sessions: z.array(z.looseObject({ tokenHash: z.string(), userId: z.string(), issuedAt: z.string(), expiresAt: z.string() })),
+  favorites: z.record(z.string(), z.array(z.string())),
+  carts: z.record(z.string(), recWithId),
+  wallets: z.array(recWithId),
+  connections: z.array(rec),
+  quotes: z.record(z.string(), rec),
+  orders: z.array(recWithId),
+  orderMeta: z.record(z.string(), rec),
+  idempotency: z.record(z.string(), rec),
+})
+
 let state: DbState | null = null
+/** Last serialized value this tab wrote or read; a different stored value means another tab wrote. */
+let lastRaw: string | null = null
+const syncListeners = new Set<() => void>()
+
+/** Called after the in-memory state was replaced by another tab's write. */
+export function onDbSynced(fn: () => void): void {
+  syncListeners.add(fn)
+}
+
+function readStored(): { raw: string; parsed: DbState } | null {
+  try {
+    const raw = localStorage.getItem(DB_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = persistedSchema.safeParse(JSON.parse(raw))
+    return parsed.success ? { raw, parsed: parsed.data as unknown as DbState } : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Cross-tab consistency: before every access the stored copy is compared with the one this tab last saw;
+ * if another tab persisted in between, its state is adopted (a mutation never overwrites foreign writes
+ * with a stale snapshot of the whole database).
+ */
+export function refreshFromStorage(): boolean {
+  if (!state) return false
+  let raw: string | null
+  try {
+    raw = localStorage.getItem(DB_STORAGE_KEY)
+  } catch {
+    return false
+  }
+  if (raw === null || raw === lastRaw) return false
+  const stored = readStored()
+  if (!stored) return false
+  state = stored.parsed
+  lastRaw = stored.raw
+  for (const fn of syncListeners) fn()
+  return true
+}
 
 export function db(): DbState {
   if (!state) throw new Error('Mock DB not initialised')
+  refreshFromStorage()
   return state
 }
 
@@ -114,24 +177,27 @@ export function setDb(next: DbState): void {
 export function persist(): void {
   if (!state) return
   try {
-    localStorage.setItem(DB_STORAGE_KEY, JSON.stringify(state))
+    const raw = JSON.stringify(state)
+    localStorage.setItem(DB_STORAGE_KEY, raw)
+    lastRaw = raw
   } catch {
     // Quota exceeded (e.g. large avatar): keep serving from memory.
   }
 }
 
+/** Persisted DB if present, valid and of the current version; otherwise null (caller reseeds). */
 export function loadPersisted(): DbState | null {
-  try {
-    const raw = localStorage.getItem(DB_STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw) as DbState
-    return parsed.schema === DB_VERSION ? parsed : null
-  } catch {
+  const stored = readStored()
+  if (!stored) {
+    clearPersisted()
     return null
   }
+  lastRaw = stored.raw
+  return stored.parsed
 }
 
 export function clearPersisted(): void {
+  lastRaw = null
   try {
     localStorage.removeItem(DB_STORAGE_KEY)
   } catch {
@@ -143,6 +209,8 @@ export function clearPersisted(): void {
 export function nextId(prefix: string, width = 4): string {
   const s = db().seq
   s[prefix] = (s[prefix] ?? 0) + 1
+  // Reserve the number now so another tab's next nextId() (which re-reads storage) cannot reuse it.
+  persist()
   return `${prefix}_${String(s[prefix]).padStart(width, '0')}`
 }
 
