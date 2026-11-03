@@ -43,7 +43,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Etapa | Agente | Status |
 |---|---|---|
 | F1a contratos + ARCHITECTURE + money + lint | arquiteto-contratos | **OK** — contratos v1.0.0 congelados, verify GREEN, merge d9b3727 |
-| F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | em andamento (volta 1) |
+| F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | **OK** — 60 NFTs, 31 rotas, 24 cenários, 70 testes verdes; merge c6b7d16 |
 | F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) | arquiteto-contratos | em andamento (volta 1) |
 | Gates (fidelidade ‖ qa ‖ segurança → revisor) | — | pendente |
 
