@@ -1,0 +1,1 @@
+{"root":["./src/spikeapp.tsx","./src/bootstrap.tsx","./src/main.tsx","./src/mocks/browser.ts","./src/mocks/handlers.ts","./src/mocks/realtime.ts","./tests/e2e/00-spike.spec.ts","./vite.config.ts","./playwright.config.ts"],"version":"6.0.3"}

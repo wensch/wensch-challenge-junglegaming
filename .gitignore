@@ -1,0 +1,15 @@
+node_modules
+dist
+.vercel
+test-results
+playwright-report
+blob-report
+lighthouse/.tmp
+*.local
+.env
+.env.*
+!.env.example
+!.env.production
+!.env.development
+
+.vercel
