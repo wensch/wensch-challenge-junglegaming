@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Etapa D concluída — **aguardando "prossiga"** para iniciar a Fase 1.
+**Fase atual:** Fase 1 — slice `fundacao`, volta 1 em andamento.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -39,5 +39,13 @@ Descobertas (registradas em CLAUDE.md):
 ## Skills instaladas (projeto: `.claude/skills/`, `skills-lock.json`)
 shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (currents-dev), accessibility (addyosmani/web-quality-skills). Cada SKILL.md foi lido antes e os 94 arquivos foram varridos por padrões perigosos: nada encontrado.
 
+## Fase 1 — fundacao
+| Etapa | Agente | Status |
+|---|---|---|
+| F1a contratos + ARCHITECTURE + money + lint | arquiteto-contratos | em andamento (volta 1) |
+| F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | aguardando F1a |
+| F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) | arquiteto-contratos | aguardando F1a |
+| Gates (fidelidade ‖ qa ‖ segurança → revisor) | — | pendente |
+
 ## Próximo passo
-Após "prossiga": Fase 1 (fundação) via `/run-pipeline fundacao`.
+Concluir F1a, mesclar em `main`, despachar F1b ‖ F1c.
