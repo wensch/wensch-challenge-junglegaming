@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 1 — slice `fundacao`, volta 1 em andamento.
+**Fase atual:** Fase 1 — slice `fundacao`, **volta 2** em andamento.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -46,11 +46,12 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | **OK** — 60 NFTs, 31 rotas, 24 cenários, 70 testes verdes; merge c6b7d16 |
 | F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) + contratos v1.1.0 | arquiteto-contratos | **OK** — merge 6a48902 |
 | verify em main (6a48902) | orquestrador | **GREEN** — typecheck, lint, build, e2e, visual 4/4, a11y 9/9 (+1 skip intencional) |
-| Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | em andamento → reports/fundacao/ |
-| Revisor sênior | revisor-frontend-senior | aguardando gates |
-| Pendente p/ volta 2 | plataforma-mocks | trocar VALIDATION→CONFLICT_VERSION (profile/wallets); remover restos do spike |
+| Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | **CHANGES_REQUESTED** ×3 — [fidelidade](reports/fundacao/fidelidade-visual.md) · [qa](reports/fundacao/qa-features.md) · [segurança](reports/fundacao/seguranca.md) · [BUGS](BUGS.md) |
+| Revisor sênior volta 1 | revisor-frontend-senior | **CHANGES_REQUESTED** — 25 achados (5 altos) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
+| Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | em andamento (PW_PORT 4175) |
+| Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, etc. | arquiteto-contratos | em andamento (PW_PORT 4176) |
 
 ## Próximo passo
-Aguardar os 3 gates, rodar revisor sênior, aplicar correções (volta 2) junto com o ajuste dos mocks.
+Integrar as duas correções da volta 2, verify em main, rodar de novo os 3 gates e o revisor (volta 2 de 3).
 
 Decisões de F1a aceitas pelo orquestrador: recusa de carteira = 200 `{status:'rejected'}`; recurso alheio = 403 FORBIDDEN; token em localStorage (trade-off documentado em ARCHITECTURE §4); 12 códigos de erro (PLANO será atualizado em F1c).
