@@ -11,9 +11,13 @@ import { walletHandlers } from './wallets'
 // Order matters: `/nfts/featured` is declared before `/nfts/:nftId` in the endpoint table.
 const apiHandlers = [...authHandlers, ...catalogHandlers, ...cartHandlers, ...orderHandlers, ...profileHandlers, ...walletHandlers]
 
+/** Probe used by `startMocks` to prove the service worker is really answering this document's requests. */
+export const PING_PATH = '/__mock/ping'
+const ping = http.get(`${API_BASE}${PING_PATH}`, () => new HttpResponse('mock-pong', { status: 200, headers: { 'Content-Type': 'text/plain' } }))
+
 const unknownRoute = http.all(`${API_BASE}/*`, ({ request }) => {
   const { body, status } = errorBody<ApiErrorCode>({ code: 'NOT_FOUND', message: `Rota desconhecida: ${new URL(request.url).pathname}` })
   return HttpResponse.json(body, { status })
 })
 
-export const restHandlers = [...apiHandlers, unknownRoute]
+export const restHandlers = [ping, ...apiHandlers, unknownRoute]

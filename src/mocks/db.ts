@@ -163,9 +163,10 @@ function readStored(): { raw: string; parsed: DbState } | null {
 export function refreshFromStorage(): boolean {
   if (!state) return false
   let raw: string | null
+  let rev: string | null
   try {
     // Cheap path: same revision stamp as the last one this tab wrote or adopted -> nothing to re-read.
-    const rev = localStorage.getItem(DB_REV_KEY)
+    rev = localStorage.getItem(DB_REV_KEY)
     if (rev !== null && rev === lastRev) return false
     raw = localStorage.getItem(DB_STORAGE_KEY)
     if (raw === null || raw === lastRaw) {
@@ -179,7 +180,7 @@ export function refreshFromStorage(): boolean {
   if (!stored) return false
   state = stored.parsed
   lastRaw = stored.raw
-  lastRev = readRev()
+  lastRev = rev
   for (const fn of syncListeners) fn()
   return true
 }
@@ -204,7 +205,14 @@ export function persist(): void {
     lastRev = `${tabId}:${++revCounter}`
     localStorage.setItem(DB_REV_KEY, lastRev)
   } catch {
-    // Quota exceeded (e.g. large avatar): keep serving from memory.
+    // Quota exceeded (e.g. large avatar): keep serving from memory. Drop the stamp so other tabs fall back
+    // to the string comparison (slow path) and still notice a DB write that happened without a new stamp.
+    lastRev = null
+    try {
+      localStorage.removeItem(DB_REV_KEY)
+    } catch {
+      /* storage unavailable */
+    }
   }
 }
 
