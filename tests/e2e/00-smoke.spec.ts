@@ -18,8 +18,8 @@ test.describe('shell', () => {
   test('home carrega com layout, título e landmarks', async ({ page, boot }, info) => {
     await boot('/')
     await expect(page).toHaveTitle(/KURIO/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Mercado de NFTs' })).toBeVisible()
-    await expect(page.getByRole('status')).toContainText('Em construção')
+    await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO/ })).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Destaques' })).toBeVisible()
     await expect(page.getByRole('main')).toBeVisible()
     await expect(page.getByRole('contentinfo')).toContainText('© 2026 Kurio')
     if (isMobileProject(info.project.name)) {
@@ -35,21 +35,21 @@ test.describe('shell', () => {
 
   test('deep link e refresh preservam rota e search params', async ({ page, boot }) => {
     await boot('/nft/nft_004?edition=ed_004_1')
-    await expect(page.getByRole('heading', { level: 1, name: 'Detalhes do NFT' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await page.reload()
-    await expect(page.getByRole('heading', { level: 1, name: 'Detalhes do NFT' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await expect(page).toHaveURL(/\/nft\/nft_004\?edition=ed_004_1$/)
 
     // Invalid catalog params fall back to defaults instead of breaking the page.
     await page.goto('/?page=abc&sort=hack&tab=nope')
-    await expect(page.getByRole('heading', { level: 1, name: 'Mercado de NFTs' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO/ })).toBeVisible()
 
     // Client-side navigation from the footer keeps the filter in the URL and survives refresh.
     await page.getByRole('contentinfo').getByRole('link', { name: 'Fotografia' }).click()
     await expect(page).toHaveURL(/categories=/)
     await page.reload()
     await expect(page).toHaveURL(/categories=/)
-    await expect(page.getByRole('heading', { level: 1, name: 'Mercado de NFTs' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO/ })).toBeVisible()
   })
 
   test('404 para rota inexistente e id malformado', async ({ page, boot }) => {

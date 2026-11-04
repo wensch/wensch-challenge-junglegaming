@@ -99,7 +99,7 @@ interface ReqOpts {
   abortMs?: number
 }
 
-async function boot(page: Page, url = '/') {
+async function boot(page: Page, url = '/em-breve') {
   await page.goto(url)
   await page.waitForFunction(() => !!window.__mock)
   await page.evaluate(() => window.__mock!.reset())

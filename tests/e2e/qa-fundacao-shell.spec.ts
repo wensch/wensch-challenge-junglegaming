@@ -4,11 +4,11 @@
 import { expect, isMobileProject, test, USERS } from '../fixtures'
 
 const PUBLIC_ROUTES: [string, string | RegExp][] = [
-  ['/', 'Mercado de NFTs'],
+  ['/', /SEJA DONO/],
   ['/cart', /Carrinho|Sacola/i],
   ['/login', 'Entrar'],
   ['/register', /Criar conta|Cadastr/i],
-  ['/nft/nft_004', 'Detalhes do NFT'],
+  ['/nft/nft_004', /\w/],
   ['/em-breve', 'Esta área'],
   ['/em-breve?secao=ajuda', 'Central de ajuda'],
   ['/em-breve?secao=__proto__', 'Esta área'],

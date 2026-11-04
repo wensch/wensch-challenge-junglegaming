@@ -48,8 +48,8 @@ Abreviações: **verify** = verify a79823d · **harness** = `tests/e2e/mocks.spe
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| TEL-1 | Início: destaques, catálogo, busca, filtros, ordenação, navegação ao NFT | — | `src/routes/index.tsx` é placeholder (S1) |
-| TEL-2 | Detalhe: galeria, informações, edição, quantidade, favoritos, compra | — | `src/routes/nft.$id.tsx` é placeholder (S1) |
+| TEL-1 | Início: destaques, catálogo, busca, filtros, ordenação, navegação ao NFT | parcial | S1: `01-catalog` (destaques, grade, busca, filtros, ordenação, navegação ao NFT); `90-visual-catalog` início |
+| TEL-2 | Detalhe: galeria, informações, edição, quantidade, favoritos, compra | parcial | S1: `02-detail` (galeria, informações, edição, quantidade, adicionar ao carrinho), `04-favorites`; "compra" até o carrinho (S3 completa) |
 | TEL-3 | Carrinho: quantidades, remoção, cupom, resumo de valores | — | `src/routes/cart.tsx` é placeholder (S3) |
 | TEL-4 | Pagamento: dados do colecionador, carteira e rede, revisão, envio | — | `src/routes/_authed/checkout.tsx` é placeholder (S3) |
 | TEL-5 | Confirmação: resultado, id da transação, itens, taxas, total | — | `src/routes/_authed/orders.$id.tsx` é placeholder (S3) |
@@ -65,15 +65,15 @@ Abreviações: **verify** = verify a79823d · **harness** = `tests/e2e/mocks.spe
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| CAT-1 | Busca, filtros, ordenação e paginação na URL; sobrevivem a refresh e histórico | parcial | `catalogSearchSchema` (ARCHITECTURE §2.4); `00-smoke` "deep link e refresh preservam rota e search params". UI e histórico: S1 |
-| CAT-2 | Filtros combináveis; mudança de filtro reinicia paginação | — | Só a regra documentada (ARCHITECTURE §2.4); nenhum teste. Mock combina categorias (harness "catalog filters") |
-| CAT-3 | Consultas refletem parâmetros enviados à API | parcial | `toNftListParams` + key normalizada (`normalizeNftListQuery`, R3); harness "catalog filters, sort, search and facets". UI: S1 |
-| CAT-4 | Resultado vazio, falha e respostas fora de ordem tratados | parcial | Cenários `catalog.empty`, `http.503`, `catalog.out-of-order` (harness); `signal` → Axios. Tratamento na UI: S1 |
-| DET-1 | Acesso direto ao detalhe | parcial | Rota `/nft/$id` abre por deep link (`qa-fundacao-shell` "rotas públicas: deep link e refresh"). Conteúdo: S1 |
-| DET-2 | NFT inexistente | parcial | `00-smoke` "404 para rota inexistente e id malformado"; mock `GET /nfts/nft_999` → NOT_FOUND (harness). Estado na tela: S1 |
-| DET-3 | Edição indisponível | — | Mock tem `soldOut` e edições esgotadas (harness "seed is deterministic and rich"); nada na UI |
-| DET-4 | Limite de quantidade | parcial | Mock responde 409 CONFLICT_AVAILABILITY acima do estoque (harness "guest cart, merge…"). UI: S1/S3 |
-| FAV-1 | Favoritos persistem para o usuário autenticado | parcial | Mock: favorito persiste após reload (harness "state and scenarios persist across reload"); guard `/favorites`. UI: S4 |
+| CAT-1 | Busca, filtros, ordenação e paginação na URL; sobrevivem a refresh e histórico | OK | `01-catalog` "busca, filtros combinados, ordenação e paginação compõem a URL e sobrevivem a refresh e histórico"; `catalogSearchSchema` + `validateSearch` em `src/routes/index.tsx` |
+| CAT-2 | Filtros combináveis; mudança de filtro reinicia paginação | OK | `01-catalog` mesma spec: após filtrar a URL perde `page` e a requisição leva `page=1` |
+| CAT-3 | Consultas refletem parâmetros enviados à API | OK | `01-catalog`: `waitForRequest` confere `categories`, `networks`, `sort`, `page` na chamada à API |
+| CAT-4 | Resultado vazio, falha e respostas fora de ordem tratados | OK | `01-catalog` (vazio, `catalog.empty`, erro 503 com retry, fora de ordem), `12-skeletons` (queda de rede + retry) |
+| DET-1 | Acesso direto ao detalhe | OK | `02-detail` acesso direto + refresh com `?edition=` |
+| DET-2 | NFT inexistente | OK | `02-detail` NFT inexistente ("NFT não encontrado") e id malformado (404) |
+| DET-3 | Edição indisponível | OK | `02-detail` edição esgotada (chip desabilitado, deep link, compra bloqueada) e NFT totalmente esgotado |
+| DET-4 | Limite de quantidade | OK | `02-detail` limite de quantidade: stepper, erro no campo (`aria-describedby`), 409 da API mapeado ao campo |
+| FAV-1 | Favoritos persistem para o usuário autenticado | parcial | S1: `04-favorites` persiste após refresh; lista `/favorites` é da S2 |
 
 ## Carrinho (§3)
 
@@ -125,7 +125,7 @@ Abreviações: **verify** = verify a79823d · **harness** = `tests/e2e/mocks.spe
 | INT-5 | Isolamento por usuário e por parâmetros | parcial | `src/queries/keys.ts` (`['u', userId]`, `['guest', id]`, lista normalizada); `20-session-tabs`. Telas: slices |
 | INT-6 | Recuperação de falhas sem duplicar operações | parcial | Retry só em TRANSIENT/5xx/0 (`src/queries/client.ts`, ARCHITECTURE §7); idempotência no mock (harness). UI: S3 |
 | INT-7 | Rotas inexistentes e acesso direto a qualquer tela | OK | `00-smoke` "404 para rota inexistente e id malformado" e "deep link e refresh"; `qa-fundacao-shell` "rotas públicas: deep link e refresh" + guard nas 5 privadas; `vercel.json` rewrite SPA. Revalidar o conteúdo de cada tela por deep link nas slices |
-| INT-8 | Atualização otimista com rollback (≥1) | — | Nenhuma mutation implementada |
+| INT-8 | Atualização otimista com rollback (≥1) | OK | `04-favorites` falha: estado otimista visível, rollback, aviso "desfeita", retry; `src/queries/favorites.ts` |
 | INT-9 | Política de cache, retries e sincronização documentada | OK | ARCHITECTURE §7 (staleTime por key, retries, invalidação, timeout) e §8 (reconciliação), lidos nesta auditoria; `src/queries/client.ts` |
 
 ## Contratos REST (§5)
@@ -175,7 +175,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI (carregamento, f
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| RT-1 | `nft.updated` atualiza preço/disponibilidade em catálogo, detalhe e carrinho | parcial | `reconcile.ts` atualiza detalhe e cards e invalida carrinho e cotação (`05-unit-cache`: unidade, sem socket). E2E via socket com efeito visível: S1/S3 |
+| RT-1 | `nft.updated` atualiza preço/disponibilidade em catálogo, detalhe e carrinho | parcial | S1: `01-catalog` e `02-detail` (nft.updated via `__mock.updateNft` -> socket.io-client -> preço/disponibilidade na tela + `role=status`); carrinho: S3 |
 | RT-2 | `order.updated` atualiza pedido e apresenta confirmação/recusa | parcial | Reconciler aplica e não regride terminal (`05-unit-cache`); harness entrega `pending → confirmed` só ao dono. UI: S3 |
 | RT-3 | Eventos com id estável, recurso afetado e versão | OK | `src/api/contracts/events.ts` (envelope zod); harness (`id` `evt_…`, `version` > 1, `resource.id`); `00-smoke` payload fora do contrato → `invalid` |
 | RT-4 | Tolerar duplicatas e eventos antigos sem regredir nem reaplicar efeitos | parcial | `00-smoke` via socket: duplicate (`applied` continua 1) e stale. Efeitos da UI (anúncio `aria-live`, banner) ainda não existem |
@@ -191,13 +191,13 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI (carregamento, f
 |---|---|---|---|
 | UI-1 | Fidelidade: tipografia, cores, espaçamentos, hierarquia, imagens, proporções | parcial | Shell: fidelidade-visual APPROVED (header, footer e tab bar dentro de ±2 px). Telas: slices |
 | UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | Shell em 390/768/1440 (fidelidade; `92-header-tablet` de 768 a 1440 sem sobreposição). Telas: slices |
-| UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | parcial | `src/components/ui/skeleton.tsx` + `.skeleton-shimmer` com `prefers-reduced-motion` (`src/index.css:165-175`). Nenhum uso ainda; CLS não medido |
+| UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | parcial | S1: `12-skeletons` (catálogo e detalhe: shimmer, mesma geometria, CLS < 0.05, reduced-motion); resumo do carrinho: S3 |
 | A11Y-1 | Navegação por teclado e foco visível | parcial | `qa-fundacao-shell` "teclado" (skip link, header, tab bar e Sheet), `07-focus`, `qa-volta2` QA-002/006. Telas: slices |
 | A11Y-2 | Controle de foco em diálogos e drawers | parcial | `00-smoke` "menu mobile: abre, Esc, devolve o foco"; `qa-volta2` "lazy: AccountDropdown / Sheet… sem perder o foco". Diálogos das telas: slices |
 | A11Y-3 | Semântica, labels e erros associados | parcial | `91-a11y-shell` (axe sem crítico ou sério, verify a11y 9). Formulários: S2/S3/S5 |
 | A11Y-4 | Alternativas textuais | parcial | axe no shell (`91-a11y-shell`). Imagens de NFT: slices |
 | A11Y-5 | Contraste e estados não dependentes só de cor | parcial | axe no shell (contraste). Estados das telas: slices |
-| A11Y-6 | Feedback acessível de mutations e tempo real | — | Não há mutations nem anúncios `aria-live` implementados |
+| A11Y-6 | Feedback acessível de mutations e tempo real | parcial | S1: toasts (região `aria-live` "Notificações") em favoritos/carrinho; `role=status` do tempo real (`02-detail`, `01-catalog`) |
 | A11Y-7 | Sem overflow horizontal e sem perda com zoom | parcial | `scrollWidth == clientWidth` em 390/768/1440 (fidelidade); `92-header-tablet`. Zoom 200% não testado |
 | UI-4 | Assets do arquivo usados; substituições e ajustes de a11y documentados | parcial | ARCHITECTURE §13 (desvios D6–D8 do shell). Assets das telas: slices |
 
@@ -206,7 +206,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI (carregamento, f
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | E2E-01 | Busca, filtros combinados, ordenação, paginação, histórico | — | |
-| E2E-02 | Acesso direto ao detalhe e inexistente | parcial | `00-smoke` "404… id malformado" + deep link da rota. Detalhe real e NOT_FOUND na tela: S1 |
+| E2E-02 | Acesso direto ao detalhe e inexistente | OK | `tests/e2e/02-detail.spec.ts` |
 | E2E-03 | Cadastro, login, expiração, logout, troca de usuário | parcial | Expiração: `21-session-clock-expiry`; logout e troca: `20-session-tabs` (login via API). Cadastro e login pela UI: S2 |
 | E2E-04 | Favoritos com falha e recuperação | — | |
 | E2E-05 | Carrinho, quantidades, remoção, cupom, persistência refresh/login | — | |
@@ -218,7 +218,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI (carregamento, f
 | E2E-11 | Teclado, foco de diálogos, validação | parcial | Teclado e foco do shell (`qa-fundacao-shell`, `00-smoke` menu mobile). Validação de formulários: slices |
 | E2E-12 | Skeletons em lentidão, falha e retry | — | |
 | E2E-13 | Chromium desktop + mobile | OK | `playwright.config.ts` (desktop 1440 + Pixel 7 390); verify roda os dois |
-| E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | parcial | Só o shell (`90-visual-shell`, `92-header-tablet`; baselines `win32`). As 4 telas e as baselines `linux` do CI estão pendentes |
+| E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | parcial | Início e detalhe (win32): `90-visual-catalog`; carrinho, pagamento e linux pendentes |
 | E2E-15 | Estado isolado; controle de relógio, latência e eventos | parcial | `tests/fixtures.ts` (`boot` isola o storage e reseta o mock), `page.clock` em `21-session-clock-expiry`, `mock.emit`, cenários de latência. Cenários sensíveis a tempo das telas: slices |
 | E2E-16 | Relatório HTML e traces de falha | OK | Reporter `html` + `trace: 'retain-on-failure'` (`playwright.config.ts`); `.github/workflows/verify.yml` publica o relatório e os traces |
 
