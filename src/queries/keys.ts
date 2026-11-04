@@ -7,7 +7,7 @@
  * - Visitor data: `['guest', guestId, ...]` (cart and quote before login).
  */
 import type { DataTag } from '@tanstack/react-query'
-import { nftListQuerySchema, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus } from '@/api/contracts'
+import { nftListQuerySchema, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus, type Profile, type WalletsResponse } from '@/api/contracts'
 
 /** Nominal brand: only `normalizeNftListQuery` produces a `NormalizedNftListQuery`. */
 declare const normalizedBrand: unique symbol
@@ -53,8 +53,8 @@ export const queryKeys = {
     orders: () => [PRIVATE_PREFIX, userId, 'orders'] as const,
     order: (orderId: string) => tag<Order>()([PRIVATE_PREFIX, userId, 'orders', 'detail', orderId]),
     orderList: (status?: OrderStatus) => [PRIVATE_PREFIX, userId, 'orders', 'list', status ?? 'all'] as const,
-    profile: () => [PRIVATE_PREFIX, userId, 'profile'] as const,
-    wallets: () => [PRIVATE_PREFIX, userId, 'wallets'] as const,
+    profile: () => tag<Profile>()([PRIVATE_PREFIX, userId, 'profile']),
+    wallets: () => tag<WalletsResponse>()([PRIVATE_PREFIX, userId, 'wallets']),
   }),
 
   owner: (owner: CartOwner) => ({

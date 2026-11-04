@@ -1,11 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { UnderConstruction } from '@/components/layout/PageStates'
+import { ProfilePage } from '@/features/profile/ProfilePage'
 
 export const Route = createFileRoute('/_authed/profile')({
   head: () => ({ meta: [{ title: 'Perfil do colecionador — KURIO' }] }),
   component: ProfilePage,
 })
-
-function ProfilePage() {
-  return <UnderConstruction title="Perfil do colecionador" slice="S2 — Conta" />
-}
