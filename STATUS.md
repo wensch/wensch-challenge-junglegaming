@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 1 — slice `fundacao` **APROVADA** na volta 3; endurecimento pré-slices em andamento.
+**Fase atual:** Fase 2 — slices S1 catálogo ‖ S2 conta ‖ S3 checkout em paralelo. Fase 1 (`fundacao`) **CONCLUÍDA**.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -57,14 +57,23 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | verify em main (aab300a) | orquestrador | 1ª execução RED (1 falha: qa-volta2 "CSP sem violação", desktop); 2ª **GREEN** (e2e 205 ✓, visual 6 ✓, a11y 9 ✓). Isolado: 12/12. **Flake intermitente sob carga, em aberto** |
 | Revisor sênior volta 3 | revisor-frontend-senior | **APPROVED** — sem alto/crítico · [relatório](reports/fundacao/revisor-frontend-senior.md) |
 | Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](reports/fundacao/seguranca.md) |
-| Endurecimento pré-slices (F1 boot MSW sem controller) | plataforma-mocks | em andamento |
-| Endurecimento pré-slices (F1 teste, F2 sessão fantasma, #13, F3, F7) | arquiteto-contratos | em andamento |
+| Endurecimento pré-slices (F1 boot MSW sem controller, F6) | plataforma-mocks | **OK** — merge c2dde91 |
+| Endurecimento pré-slices (F1 teste, F2 sessão fantasma, #13, F3, F7) | arquiteto-contratos | **OK** — CSP stress 80/80; merge b9cec4e |
+| `Number()` proibido em todo src/tests fora de mocks (auditor #1, #5) | orquestrador | **OK** |
+| **verify final em main** | orquestrador | **GREEN 3× seguidas** (e2e 215 ✓, visual 6 ✓, a11y 9 ✓) |
 | Matriz de requisitos | auditor-requisitos | **OK** — 39 OK · 75 parcial · 33 pendente; nenhum eliminatório violado · [relatório](reports/fundacao/auditor-requisitos.md) |
 | Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | **OK** — verify GREEN (e2e 199 ✓); merge 998f27c |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
+## Fase 2 — slices
+| Slice | Agente | Porta | Status |
+|---|---|---|---|
+| S1 catálogo | implementador-catalogo | PW_PORT 4181 | volta 1 em andamento |
+| S2 conta | implementador-conta | PW_PORT 4182 | volta 1 em andamento |
+| S3 checkout | implementador-checkout | PW_PORT 4183 | volta 1 em andamento |
+
 ## Próximo passo
-Integrar o endurecimento (verify verde 2× em main), fechar a matriz e abrir a Fase 2: S1 catálogo ‖ S2 conta ‖ S3 checkout em worktrees.
+Integrar cada slice ao entregar (verify verde), rodar gates por slice.
 
 Antes de abrir as slices (revisor): favorites.ts fica com a S1, cart-mutations.ts/useAddToCart com a S3 (cart.ts congelado), SiteHeader por bloco (S1 busca, S3 badge, S2 AccountDropdown), routeTree.gen.ts regenerado no merge.
 

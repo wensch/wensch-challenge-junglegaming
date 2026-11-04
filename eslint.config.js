@@ -15,6 +15,13 @@ const noNumberCoercion = [
   { selector: "CallExpression[callee.object.name='z'][callee.property.name='number']", message: 'Use z.int() for quantities and ethSchema (string) for money; z.number() is forbidden in contracts.' },
 ]
 
+// App code (outside mocks): no Number()/unary + either — ETH stays a decimal string end to end.
+// Integers (quantity, page) parse with parseInt(x, 10) or zod z.coerce.number().int() in route search schemas.
+const noAppNumberCoercion = [
+  { selector: "CallExpression[callee.name='Number']", message: 'Number() is forbidden in app code: ETH is a decimal string (lib/money); integers use parseInt(x, 10).' },
+  { selector: "UnaryExpression[operator='+'][argument.type!='Literal']", message: 'Unary + coercion is forbidden in app code (ETH is a decimal string).' },
+]
+
 // `no-restricted-imports` does not see `import()`: dynamic imports of the mock layer are banned too.
 const noDynamicMocksImport = [
   {
@@ -52,7 +59,7 @@ export default tseslint.config(
     ignores: ['src/mocks/**', 'src/main.tsx'],
     rules: {
       'no-restricted-imports': ['error', mocksImportBan],
-      'no-restricted-syntax': ['error', ...noFloatMoney, ...noDynamicMocksImport],
+      'no-restricted-syntax': ['error', ...noFloatMoney, ...noAppNumberCoercion, ...noDynamicMocksImport],
     },
   },
   {

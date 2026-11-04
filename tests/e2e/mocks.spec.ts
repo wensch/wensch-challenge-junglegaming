@@ -10,6 +10,7 @@ import { dirname, join } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import type { ApiErrorCode, QuoteChange } from '../../src/api/contracts'
 import { SCENARIO_NAMES, type ScenarioName } from '../../src/api/contracts/scenarios'
+import { compare } from '../../src/lib/money'
 
 const SOCKET_CLIENT_BUNDLE = join(dirname(createRequire(import.meta.url).resolve('socket.io-client')), '..', '..', 'dist', 'socket.io.min.js')
 const SOCKET_URL = 'wss://realtime.nft-mock.local' // VITE_SOCKET_URL (.env)
@@ -221,7 +222,7 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
           const t0 = performance.now()
           const r = await fetch('/api/nfts/featured')
           await r.text()
-          out.push({ nominal: Number(r.headers.get('X-Mock-Delay-Ms')), ms: performance.now() - t0 })
+          out.push({ nominal: parseInt(r.headers.get('X-Mock-Delay-Ms') ?? '', 10), ms: performance.now() - t0 })
         }
         return out
       })
@@ -489,8 +490,8 @@ test.describe('state and lifecycle', () => {
     await boot(page)
     const cat = await api(page, 'GET', '/nfts?categories=musica,fotografia&sort=price_asc&pageSize=60')
     expect(cat.body.items.every((n: Json) => ['musica', 'fotografia'].includes(n.category))).toBe(true)
-    const prices = cat.body.items.map((n: Json) => Number(n.price))
-    expect(prices).toEqual([...prices].sort((a, b) => a - b))
+    const prices: string[] = cat.body.items.map((n: Json) => n.price)
+    expect(prices).toEqual([...prices].sort(compare))
     expect(cat.body.facets.categories).toHaveLength(9)
     const tab = await api(page, 'GET', '/nfts?tab=new&pageSize=60')
     expect(tab.body.items.every((n: Json) => n.isNew)).toBe(true)
