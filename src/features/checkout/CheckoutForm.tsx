@@ -217,6 +217,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
       setSubmitError(`${error.message} Volte ao carrinho para ajustar as quantidades.`)
       if (owner) void invalidateCartAndQuote(qc, owner)
     } else if (error.is('IDEMPOTENCY_CONFLICT')) {
+      recordAttemptOrder(credential.userId, error.payload.orderId)
       await navigate({ to: '/orders/$id', params: { id: error.payload.orderId } })
     } else if (error.is('VALIDATION')) {
       const unmatched = applyFieldErrors(error, setError, CHECKOUT_FIELDS, { 'collector.ensName': 'ensLabel' })

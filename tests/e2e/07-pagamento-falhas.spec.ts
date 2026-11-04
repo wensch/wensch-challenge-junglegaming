@@ -107,6 +107,46 @@ test.describe('pagamento: falhas e recuperação', () => {
     expect(page.url()).toContain(orders[0]!.id)
   })
 
+  test('abrir um pedido terminal antigo não perde a chave: o reenvio devolve o mesmo pedido', async ({ page, boot }) => {
+    await boot('/', ['payment.hold'])
+    const [a] = await pickEditions(page, 1)
+    const session = await loginWithCart(page, [{ item: a!, quantity: 1 }])
+    await page.goto('/checkout')
+    await connectWallet(page)
+    const posts = trackOrderPosts(page)
+    await sendOrder(page)
+    await page.waitForURL(/\/orders\/ord_/)
+    await expect(page.getByTestId('order-pending')).toBeVisible()
+    const pendingId = new URL(page.url()).pathname.split('/').pop()!
+
+    // Another, already terminal order is opened: it must not discard the attempt of the pending one.
+    const old = await page.evaluate(async (t) => {
+      const r = await fetch('/api/orders', { headers: { Authorization: `Bearer ${t}` } })
+      return ((await r.json()) as { items: { id: string; status: string }[] }).items.find((o) => o.status !== 'pending')?.id
+    }, session.token)
+    expect(old).toBeTruthy()
+    await page.goto(`/orders/${old}`)
+    await expect(page.getByTestId('order-skeleton')).toHaveCount(0)
+    await expect.poll(() => page.locator('[data-status]').first().getAttribute('data-status')).not.toBe('pending')
+
+    // The stored attempt survived (same key, bound to the pending order); resending the first request with
+    // it returns the SAME order and creates no second one.
+    const stored = await page.evaluate((id) => sessionStorage.getItem(`kurio.u.${id}.attempt`), session.user.id)
+    expect(stored).not.toBeNull()
+    const attempt = JSON.parse(stored!) as { key: string; orderId: string }
+    expect(attempt.key).toBe(posts[0]!.headers()['idempotency-key'])
+    expect(attempt.orderId).toBe(pendingId)
+    const replay = await page.evaluate(
+      async ([token, key, body]) => {
+        const r = await fetch('/api/orders', { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Idempotency-Key': key!, 'Content-Type': 'application/json' }, body })
+        return { status: r.status, id: ((await r.json()) as { id: string }).id }
+      },
+      [session.token, attempt.key, posts[0]!.postData()] as const,
+    )
+    expect(replay.id).toBe(pendingId)
+    expect(await ordersOf(page, session.token)).toHaveLength(1)
+  })
+
   test('cotação mudou com a revisão aberta: 409 QUOTE_STALE mostra o diff e exige nova confirmação', async ({ page, boot, mock }) => {
     await boot('/')
     const [a] = await pickEditions(page, 1)
