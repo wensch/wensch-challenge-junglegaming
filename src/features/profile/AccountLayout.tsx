@@ -82,7 +82,7 @@ export function LoadError({ message, onRetry, retrying }: { message: string; onR
 /** Skeleton with the exact grid of the forms (no layout shift when data arrives). */
 export function FormSkeleton({ rows }: { rows: number }) {
   return (
-    <div aria-busy="true" role="status" className="grid gap-x-7 gap-y-7 md:grid-cols-2">
+    <div aria-busy="true" role="status" className="grid gap-x-7 gap-y-7 lg:grid-cols-2">
       <span className="sr-only">Carregando…</span>
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="flex flex-col gap-2">
