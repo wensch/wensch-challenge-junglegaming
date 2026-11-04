@@ -15,7 +15,12 @@ async function settle(page: Page, ready: () => Promise<void>) {
       await new Promise((r) => setTimeout(r, 40))
     }
     window.scrollTo(0, 0)
-    await Promise.all([...document.images].map((i) => (i.complete ? Promise.resolve() : new Promise((r) => i.addEventListener('load', r, { once: true })))))
+    // Hidden or horizontally off-screen lazy images may never load: cap the wait per image.
+    await Promise.all(
+      [...document.images].map((i) =>
+        i.complete ? Promise.resolve() : new Promise((r) => { i.addEventListener('load', r, { once: true }); setTimeout(r, 1500) }),
+      ),
+    )
   })
   // Fixed bar and the sonner region would be repeated/overlapping in a full-page capture.
   await page.addStyleTag({ content: 'nav[aria-label="Navegação inferior"] { visibility: hidden !important; }' })

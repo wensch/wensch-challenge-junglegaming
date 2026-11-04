@@ -41,7 +41,7 @@ export function RelatedNfts({ collectionId, excludeId }: { collectionId: string;
           <ul className={ROW} aria-label="NFTs da mesma coleção">
             {items.map((nft) => (
               <li key={nft.id}>
-                <NftCard nft={nft} size="related" />
+                <NftCard nft={nft} size="related" priority />
               </li>
             ))}
           </ul>
