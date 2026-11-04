@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 1 — slice `fundacao`, **volta 2** em andamento.
+**Fase atual:** Fase 1 — slice `fundacao`, **volta 3 (última)** em andamento.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -51,10 +51,15 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | **OK** — verify GREEN, R2 passa; merge 3d52cf7. Obs.: `latency.variable` falhou 1× com 6 workers (175 ms vs limite 150 ms), possível flake |
 | Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, contratos v1.2.0 | arquiteto-contratos | **OK** — merge 0c27e52 |
 | verify em main (0c27e52) | orquestrador | **GREEN** — e2e 169 ✓ (11 skip), visual 6 ✓, a11y 9 ✓ |
-| Gates volta 2 | fidelidade ‖ qa ‖ segurança → revisor | em andamento |
+| Gates volta 2 | fidelidade ‖ qa ‖ segurança | **APPROVED** ×3 |
+| Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
+| Volta 3: N1 + R3 | arquiteto-contratos | em andamento (PW_PORT 4176) |
+| Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | em andamento (PW_PORT 4175) |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
 ## Próximo passo
-Integrar as duas correções da volta 2, verify em main, rodar de novo os 3 gates e o revisor (volta 2 de 3).
+Integrar a volta 3, rodar verify em main, revisor sênior (volta 3) com reteste rápido dos gates. Se N1 não fechar: ESCALATIONS.md e seguir para a Fase 2.
+
+Antes de abrir as slices (revisor): favorites.ts fica com a S1, cart-mutations.ts/useAddToCart com a S3 (cart.ts congelado), SiteHeader por bloco (S1 busca, S3 badge, S2 AccountDropdown), routeTree.gen.ts regenerado no merge.
 
 Decisões de F1a aceitas pelo orquestrador: recusa de carteira = 200 `{status:'rejected'}`; recurso alheio = 403 FORBIDDEN; token em localStorage (trade-off documentado em ARCHITECTURE §4); 12 códigos de erro (PLANO será atualizado em F1c).
