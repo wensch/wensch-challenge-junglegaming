@@ -14,3 +14,13 @@ Eliminatórios: confirmação só com `status === 'confirmed'` (OrderPage/Receip
 | 4 | baixa | `waitForTimeout` em `01-catalog:122`, `12-skeletons:32`, `20-session-tabs:122`, `mocks.spec:438,683` (regra "sem waitForTimeout"). | grep | Trocar por expect com polling / `page.clock` |
 
 Sem achados alta/crítica.
+
+## Reteste final (delta c268276..HEAD)
+Veredito: APPROVED
+Evidência: `BASE_URL=http://localhost:4173 npx playwright test tests/e2e/14-reteste-final.spec.ts 04b-favorites-page 13-overflow` -> 36/36 verdes (desktop+mobile; 2 flakes com retry sob carga paralela, 14-duplicada 8/8 isolada com --repeat-each=4).
+- Lista de interesse: favoritar (detalhe; card no mobile) -> aparece; remover; falha (`favorites.fail`) com rollback; visitante -> login -> volta; alice -> logout -> bob só vê nft_004; erro (`network.offline`) e retry; vazio; `nft.updated` reflete preço; rodapé, dropdown desktop e aba Favoritos (mobile) levam à página real.
+- Compra após timeout (`order.timeout-after-create`) + outro pedido terminal + reenvio: 1 pedido novo na API.
+- `/favorites` sem rolagem horizontal em 768 e 390; 13-overflow cobre o restante.
+- Boot frio de `/`, `/nft/nft_002`, `/favorites` (reload duplo, navegação durante o boot): sem 404 `/api/*`, sem erro, sem navegação extra.
+- `/robots.txt` text/plain; `/favicon.ico` image/x-icon.
+- Achado: BUG-QA-010 (baixa). Nota: 1ª execução do teste de favoritos navegou antes do PUT terminar (mutação abortada pelo goto); é corrida do teste, corrigido aguardando a resposta.

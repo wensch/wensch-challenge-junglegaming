@@ -51,3 +51,7 @@ Formato: id · severidade · slice · passos · esperado · obtido · evidência
 - Passos: `grep -n waitForTimeout tests/e2e/*.ts` -> `01-catalog:122`, `12-skeletons:32`, `20-session-tabs:122`, `mocks.spec:438,683`.
 - Esperado: sem espera arbitrária (regra de QA). Obtido: 5 ocorrências (passam, risco de flake/asserção negativa fraca).
 - Evidência: `reports/s-integrada/qa-features.md`. Status: aberto (baixa).
+
+## BUG-QA-010 · baixa · reteste final · Sheet do menu mobile não tem "Lista de interesse"
+- Passos: 390 px, logado, "Abrir menu". Esperado: link para `/favorites` como no dropdown desktop. Obtido: só Perfil/Carteiras; a página é alcançável pela aba "Favoritos" da barra inferior e pelo rodapé.
+- Status: aberto (baixa, opcional). O coração do card no catálogo é `md:hidden` por desenho (desktop favorita no detalhe).
