@@ -65,6 +65,7 @@ test.describe('carrinho', () => {
     await expect(inc).toBeDisabled()
     await expect(inc).toHaveAccessibleName(new RegExp(`limite de ${limit}`))
 
+    await page.waitForLoadState('networkidle')
     await first.getByRole('button', { name: /Remover/ }).click()
     await expect(page.getByTestId('cart-line')).toHaveCount(1)
     await expect(page.getByTestId('cart-subtotal')).toHaveText(formatEth(b!.price))

@@ -18,7 +18,7 @@ import { walletList, useWallets } from './wallets'
 
 function CheckoutSkeleton() {
   return (
-    <div data-testid="checkout-page-skeleton" aria-hidden="true" className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_405px] lg:gap-[46px]">
+    <div data-testid="checkout-page-skeleton" aria-hidden="true" className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_405px] lg:gap-[46px]">
       <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
         {Array.from({ length: 8 }, (_, i) => (
           <Skeleton key={i} className="h-[66px] w-full" />

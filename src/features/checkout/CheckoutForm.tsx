@@ -236,7 +236,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
   const selectedIsSecondary = wallet?.slot === 'secondary'
 
   return (
-    <form onSubmit={(e) => void openReview(e)} noValidate data-testid="checkout-form" className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_405px] lg:gap-[46px]">
+    <form onSubmit={(e) => void openReview(e)} noValidate data-testid="checkout-form" className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_405px] lg:gap-[46px]">
       <div>
         <h2 className="mb-4 text-body-md font-bold text-text-primary">Perfil do colecionador</h2>
         <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">

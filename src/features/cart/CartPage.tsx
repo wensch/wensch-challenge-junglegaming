@@ -47,7 +47,7 @@ function blockingMessages(quote: Quote | undefined): string[] {
 
 function CartSkeleton() {
   return (
-    <div data-testid="cart-skeleton" className="mt-6 grid gap-12 lg:grid-cols-[minmax(0,1fr)_332px]" aria-hidden="true">
+    <div data-testid="cart-skeleton" className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_332px]" aria-hidden="true">
       <div className="flex flex-col gap-3">
         <Skeleton className="hidden h-4 w-full lg:block" />
         {Array.from({ length: 3 }, (_, i) => (
@@ -188,7 +188,7 @@ export function CartPage() {
       ) : lines.length === 0 ? (
         <EmptyCart />
       ) : (
-        <div className="mt-6 grid gap-10 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_332px] lg:gap-[86px]">
+        <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_332px] lg:gap-[86px]">
           <div>
             <div aria-hidden="true" className="mb-3 hidden grid-cols-[minmax(0,1fr)_77px_75px_87px_24px] gap-x-[61px] border-b border-line pr-6 pb-3 text-body-sm font-bold text-text-primary lg:grid">
               <span>NFTs</span>
