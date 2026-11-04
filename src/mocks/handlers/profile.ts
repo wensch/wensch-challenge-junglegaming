@@ -17,6 +17,9 @@ export const profileOf = (u: UserRec): Profile => ({
   updatedAt: u.updatedAt,
 })
 
+/** Re-reads the user from the (cross-tab synced) DB; `auth.user` was captured before awaits and may be orphaned. */
+const liveUser = (auth: { user: UserRec | null }): UserRec => db().users.find((u) => u.id === auth.user!.id) ?? auth.user!
+
 function bump(u: UserRec) {
   u.version += 1
   u.updatedAt = nowIso()
@@ -31,10 +34,10 @@ async function toDataUrl(file: File): Promise<string> {
 }
 
 export const profileHandlers = [
-  route('getProfile', ({ auth }) => profileOf(auth.user!)),
+  route('getProfile', ({ auth }) => profileOf(liveUser(auth))),
 
   route('updateProfile', ({ auth, body }) => {
-    const me = auth.user!
+    const me = liveUser(auth)
     if (isActive('forms.server-validation')) validationFail({ username: ['Este nome de usuário não está disponível'] })
     if (body.version !== me.version) {
       fail({ code: 'CONFLICT_VERSION', message: 'O perfil foi alterado em outro lugar. Recarregue e tente novamente.', resource: { kind: 'profile', id: me.id }, currentVersion: me.version })
@@ -55,16 +58,17 @@ export const profileHandlers = [
     if (!(AVATAR_MIME_TYPES as readonly string[]).includes(file.type)) validationFail({ [AVATAR_FIELD]: ['Use PNG, JPEG ou WebP'] })
     if (file.size > AVATAR_MAX_BYTES) validationFail({ [AVATAR_FIELD]: ['Imagem maior que 2 MB'] })
     const url = await toDataUrl(file)
-    const live = db().users.find((u) => u.id === auth.user!.id) ?? auth.user!
+    const live = liveUser(auth)
     live.avatarUrl = url
     bump(live)
     return profileOf(live)
   }),
 
   route('removeAvatar', ({ auth }) => {
-    auth.user!.avatarUrl = null
-    bump(auth.user!)
-    return profileOf(auth.user!)
+    const live = liveUser(auth)
+    live.avatarUrl = null
+    bump(live)
+    return profileOf(live)
   }),
 
   route('changePassword', async ({ auth, body }) => {
@@ -73,7 +77,7 @@ export const profileHandlers = [
     if ((await hashPassword(body.currentPassword, me.salt)) !== me.passwordHash) validationFail({ currentPassword: ['Senha atual incorreta'] })
     const salt = newSalt()
     const passwordHash = await hashPassword(body.newPassword, salt)
-    const live = db().users.find((u) => u.id === me.id) ?? me
+    const live = liveUser(auth)
     Object.assign(live, { salt, passwordHash })
     bump(live)
     // Other sessions of this user are no longer valid after a password change.

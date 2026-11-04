@@ -7,6 +7,8 @@ import type { Coupon, Edition, Network, NftDetail, Order, Quote, Wallet } from '
 
 export const DB_VERSION = 1
 export const DB_STORAGE_KEY = `mock:db:v${DB_VERSION}`
+/** Tiny revision stamp written after every DB write; comparing it avoids re-reading the (possibly MB-sized) DB. */
+export const DB_REV_KEY = `${DB_STORAGE_KEY}:rev`
 
 /** Catalog record: the detail contract is the storage shape (summary is derived). */
 export type NftRec = Omit<NftDetail, 'available' | 'soldOut' | 'price' | 'compareAtPrice' | 'editions'> & { editions: Edition[] }
@@ -123,11 +125,23 @@ const persistedSchema = z.looseObject({
 let state: DbState | null = null
 /** Last serialized value this tab wrote or read; a different stored value means another tab wrote. */
 let lastRaw: string | null = null
+/** Revision stamp matching `lastRaw`. */
+let lastRev: string | null = null
+let revCounter = 0
+const tabId = Math.random().toString(36).slice(2, 10)
 const syncListeners = new Set<() => void>()
 
 /** Called after the in-memory state was replaced by another tab's write. */
 export function onDbSynced(fn: () => void): void {
   syncListeners.add(fn)
+}
+
+function readRev(): string | null {
+  try {
+    return localStorage.getItem(DB_REV_KEY)
+  } catch {
+    return null
+  }
 }
 
 function readStored(): { raw: string; parsed: DbState } | null {
@@ -150,15 +164,22 @@ export function refreshFromStorage(): boolean {
   if (!state) return false
   let raw: string | null
   try {
+    // Cheap path: same revision stamp as the last one this tab wrote or adopted -> nothing to re-read.
+    const rev = localStorage.getItem(DB_REV_KEY)
+    if (rev !== null && rev === lastRev) return false
     raw = localStorage.getItem(DB_STORAGE_KEY)
+    if (raw === null || raw === lastRaw) {
+      lastRev = rev
+      return false
+    }
   } catch {
     return false
   }
-  if (raw === null || raw === lastRaw) return false
   const stored = readStored()
   if (!stored) return false
   state = stored.parsed
   lastRaw = stored.raw
+  lastRev = readRev()
   for (const fn of syncListeners) fn()
   return true
 }
@@ -180,6 +201,8 @@ export function persist(): void {
     const raw = JSON.stringify(state)
     localStorage.setItem(DB_STORAGE_KEY, raw)
     lastRaw = raw
+    lastRev = `${tabId}:${++revCounter}`
+    localStorage.setItem(DB_REV_KEY, lastRev)
   } catch {
     // Quota exceeded (e.g. large avatar): keep serving from memory.
   }
@@ -193,13 +216,16 @@ export function loadPersisted(): DbState | null {
     return null
   }
   lastRaw = stored.raw
+  lastRev = readRev()
   return stored.parsed
 }
 
 export function clearPersisted(): void {
   lastRaw = null
+  lastRev = null
   try {
     localStorage.removeItem(DB_STORAGE_KEY)
+    localStorage.removeItem(DB_REV_KEY)
   } catch {
     // ignore
   }

@@ -132,6 +132,14 @@ export function route<N extends EndpointName>(name: N, handler: (ctx: Ctx<N>) =>
   const factory = http[def.method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete']
 
   return factory(`${API_BASE}${def.path}`, async ({ request, params }) => {
+    const nominal: { ms: number | null } = { ms: null }
+    const res = await handle(request, params, nominal)
+    // Nominal (drawn) delay, so tests can assert determinism without measuring timer jitter.
+    if (nominal.ms !== null && res.type !== 'error') res.headers.set('X-Mock-Delay-Ms', String(nominal.ms))
+    return res
+  })
+
+  async function handle(request: Request, params: Record<string, string | readonly string[] | undefined>, nominal: { ms: number | null }): Promise<Response> {
     const requestId = request.headers.get(HEADERS.requestId)
 
     // --- network scenarios ---
@@ -141,6 +149,7 @@ export function route<N extends EndpointName>(name: N, handler: (ctx: Ctx<N>) =>
       await delay('infinite')
       return HttpResponse.error()
     }
+    nominal.ms = wait
     await delay(wait)
     // Re-check: the scenario may have changed while waiting.
     if (isActive('network.offline')) return HttpResponse.error()
@@ -207,5 +216,5 @@ export function route<N extends EndpointName>(name: N, handler: (ctx: Ctx<N>) =>
       console.error(`[mock] unexpected error in ${name}`, e)
       return respondError(errorBody<ApiErrorCode>({ code: 'TRANSIENT', message: 'Erro interno simulado.', reason: 'server' }), requestId)
     }
-  })
+  }
 }
