@@ -50,6 +50,8 @@ http.interceptors.request.use(
       if ('token' in explicit) headers.set(HEADERS.authorization, `Bearer ${explicit.token}`)
       else if (mode === 'guest') headers.set(HEADERS.guestId, explicit.guestId)
     } else if (mode !== 'public' && !headers.has(HEADERS.authorization)) {
+      // The stored token is sent EVEN IF the local clock says it expired: the server answers
+      // SESSION_EXPIRED and the `expired` flow (context preserved) takes over (ARCHITECTURE §4).
       const token = getToken()
       if (token) headers.set(HEADERS.authorization, `Bearer ${token}`)
       else if (mode === 'guest') headers.set(HEADERS.guestId, ensureGuestId())
@@ -68,11 +70,17 @@ http.interceptors.request.use(
 // 401 means the session is gone server-side:
 //  - SESSION_EXPIRED   -> re-authentication flow (login with redirect back);
 //  - UNAUTHENTICATED   -> token unknown/revoked (logout in another tab, mock reset): teardown only.
-// Fired once per token, and ONLY if that token is still the current one: a late 401 for a session
-// that was already replaced (logout + new login, other tab) must not tear down the new session.
+// Fired ONLY if that token is still the current one: a late 401 for a session that was already
+// replaced (logout + new login, other tab) must not tear down the new session. Fired once per token:
+// the handler returns `true` when it acted; `false` (e.g. a background GET on a public page, see
+// bootstrap) keeps the token eligible, so the next 401 of a user action still runs the flow.
 // ---------------------------------------------------------------------------
 export type SessionInvalidReason = 'expired' | 'unauthenticated'
-type SessionInvalidHandler = (reason: SessionInvalidReason) => void
+export interface SessionInvalidInfo {
+  /** HTTP method of the request that got the 401 (lower case). `get` = background read. */
+  method: string
+}
+type SessionInvalidHandler = (reason: SessionInvalidReason, info: SessionInvalidInfo) => boolean
 let sessionInvalidHandler: SessionInvalidHandler | null = null
 let lastInvalidToken: string | null = null
 
@@ -88,8 +96,8 @@ function bearerOf(config: AxiosRequestConfig | undefined): string | null {
 function notifySessionInvalid(config: AxiosRequestConfig | undefined, reason: SessionInvalidReason) {
   const token = bearerOf(config)
   if (!token || token !== getToken() || token === lastInvalidToken) return
-  lastInvalidToken = token
-  sessionInvalidHandler?.(reason)
+  const handled = sessionInvalidHandler?.(reason, { method: (config?.method ?? 'get').toLowerCase() }) ?? false
+  if (handled) lastInvalidToken = token
 }
 
 // ---------------------------------------------------------------------------

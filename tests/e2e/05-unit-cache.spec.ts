@@ -6,7 +6,7 @@
 import { QueryClient } from '@tanstack/react-query'
 import { test, expect } from '@playwright/test'
 import { avatarUrlSchema, httpsUrlSchema, safeRedirectSchema, transactionSchema } from '../../src/api/contracts'
-import { queryKeys } from '../../src/queries/keys'
+import { normalizeNftListQuery, queryKeys } from '../../src/queries/keys'
 import { keepNewest } from '../../src/queries/versioned'
 import { createReconciler } from '../../src/realtime/reconcile'
 
@@ -82,7 +82,7 @@ test.describe('reconciler: REST em voo x evento', () => {
   test('cards de lista em voo também recebem o evento', async () => {
     const qc = new QueryClient()
     const rec = createReconciler({ queryClient: qc, getUserId: () => null })
-    const key = queryKeys.nfts.list({ page: 1 })
+    const key = queryKeys.nfts.list(normalizeNftListQuery({ page: 1 }))
     const card = { id: 'nft_001', price: '1.0', compareAtPrice: null, available: 5, soldOut: false, version: 1 }
     const inflight = qc.fetchQuery({ queryKey: key, queryFn: async () => (await sleep(30), { items: [card], meta: {}, facets: {} }) as never })
     rec.handle(nftEvent('evt_l1', 3, '3.5'))

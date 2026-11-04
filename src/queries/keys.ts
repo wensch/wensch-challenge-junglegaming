@@ -7,9 +7,18 @@
  * - Visitor data: `['guest', guestId, ...]` (cart and quote before login).
  */
 import type { DataTag } from '@tanstack/react-query'
-import type { ApiError, Cart, FeaturedResponse, NftDetail, NftListQuery, Network, Order, OrderStatus } from '@/api/contracts'
+import { nftListQuerySchema, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus } from '@/api/contracts'
 
 /** Attaches the cached data type to a key (getQueryData/setQueryData infer it; queryOptions check it). */
+declare const normalizedBrand: unique symbol
+/** `NftListQuery` that went through `normalizeNftListQuery` (defaults applied, lists canonical). */
+export type NormalizedNftListQuery = NftListQuery & { readonly [normalizedBrand]: true }
+
+/** Canonical list query: defaults applied, lists sorted/unique, so `{}` and `{ pageSize: 9 }` share one key. */
+export function normalizeNftListQuery(query: Partial<NftListQuery>): NormalizedNftListQuery {
+  return nftListQuerySchema.parse(query) as NormalizedNftListQuery
+}
+
 const tag = <T>() => <const K extends readonly unknown[]>(key: K) => key as DataTag<K, T, ApiError>
 
 export const PRIVATE_PREFIX = 'u' as const
@@ -26,7 +35,8 @@ export const queryKeys = {
   nfts: {
     all: () => ['nfts'] as const,
     lists: () => ['nfts', 'list'] as const,
-    list: (query: Partial<NftListQuery>) => ['nfts', 'list', query] as const,
+    /** Only the NORMALIZED query (`normalizeNftListQuery`): a raw partial would split `{}` from `{ pageSize: 9 }`. */
+    list: (query: NormalizedNftListQuery) => ['nfts', 'list', query] as const,
     details: () => ['nfts', 'detail'] as const,
     detail: (nftId: string) => tag<NftDetail>()(['nfts', 'detail', nftId]),
     featured: () => tag<FeaturedResponse>()(['nfts', 'featured']),

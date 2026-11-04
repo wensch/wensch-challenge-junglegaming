@@ -10,9 +10,26 @@ import { queryOptions, useQuery, type QueryClient } from '@tanstack/react-query'
 import { isApiError, type MergeCartResponse, type Session } from '@/api/contracts'
 import { authApi, cartApi } from '@/api/endpoints'
 import { realtime } from '@/realtime/socket'
-import { clearGuestId, clearStoredSession, clearUserDrafts, getToken, peekGuestId, setStoredSession } from '@/session/store'
+import { clearGuestId, clearStoredSession, clearUserDrafts, getToken, peekGuestId, readStoredSession, setStoredSession } from '@/session/store'
 import { STALE } from './client'
 import { queryKeys } from './keys'
+
+// ---------------------------------------------------------------------------
+// "The last session of this tab ended by expiry" (ARCHITECTURE §4). Lets the private-route guard
+// answer `reason=expired` (instead of `required`) for a visitor whose session just expired — at
+// boot or after the teardown — so the login screen explains why and resumes the context.
+// Set by the expired teardown and by the boot check; cleared by any other end of session and by login.
+// ---------------------------------------------------------------------------
+let sessionEndedByExpiry = false
+
+export function sessionExpiredRecently(): boolean {
+  return sessionEndedByExpiry
+}
+
+/** True when `expiresAt` (ISO) is already in the past for the local clock. */
+export function isPastExpiry(expiresAt: string, now: number = Date.now()): boolean {
+  return Date.parse(expiresAt) <= now
+}
 
 export const sessionQueryOptions = () =>
   queryOptions({
@@ -20,8 +37,15 @@ export const sessionQueryOptions = () =>
     queryFn: async ({ signal }): Promise<Session | null> => {
       // The token is read ONCE and bound to the request: the cached session always carries the
       // token it was resolved with (compared against storage by syncSessionWithStorage).
-      const token = getToken()
-      if (!token) return null
+      const stored = readStoredSession()
+      if (!stored) return null
+      const { token } = stored
+      if (stored.expired) {
+        // Locally expired at boot: visitor, no round-trip. Drafts stay (same user resumes after login).
+        clearStoredSession()
+        sessionEndedByExpiry = true
+        return null
+      }
       try {
         // Silent: an expired token at boot just means "visitor", not the re-authentication flow.
         return await authApi.getSession({ signal, silentSessionExpiry: true, as: { token } })
@@ -29,6 +53,7 @@ export const sessionQueryOptions = () =>
         if (isApiError(e) && (e.is('UNAUTHENTICATED') || e.is('SESSION_EXPIRED'))) {
           // Drop only the token that was checked (another tab may have stored a new one meanwhile).
           if (getToken() === token) clearStoredSession()
+          if (e.is('SESSION_EXPIRED')) sessionEndedByExpiry = true
           return null
         }
         throw e
@@ -54,10 +79,14 @@ export function currentUserId(queryClient: QueryClient): string | null {
 
 /**
  * - `logout`: explicit action (token dropped, best-effort POST /auth/logout, every draft removed);
- * - `expired`: 401 SESSION_EXPIRED (drafts of the same user kept so the checkout resumes);
+ * - `expired`: 401 SESSION_EXPIRED or local clock past `expiresAt` (drafts of the same user kept so the
+ *   checkout resumes);
  * - `unauthenticated`: 401 UNAUTHENTICATED with a Bearer (token revoked/unknown);
  * - `switch`: another user is about to be stored in this tab;
  * - `external`: storage changed in ANOTHER tab — storage already holds the new state, so it is left alone.
+ *   If storage now holds a session, the drafts of the user being torn down are kept (it may be the same
+ *   user re-logged); `syncSessionWithStorage` drops them once the new owner is known to be someone else.
+ *   If storage is empty (logout elsewhere), every draft is removed.
  */
 export type TeardownReason = 'logout' | 'expired' | 'unauthenticated' | 'switch' | 'external'
 
@@ -77,8 +106,10 @@ export async function teardownSession(queryClient: QueryClient, reason: Teardown
   if (reason !== 'external' && (!token || getToken() === token)) clearStoredSession()
   queryClient.setQueryData(sessionQueryOptions().queryKey, null)
 
-  if ((reason === 'expired' || reason === 'unauthenticated') && userId) clearUserDrafts(userId)
+  const keepDrafts = reason === 'expired' || reason === 'unauthenticated' || (reason === 'external' && getToken() !== null)
+  if (keepDrafts && userId) clearUserDrafts(userId)
   else clearUserDrafts()
+  sessionEndedByExpiry = reason === 'expired'
 
   if (reason === 'logout' && token) {
     authApi.logout({ token }).catch(() => {
@@ -106,7 +137,8 @@ let syncChain: Promise<unknown> = Promise.resolve()
 export function syncSessionWithStorage(queryClient: QueryClient): Promise<Session | null> {
   const run = async (): Promise<Session | null> => {
     const key = sessionQueryOptions().queryKey
-    const stored = getToken()
+    const storedState = readStoredSession()
+    const stored = storedState?.token ?? null
     const cached = cachedSession(queryClient)
 
     if (cached === undefined) {
@@ -117,11 +149,21 @@ export function syncSessionWithStorage(queryClient: QueryClient): Promise<Sessio
       }
       return null
     }
+    // Natural expiry (local clock past `expiresAt`) of the session in cache: the `expired` flow, not
+    // "session missing" — drafts of the user are kept and the guard answers `reason=expired`.
+    // Also when the storage was already emptied by another tab's own expiry teardown.
+    if (cached && (stored === null || stored === cached.token) && (isPastExpiry(cached.expiresAt) || storedState?.expired === true)) {
+      await teardownSession(queryClient, 'expired')
+      return null
+    }
     if ((cached?.token ?? null) === stored) return cached
 
     if (cached) await teardownSession(queryClient, 'external')
     if (!stored) return null
-    return queryClient.fetchQuery({ ...sessionQueryOptions(), staleTime: 0 }).catch(() => null)
+    const next = await queryClient.fetchQuery({ ...sessionQueryOptions(), staleTime: 0 }).catch(() => null)
+    // Drafts kept by the external teardown belong to the previous user: drop them unless it is the same one.
+    if (cached) clearUserDrafts(next?.user.id)
+    return next
   }
   const next = syncChain.then(run, run)
   syncChain = next.catch(() => null)
@@ -136,6 +178,7 @@ export async function establishSession(queryClient: QueryClient, session: Sessio
   const previous = currentUserId(queryClient)
   if (previous && previous !== session.user.id) await teardownSession(queryClient, 'switch')
   clearUserDrafts(session.user.id)
+  sessionEndedByExpiry = false
   setStoredSession({ token: session.token, expiresAt: session.expiresAt })
   queryClient.setQueryData(sessionQueryOptions().queryKey, session)
 }
