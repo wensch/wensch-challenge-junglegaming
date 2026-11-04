@@ -157,6 +157,19 @@ public/            fontes, imagens de NFT, mockServiceWorker.js
 
 Documentos: [ARCHITECTURE.md](ARCHITECTURE.md) (contratos, sessão, carrinho, cache, reconciliação, UX e desvios do Figma) · [docs/requirements-matrix.md](docs/requirements-matrix.md) (requisito a requisito, com evidência) · [lighthouse/](lighthouse/) (auditoria) · [BUGS.md](BUGS.md) (achados de QA) · [src/mocks/README.md](src/mocks/README.md) · [docs/figma.md](docs/figma.md).
 
+## Resultados do Lighthouse
+
+Medianas de 3 execuções por página e perfil, build de produção com os mocks ativos (`npm run lighthouse`; relatórios HTML/JSON, ambiente e diagnóstico em [lighthouse/](lighthouse/)):
+
+| Página | Perfil | Perf | A11y | BP | SEO | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|---|
+| Início | mobile | 70 | 100 | 100 | 100 | 5,9 s | 0 | 374 ms |
+| Detalhe | mobile | 68 | 100 | 100 | 100 | 5,6 s | 0 | 475 ms |
+| Início | desktop | 97 | 100 | 100 | 100 | 1,2 s | 0 | 8 ms |
+| Detalhe | desktop | 98 | 100 | 100 | 100 | 1,2 s | 0 | 5 ms |
+
+A única meta não atingida é a Performance mobile (70 e 68 contra 90). O LCP observado é de ~0,65 s; a nota usa o LCP simulado (rede de 1,6 Mbps e CPU 4× mais lenta) sobre 528 KB gzip de JavaScript, dos quais um terço é a camada de mocks exigida no build de demonstração. A justificativa completa, com os números e o que foi otimizado, está em [lighthouse/README.md](lighthouse/README.md#resultado-final-e-justificativa-lh-2).
+
 ## Limitações conhecidas e desvios do Figma
 
 - Backend, pagamento e carteiras são simulados; senhas do mock usam SHA-256 com salt (um backend real usaria um KDF lento) e o token de sessão fica em `localStorage` (real: cookie `HttpOnly`). Ver ARCHITECTURE §4.

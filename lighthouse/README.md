@@ -7,14 +7,27 @@ Nota: a porta 4190 e bloqueada pelo Chrome/fetch (ERR_UNSAFE_PORT), por isso 419
 
 | Pagina | Perfil | Perf | A11y | BP | SEO | LCP ms | CLS | TBT ms | FCP ms | SI ms |
 |---|---|---|---|---|---|---|---|---|---|---|
-| inicio (/) | mobile | 67 | 100 | 96 | 92 | 5447 | 0.000 | 486 | 904 | 989 |
-| detalhe (/nft/nft_002) | mobile | 66 | 100 | 96 | 92 | 5341 | 0.000 | 560 | 902 | 1623 |
-| inicio (/) | desktop | 98 | 100 | 96 | 92 | 1164 | 0.000 | 16 | 245 | 348 |
-| detalhe (/nft/nft_002) | desktop | 93 | 100 | 96 | 92 | 1110 | 0.143 | 13 | 243 | 431 |
+| inicio (/) | mobile | **70** | 100 | 100 | 100 | 5852 | 0.000 | 374 | 903 | 945 |
+| detalhe (/nft/nft_002) | mobile | **68** | 100 | 100 | 100 | 5600 | 0.000 | 475 | 905 | 1581 |
+| inicio (/) | desktop | 97 | 100 | 100 | 100 | 1242 | 0.000 | 8 | 244 | 329 |
+| detalhe (/nft/nft_002) | desktop | 98 | 100 | 100 | 100 | 1154 | 0.000 | 5 | 241 | 326 |
 
-Metas: Perf >= 90, A11y >= 95, BP >= 95, SEO >= 90. Atingidas: A11y (100), BP (96), SEO (92) em todas; Perf desktop (98 / 93). **Nao atingida: Performance mobile (67 / 66)**, LCP ~5,4 s e TBT ~490-560 ms. CLS desktop do detalhe = 0,143 (acima de 0,1).
+Metas: Perf >= 90, A11y >= 95, BP >= 95, SEO >= 90. Atingidas, exceto Performance mobile (ver "Resultado final e justificativa").
 
-## Diagnostico
+
+## Resultado final e justificativa (LH-2)
+
+Medianas de 3 execucoes validas por celula (tabela acima), build de producao com os mocks ativos (cenario padrao), medidas sozinhas na maquina, sem outros processos. Atingidas em todas as celulas: A11y (100), Best Practices (100), SEO (100), CLS (0) e Performance desktop (97 / 98). **Nao atingida: Performance mobile (70 / 68 contra a meta de 90).**
+
+Por que a nota mobile fica abaixo, com os dados medidos:
+
+- A nota usa o LCP **simulado** (Slow 4G de 1,6 Mbps, RTT de 150 ms, CPU 4x mais lenta): 5,8 s. O LCP **observado** no mesmo carregamento e de ~0,65 s (TTFB 10 ms, espera pelo recurso 549 ms, download 48 ms, renderizacao 45 ms) e o FCP e de 0,9 s. A diferenca e custo de bytes e de CPU simulados, nao latencia real.
+- O carregamento inicial baixa **528 KB gzip de JavaScript** (56 scripts): **175 KB (um terco) sao a camada de mocks** (MSW, handlers e seed), que o enunciado exige no build de demonstracao, e 353 KB sao do app (React, TanStack Router e Query, zod, Axios, Socket.IO client, Radix e o codigo das telas). A 1,6 Mbps, so transferir isso custa ~2,6 s antes de executar; o `bootstrap` ainda gasta ~516 ms de script e o chunk dos mocks ~365 ms (CPU 4x).
+- O que foi feito sem alterar o comportamento: `modulepreload` do grafo de boot e das rotas de entrada, seed preguicoso em paralelo ao start do worker, skeletons com geometria final (CLS 0), `favicon.ico` e `robots.txt`, fonte com preload e `font-display`, cache imutavel dos assets. Ganho: BP e SEO de 96 / 92 para 100, CLS do detalhe de 0,143 para 0. A Performance mobile mudou pouco (67 / 66 para 70 / 68) porque os preloads reduzem espera de rede, nao os bytes nem a CPU.
+- O que ainda cortaria mais (adiar `socket.io-client`, dividir `createLucideIcon`, partir mais o `bootstrap`) renderia por estimativa ~5 pontos, nao 20. Chegar a 90 exigiria remover pecas da stack obrigatoria ou tirar o MSW do caminho do medidor, e o item LH-5 do enunciado proibe simplificacoes feitas so para a nota. Por isso a nota fica medida e justificada, sem esse tipo de atalho.
+- Fora do build de demonstracao (sem a camada de mocks, que e uma ferramenta de teste), o app entregaria ~33% menos JS no mesmo caminho.
+
+## Diagnostico (primeira medicao, antes das correcoes)
 
 1. **Flake NO_NAVSTART (causa: `src/mocks/browser.ts:22-23,49-79`)**. Em perfil limpo o Service Worker do MSW ainda nao controla a pagina, entao `ensureControlled()` chama `location.reload()` (linha 79) e o documento carrega duas vezes. O trace do Lighthouse perde o navigationStart em parte das execucoes (observado: ~1/3 a 5 descartes por celula). O runner descarta e repete execucoes com runtimeError (contagem em `summary.json`, campo `discarded`); nada e escondido: a nota usa so execucoes validas. Em usuario real e so a primeira visita.
 2. **LCP mobile 5,4 s (simulado 4x CPU + 3G lento)**. Decomposicao observada: TTFB 10 ms, **resource load delay ~540 ms**, load 50 ms, render 16 ms. A imagem LCP so e descoberta depois que o JS boota (`index.html` so tem `<div id=root>`; a imagem nasce no React). O caminho critico e: `main.tsx` -> `import('./mocks/browser')` (**browser-*.js, 479 kB / 177 kB gz, ~72 kB nao usado na carga**, e o MSW + mocks) -> seed + `worker.start` -> `import('./bootstrap')` (**bootstrap-*.js, 243 kB**) -> query -> render. Os imports sao sequenciais (`src/main.tsx:13-16`), nao paralelos.
