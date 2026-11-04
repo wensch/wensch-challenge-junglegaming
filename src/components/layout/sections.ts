@@ -17,6 +17,10 @@ export const UNAVAILABLE_SECTIONS = {
   denunciar: 'Denunciar item',
   'redes-sociais': 'Redes sociais',
   newsletter: 'Newsletter',
+  'recuperar-senha': 'Recuperação de senha',
+  ofertas: 'Ofertas',
+  arquivos: 'Arquivos baixados',
+  suporte: 'Suporte',
 } as const
 
 export type UnavailableSection = keyof typeof UNAVAILABLE_SECTIONS
