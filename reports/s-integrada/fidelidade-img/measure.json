@@ -1,0 +1,6485 @@
+{
+ "inicio@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 3857,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "SEJA DONO DA CULTURA DIGITAL",
+    "ff": "\"Roboto Mono\"",
+    "fs": "24px",
+    "lh": "32px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     40,
+     129,
+     188,
+     96
+    ]
+   },
+   {
+    "t": "Mercado de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     23,
+     370,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Faixa de preço",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Rede",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "NFT EM DESTAQUE",
+    "ff": "\"Roboto Mono\"",
+    "fs": "24px",
+    "lh": "32px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Lançamentos gênesis de ediçã",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Arte digital selecionada e m",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     321,
+     40,
+     45,
+     45
+    ]
+   },
+   {
+    "t": "EXPLORAR",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     34,
+     317,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     58,
+     317,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     82,
+     317,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     106,
+     317,
+     24,
+     24
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     244,
+     155,
+     138,
+     138
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     228,
+     243,
+     58,
+     58
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     24,
+     477,
+     168,
+     168
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     219,
+     509,
+     132,
+     168
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     24,
+     789,
+     168,
+     168
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "detalhe@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 3903,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Cristal Perdido",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "28px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     473,
+     162,
+     28
+    ]
+   },
+   {
+    "t": "Sobre este NFT:",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     549,
+     342,
+     22
+    ]
+   },
+   {
+    "t": "Mais desta coleção",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     1694,
+     342,
+     33
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2230,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2356,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2482,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2630,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     3092,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     331,
+     24,
+     35,
+     35
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "oklab(0.167316 0.00974907 0.00951482 / 0.8)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "1/1",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     699,
+     48,
+     28
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     70,
+     750,
+     26,
+     26
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     160,
+     750,
+     26,
+     26
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     36,
+     87,
+     318,
+     318
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     24,
+     1784,
+     190,
+     190
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     230,
+     1784,
+     190,
+     190
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "carrinho@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 2531,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carrinho de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     109,
+     24,
+     173,
+     24
+    ]
+   },
+   {
+    "t": "Resumo da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Colecionadores também viram",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     858,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     984,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1110,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1258,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1720,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     24,
+     18,
+     36,
+     36
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     258,
+     166,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     326,
+     166,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     334,
+     96,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "Aplicar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     239,
+     299,
+     102,
+     40
+    ]
+   },
+   {
+    "t": "Conectar e finalizar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     48,
+     554,
+     294,
+     48
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     24,
+     95,
+     100,
+     100
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     0,
+     0
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     0,
+     0
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     0,
+     0
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     0,
+     0
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     0,
+     0
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "pagamento@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 3703,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Pagamento",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     146,
+     24,
+     97,
+     24
+    ]
+   },
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     72,
+     342,
+     20
+    ]
+   },
+   {
+    "t": "Seus NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     1094,
+     342,
+     31
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2030,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2156,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2282,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2430,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2892,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     24,
+     18,
+     36,
+     36
+    ]
+   },
+   {
+    "t": "Conectar carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     1733,
+     342,
+     40
+    ]
+   },
+   {
+    "t": "Confirmar compra",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     1793,
+     342,
+     45
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     24,
+     1145,
+     70,
+     70
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "perfil@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 3173,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     228,
+     342,
+     20
+    ]
+   },
+   {
+    "t": "Alterar senha",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     954,
+     342,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1500,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1626,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1752,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1900,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2362,
+     131,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     211,
+     2362,
+     131,
+     48
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     24,
+     24,
+     178,
+     45
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     202,
+     24,
+     128,
+     45
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     69,
+     128,
+     45
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     69,
+     203,
+     45
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     114,
+     111,
+     45
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     135,
+     114,
+     195,
+     45
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "carteiras@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 4185,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     228,
+     342,
+     20
+    ]
+   },
+   {
+    "t": "Carteira principal",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     304,
+     342,
+     20
+    ]
+   },
+   {
+    "t": "Carteira secundária",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     1368,
+     182,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2512,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2638,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     2764,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2912,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     3374,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     24,
+     178,
+     45
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     202,
+     24,
+     128,
+     45
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     69,
+     128,
+     45
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     69,
+     203,
+     45
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     114,
+     111,
+     45
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     135,
+     114,
+     195,
+     45
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "login@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 2449,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     120,
+     342,
+     24
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     776,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     902,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1028,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1176,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1638,
+     131,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     211,
+     1638,
+     131,
+     48
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1956,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     322,
+     232,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     314,
+     342,
+     60
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     24,
+     436,
+     342,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     24,
+     488,
+     342,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "register@390": {
+  "sw": 390,
+  "cw": 390,
+  "h": 2565,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     120,
+     342,
+     24
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     892,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1018,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     112,
+     1144,
+     248,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1292,
+     312,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     1754,
+     131,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     211,
+     1754,
+     131,
+     48
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     48,
+     2072,
+     131,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     322,
+     288,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     322,
+     366,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     430,
+     342,
+     60
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     24,
+     552,
+     342,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     24,
+     604,
+     342,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   }
+  ]
+ },
+ "inicio@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 3697,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "SEJA DONO DA CULTURA DIGITAL",
+    "ff": "\"Roboto Mono\"",
+    "fs": "43px",
+    "lh": "70px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     64,
+     229,
+     600,
+     140
+    ]
+   },
+   {
+    "t": "Mercado de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     23,
+     707,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Faixa de preço",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Rede",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "NFT EM DESTAQUE",
+    "ff": "\"Roboto Mono\"",
+    "fs": "24px",
+    "lh": "32px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Lançamentos gênesis de ediçã",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     240,
+     2203,
+     106,
+     80
+    ]
+   },
+   {
+    "t": "Arte digital selecionada e m",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     614,
+     2203,
+     106,
+     100
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     699,
+     101,
+     45,
+     45
+    ]
+   },
+   {
+    "t": "EXPLORAR",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     64,
+     485,
+     140,
+     40
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     612,
+     549,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     636,
+     549,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     660,
+     549,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     684,
+     549,
+     24,
+     24
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     696,
+     162,
+     450,
+     450
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     24,
+     807,
+     250,
+     250
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     275,
+     789,
+     224,
+     286
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     527,
+     807,
+     250,
+     250
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "detalhe@768": {
+  "sw": 1091,
+  "cw": 768,
+  "h": 3382,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Cristal Perdido",
+    "ff": "\"Roboto Mono\"",
+    "fs": "28px",
+    "lh": "37px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     629,
+     151,
+     118,
+     74
+    ]
+   },
+   {
+    "t": "Sobre este NFT:",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     629,
+     368,
+     115,
+     44
+    ]
+   },
+   {
+    "t": "Mais desta coleção",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     1712,
+     720,
+     33
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     2362,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     2362,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     2574,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     2490,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     2884,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     24,
+     151,
+     100,
+     100
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "oklab(0.167316 0.00974907 0.00951482 / 0.8)",
+    "box": [
+     550,
+     167,
+     30,
+     30
+    ]
+   },
+   {
+    "t": "1/1",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     629,
+     650,
+     48,
+     28
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     629,
+     702,
+     33,
+     33
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     726,
+     702,
+     33,
+     33
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     26,
+     153,
+     96,
+     96
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     172,
+     171,
+     404,
+     404
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     24,
+     1802,
+     190,
+     190
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     169,
+     1802,
+     190,
+     190
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "carrinho@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 2556,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carrinho de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     298,
+     93,
+     173,
+     24
+    ]
+   },
+   {
+    "t": "Resumo da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Colecionadores também viram",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     817,
+     720,
+     31
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1536,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1536,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1748,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1664,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     2058,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     24,
+     87,
+     36,
+     36
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     636,
+     221,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     704,
+     221,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     712,
+     165,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "Aplicar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     617,
+     354,
+     102,
+     40
+    ]
+   },
+   {
+    "t": "Conectar e finalizar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     48,
+     609,
+     672,
+     48
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     24,
+     157,
+     100,
+     100
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     24,
+     880,
+     123,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     173,
+     880,
+     123,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     322,
+     880,
+     123,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     310,
+     366
+    ],
+    "box": [
+     472,
+     880,
+     123,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     621,
+     880,
+     123,
+     255
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "pagamento@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 2883,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Pagamento",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     335,
+     93,
+     97,
+     24
+    ]
+   },
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     141,
+     720,
+     20
+    ]
+   },
+   {
+    "t": "Seus NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     811,
+     720,
+     31
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1863,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1863,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     2075,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1991,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     2385,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     24,
+     87,
+     36,
+     36
+    ]
+   },
+   {
+    "t": "Conectar carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     1450,
+     720,
+     40
+    ]
+   },
+   {
+    "t": "Confirmar compra",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     24,
+     1510,
+     720,
+     45
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     24,
+     862,
+     70,
+     70
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "perfil@768": {
+  "sw": 833,
+  "cw": 768,
+  "h": 2233,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     362,
+     101,
+     382,
+     20
+    ]
+   },
+   {
+    "t": "Alterar senha",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     362,
+     551,
+     382,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1213,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1213,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1425,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1341,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     1735,
+     312,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1735,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     24,
+     149,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     191,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     233,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     275,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     317,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     359,
+     310,
+     42
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "carteiras@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 2665,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     362,
+     101,
+     382,
+     20
+    ]
+   },
+   {
+    "t": "Carteira principal",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     362,
+     177,
+     382,
+     20
+    ]
+   },
+   {
+    "t": "Carteira secundária",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     362,
+     813,
+     182,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1645,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1645,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1857,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1773,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     2167,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     149,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     24,
+     191,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     233,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     275,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     317,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     24,
+     359,
+     310,
+     42
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "login@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 2029,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     213,
+     176,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1009,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1009,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1221,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1137,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     1531,
+     312,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1531,
+     312,
+     24
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     1737,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     510,
+     333,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     214,
+     415,
+     340,
+     48
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     214,
+     525,
+     340,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     214,
+     577,
+     340,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "register@768": {
+  "sw": 768,
+  "cw": 768,
+  "h": 2145,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     213,
+     176,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1125,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1125,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     72,
+     1337,
+     296,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1253,
+     296,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     1647,
+     312,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     400,
+     1647,
+     312,
+     24
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     56,
+     1853,
+     312,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     510,
+     389,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     510,
+     467,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     214,
+     531,
+     340,
+     48
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     214,
+     641,
+     340,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     214,
+     693,
+     340,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     768,
+     69
+    ]
+   }
+  ]
+ },
+ "inicio@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 3136,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "SEJA DONO DA CULTURA DIGITAL",
+    "ff": "\"Roboto Mono\"",
+    "fs": "43px",
+    "lh": "70px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     160,
+     168,
+     600,
+     140
+    ]
+   },
+   {
+    "t": "Mercado de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     119,
+     646,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     132,
+     671,
+     286,
+     28
+    ]
+   },
+   {
+    "t": "Faixa de preço",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     144,
+     1083,
+     262,
+     32
+    ]
+   },
+   {
+    "t": "Rede",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     132,
+     1273,
+     286,
+     28
+    ]
+   },
+   {
+    "t": "NFT EM DESTAQUE",
+    "ff": "\"Roboto Mono\"",
+    "fs": "24px",
+    "lh": "32px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     140,
+     1481,
+     270,
+     32
+    ]
+   },
+   {
+    "t": "Lançamentos gênesis de ediçã",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     436,
+     2142,
+     246,
+     40
+    ]
+   },
+   {
+    "t": "Arte digital selecionada e m",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     1050,
+     2142,
+     246,
+     40
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "EXPLORAR",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     160,
+     424,
+     140,
+     40
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     708,
+     488,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     732,
+     488,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     756,
+     488,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     780,
+     488,
+     24,
+     24
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     830,
+     101,
+     450,
+     450
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     120,
+     1585,
+     310,
+     368
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     482,
+     746,
+     250,
+     250
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     787,
+     728,
+     224,
+     286
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     1066,
+     746,
+     250,
+     250
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "detalhe@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 2415,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Cristal Perdido",
+    "ff": "\"Roboto Mono\"",
+    "fs": "28px",
+    "lh": "37px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     725,
+     151,
+     252,
+     37
+    ]
+   },
+   {
+    "t": "Sobre este NFT:",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     725,
+     289,
+     595,
+     22
+    ]
+   },
+   {
+    "t": "Mais desta coleção",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     1245,
+     1200,
+     33
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1895,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1895,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1895,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1811,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     2147,
+     303,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     120,
+     151,
+     100,
+     100
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "oklab(0.167316 0.00974907 0.00951482 / 0.8)",
+    "box": [
+     646,
+     167,
+     30,
+     30
+    ]
+   },
+   {
+    "t": "1/1",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     725,
+     417,
+     48,
+     28
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     725,
+     469,
+     33,
+     33
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     822,
+     469,
+     33,
+     33
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     122,
+     153,
+     96,
+     96
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     268,
+     171,
+     404,
+     404
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     142,
+     1335,
+     190,
+     190
+    ],
+    "of": "contain"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     384,
+     1335,
+     190,
+     190
+    ],
+    "of": "contain"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "carrinho@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 1869,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carrinho de NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     119,
+     92,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Resumo da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     988,
+     143,
+     332,
+     31
+    ]
+   },
+   {
+    "t": "Colecionadores também viram",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     662,
+     1200,
+     31
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1349,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1349,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1349,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1265,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1601,
+     303,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     581,
+     213,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     649,
+     213,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     854,
+     213,
+     24,
+     24
+    ]
+   },
+   {
+    "t": "Aplicar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     1217,
+     231,
+     102,
+     40
+    ]
+   },
+   {
+    "t": "Conectar e finalizar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     988,
+     486,
+     332,
+     40
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     120,
+     190,
+     70,
+     70
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     500,
+     500
+    ],
+    "box": [
+     120,
+     725,
+     219,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     365,
+     725,
+     219,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     610,
+     725,
+     219,
+     255
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     310,
+     366
+    ],
+    "box": [
+     856,
+     725,
+     219,
+     259
+    ],
+    "of": "cover"
+   },
+   {
+    "nat": [
+     250,
+     250
+    ],
+    "box": [
+     1101,
+     725,
+     219,
+     255
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "pagamento@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 1679,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Pagamento",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     119,
+     92,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     139,
+     749,
+     20
+    ]
+   },
+   {
+    "t": "Seus NFTs",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     915,
+     139,
+     405,
+     31
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1159,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1159,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1159,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1075,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1411,
+     303,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(36, 22, 18)",
+    "box": [
+     0,
+     0,
+     0,
+     0
+    ]
+   },
+   {
+    "t": "Conectar carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     915,
+     778,
+     405,
+     40
+    ]
+   },
+   {
+    "t": "Confirmar compra",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     915,
+     838,
+     405,
+     45
+    ]
+   }
+  ],
+  "imgs": [
+   {
+    "nat": [
+     224,
+     286
+    ],
+    "box": [
+     915,
+     190,
+     70,
+     70
+    ],
+    "of": "cover"
+   }
+  ],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "perfil@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 1733,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Perfil do colecionador",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     458,
+     101,
+     862,
+     20
+    ]
+   },
+   {
+    "t": "Alterar senha",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     458,
+     551,
+     417,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1213,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1213,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1213,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1129,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1465,
+     303,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     455,
+     1465,
+     303,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     120,
+     149,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     191,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     233,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     275,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     317,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     359,
+     310,
+     42
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "carteiras@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 2119,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     458,
+     101,
+     862,
+     20
+    ]
+   },
+   {
+    "t": "Carteira principal",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     458,
+     177,
+     555,
+     20
+    ]
+   },
+   {
+    "t": "Carteira secundária",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     458,
+     783,
+     182,
+     20
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1599,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1599,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1599,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1515,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1851,
+     303,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "Dados do perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     149,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Carteiras",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgb(56, 34, 15)",
+    "box": [
+     120,
+     191,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Atividade",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     233,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Lista de interesse",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     275,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Ofertas",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     317,
+     310,
+     42
+    ]
+   },
+   {
+    "t": "Arquivos baixados",
+    "ff": "\"Roboto Mono\"",
+    "fs": "14px",
+    "lh": "22px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(232, 155, 85)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     120,
+     359,
+     310,
+     42
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "login@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 1529,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     549,
+     176,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1009,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1009,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1009,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     925,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1261,
+     303,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     455,
+     1261,
+     303,
+     24
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     758,
+     1261,
+     302,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     846,
+     333,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Entrar",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     550,
+     415,
+     340,
+     48
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     550,
+     525,
+     340,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     550,
+     577,
+     340,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ },
+ "register@1440": {
+  "sw": 1440,
+  "cw": 1440,
+  "h": 1645,
+  "bodyBg": "rgb(20, 13, 10)",
+  "bodyFf": "\"Roboto Mono\"",
+  "h1": [
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     549,
+     176,
+     1,
+     1
+    ]
+   },
+   {
+    "t": "Segurança da carteira",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     168,
+     1125,
+     233,
+     24
+    ]
+   },
+   {
+    "t": "Criadores em destaque",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     435,
+     1125,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Alertas de lançamentos",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     701,
+     1125,
+     232,
+     24
+    ]
+   },
+   {
+    "t": "Antecipe-se ao próximo lança",
+    "ff": "\"Roboto Mono\"",
+    "fs": "17px",
+    "lh": "16px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     966,
+     1041,
+     324,
+     32
+    ]
+   },
+   {
+    "t": "Meu perfil",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     152,
+     1377,
+     303,
+     24
+    ]
+   },
+   {
+    "t": "Central de ajuda",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     455,
+     1377,
+     303,
+     24
+    ]
+   },
+   {
+    "t": "Coleções",
+    "ff": "\"Roboto Mono\"",
+    "fs": "18px",
+    "lh": "24px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(247, 243, 236)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     758,
+     1377,
+     302,
+     24
+    ]
+   }
+  ],
+  "btn": [
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     846,
+     389,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     846,
+     467,
+     44,
+     40
+    ]
+   },
+   {
+    "t": "Criar conta",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "20px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(20, 13, 10)",
+    "bg": "rgb(210, 138, 76)",
+    "box": [
+     550,
+     531,
+     340,
+     48
+    ]
+   },
+   {
+    "t": "GContinuar com Google",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     550,
+     641,
+     340,
+     40
+    ]
+   },
+   {
+    "t": "Continuar com Facebook",
+    "ff": "\"Roboto Mono\"",
+    "fs": "12px",
+    "lh": "14px",
+    "fw": "700",
+    "ls": "normal",
+    "col": "rgb(207, 178, 140)",
+    "bg": "rgb(20, 13, 10)",
+    "box": [
+     550,
+     693,
+     340,
+     40
+    ]
+   }
+  ],
+  "imgs": [],
+  "hdr": [
+   {
+    "t": "KURIO — página inicialInício",
+    "ff": "\"Roboto Mono\"",
+    "fs": "16px",
+    "lh": "24px",
+    "fw": "400",
+    "ls": "normal",
+    "col": "rgb(245, 241, 235)",
+    "bg": "rgba(0, 0, 0, 0)",
+    "box": [
+     0,
+     0,
+     1440,
+     69
+    ]
+   }
+  ]
+ }
+}
