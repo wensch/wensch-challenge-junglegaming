@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 1 — slice `fundacao`, **volta 3 (última)** em andamento.
+**Fase atual:** Fase 1 — slice `fundacao` **APROVADA** na volta 3; endurecimento pré-slices em andamento.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -55,12 +55,16 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
 | Volta 3: N1 + R3 | arquiteto-contratos | **OK** — V1 do revisor passa (reason=expired, redirect=/wallets, draftKept=true); merge aab300a |
 | verify em main (aab300a) | orquestrador | 1ª execução RED (1 falha: qa-volta2 "CSP sem violação", desktop); 2ª **GREEN** (e2e 205 ✓, visual 6 ✓, a11y 9 ✓). Isolado: 12/12. **Flake intermitente sob carga, em aberto** |
-| Revisor sênior volta 3 + reteste segurança | revisor ‖ seguranca | em andamento |
+| Revisor sênior volta 3 | revisor-frontend-senior | **APPROVED** — sem alto/crítico · [relatório](reports/fundacao/revisor-frontend-senior.md) |
+| Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](reports/fundacao/seguranca.md) |
+| Endurecimento pré-slices (F1 boot MSW sem controller) | plataforma-mocks | em andamento |
+| Endurecimento pré-slices (F1 teste, F2 sessão fantasma, #13, F3, F7) | arquiteto-contratos | em andamento |
+| Matriz de requisitos | auditor-requisitos | em andamento |
 | Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | **OK** — verify GREEN (e2e 199 ✓); merge 998f27c |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
 ## Próximo passo
-Integrar a volta 3, rodar verify em main, revisor sênior (volta 3) com reteste rápido dos gates. Se N1 não fechar: ESCALATIONS.md e seguir para a Fase 2.
+Integrar o endurecimento (verify verde 2× em main), fechar a matriz e abrir a Fase 2: S1 catálogo ‖ S2 conta ‖ S3 checkout em worktrees.
 
 Antes de abrir as slices (revisor): favorites.ts fica com a S1, cart-mutations.ts/useAddToCart com a S3 (cart.ts congelado), SiteHeader por bloco (S1 busca, S3 badge, S2 AccountDropdown), routeTree.gen.ts regenerado no merge.
 
