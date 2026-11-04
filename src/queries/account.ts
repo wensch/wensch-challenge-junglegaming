@@ -20,7 +20,7 @@ import type {
 import { profileApi, walletsApi } from '@/api/endpoints'
 import { STALE } from './client'
 import { queryKeys } from './keys'
-import { ownedQueryFn } from './owner'
+import { ownedQueryFn, ownerChangedError } from './owner'
 import type { UserCredential } from './orders'
 import { cachedSession, currentUserId, sessionQueryOptions, useSession } from './session'
 import { keepNewest } from './versioned'
@@ -98,7 +98,7 @@ function useProfileWriter() {
 }
 
 function requireUser(user: UserCredential | null): UserCredential {
-  if (!user) throw new Error('Sem sessão')
+  if (!user) throw ownerChangedError()
   return user
 }
 

@@ -86,10 +86,12 @@ function rollback(queryClient: QueryClient, owner: UserOwner, previous: Favorite
   if (previous) queryClient.setQueryData<FavoritesResponse>(key, previous)
 }
 
-export function useToggleFavorite() {
+/** `scopeId` (userId + nftId) makes toggles of the same NFT run serially, so clicks reach the server in order. */
+export function useToggleFavorite(scopeId: string) {
   const queryClient = useQueryClient()
   return useMutation<FavoriteToggleResponse, ApiError, ToggleFavoriteVars, ToggleContext>({
     mutationKey: MUTATION_KEY,
+    scope: { id: `favorite:${scopeId}` },
     mutationFn: ({ nft, favorited, owner }) => {
       const as = { token: owner.token }
       return favorited ? favoritesApi.addFavorite(nft.id, { as }) : favoritesApi.removeFavorite(nft.id, { as })

@@ -118,9 +118,9 @@ function ProfileDataForm({ profile }: { profile: Profile }) {
   const serverError = rootMessage(errors)
 
   return (
-    <form onSubmit={onSubmit} noValidate aria-label="Dados do perfil" className="grid gap-x-7 gap-y-7 md:grid-cols-2" onChange={() => setSaved(false)}>
+    <form onSubmit={onSubmit} noValidate aria-label="Dados do perfil" className="grid gap-x-7 gap-y-7 lg:grid-cols-2" onChange={() => setSaved(false)}>
       {conflict && (
-        <div role="alert" className="rounded-control border border-primary bg-surface-dark p-4 text-body-sm text-text-primary md:col-span-2">
+        <div role="alert" className="rounded-control border border-primary bg-surface-dark p-4 text-body-sm text-text-primary lg:col-span-2">
           <p className="font-bold">Seus dados mudaram em outro lugar.</p>
           <p className="mt-1 text-text-secondary">
             Carregamos a versão mais recente (v{profile.version}). Revise e confirme para salvar suas alterações sobre ela, ou descarte as suas.
@@ -131,7 +131,7 @@ function ProfileDataForm({ profile }: { profile: Profile }) {
         </div>
       )}
       {serverError && (
-        <p role="alert" className="rounded-control border border-destructive px-3 py-2 text-caption-sm text-destructive md:col-span-2">
+        <p role="alert" className="rounded-control border border-destructive px-3 py-2 text-caption-sm text-destructive lg:col-span-2">
           {serverError}
         </p>
       )}
@@ -158,7 +158,7 @@ function ProfileDataForm({ profile }: { profile: Profile }) {
         {(c) => <Input {...c} {...form.register('walletAlias')} className={controlClass} />}
       </Field>
       <AvatarControl profile={profile} />
-      <div className="flex flex-wrap items-center gap-4 md:col-span-2">
+      <div className="flex flex-wrap items-center gap-4 lg:col-span-2">
         <Button type="submit" disabled={form.formState.isSubmitting || (conflict && update.isPending)} className="h-10 rounded-control px-6 text-body-sm font-bold">
           {form.formState.isSubmitting ? 'Salvando…' : conflict ? 'Confirmar e salvar' : 'Salvar'}
         </Button>
@@ -209,7 +209,7 @@ function AvatarControl({ profile }: { profile: Profile }) {
       <span id="avatar-label" className="text-body-sm leading-4 text-text-primary">
         Avatar
       </span>
-      <div className="flex items-center gap-5">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         <Avatar url={profile.avatarUrl} name={profile.displayName} className="size-[50px]" />
         <input
           ref={input}

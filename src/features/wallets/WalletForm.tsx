@@ -163,12 +163,12 @@ export function WalletForm({
       onSubmit={onSubmit}
       noValidate
       aria-label={title}
-      className="grid gap-x-7 gap-y-7 md:grid-cols-2"
+      className="grid gap-x-7 gap-y-7 lg:grid-cols-2"
       onChange={() => setSaved(false)}
       data-testid={`wallet-form-${slot}`}
     >
       {conflict && (
-        <div role="alert" className="rounded-control border border-primary bg-surface-dark p-4 text-body-sm text-text-primary md:col-span-2">
+        <div role="alert" className="rounded-control border border-primary bg-surface-dark p-4 text-body-sm text-text-primary lg:col-span-2">
           <p className="font-bold">Esta carteira mudou em outro lugar.</p>
           <p className="mt-1 text-text-secondary">
             Carregamos a versão mais recente{wallet ? ` (v${wallet.version})` : ''}. Revise e confirme para salvar suas alterações sobre ela, ou descarte as suas.
@@ -187,7 +187,7 @@ export function WalletForm({
         </div>
       )}
       {serverError && (
-        <p role="alert" className="rounded-control border border-destructive px-3 py-2 text-caption-sm text-destructive md:col-span-2">
+        <p role="alert" className="rounded-control border border-destructive px-3 py-2 text-caption-sm text-destructive lg:col-span-2">
           {serverError}
         </p>
       )}
@@ -280,7 +280,7 @@ export function WalletForm({
           </div>
         )}
       </Field>
-      <div className="flex flex-wrap items-center gap-4 md:col-span-2">
+      <div className="flex flex-wrap items-center gap-4 lg:col-span-2">
         <Button type="submit" disabled={form.formState.isSubmitting} className="h-10 rounded-control px-6 text-body-sm font-bold">
           {form.formState.isSubmitting ? 'Salvando…' : conflict ? 'Confirmar e salvar' : 'Salvar carteira'}
         </Button>
