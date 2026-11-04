@@ -3,7 +3,8 @@
  * `GET /nfts/featured`. The copy is static; the artwork cycles through `hero` via the dots
  * (manual, no auto-rotation: nothing moves on its own, WCAG 2.2.2).
  */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { useHeadingFocus } from '@/features/nft/useHeadingFocus'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight } from 'lucide-react'
 import type { NftSummary } from '@/api/contracts'
@@ -17,11 +18,13 @@ import { nftQueries } from '@/queries/nfts'
 const HERO_BOX = 'min-h-[190px] md:min-h-[450px]'
 
 function HeroCopy({ children }: { children?: React.ReactNode }) {
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  useHeadingFocus(headingRef, 'home')
   return (
     <div className="flex w-[188px] shrink-0 flex-col justify-between self-stretch md:w-[600px] md:justify-center md:gap-8 md:self-center">
       <div className="flex flex-col gap-1.5 md:gap-3">
         <p className="text-body-sm leading-4 text-text-primary">Bem-vindo à Kurio</p>
-        <h1 className="text-heading font-bold text-text-primary md:text-display">
+        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none md:text-display">
           <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
           <span className="hidden md:inline">
             SEJA DONO DO FUTURO
@@ -76,7 +79,7 @@ export function HeroSkeleton() {
       <HeroCopy>
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
-          <div className="h-4" />
+          <div className="h-6" />
         </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">

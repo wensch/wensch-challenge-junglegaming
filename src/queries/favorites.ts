@@ -4,7 +4,7 @@
  * and announces the failure (sonner region = `aria-live="polite"`), `onSettled` re-syncs with the
  * server. Every write checks that the owner is still the current identity (F8 of the foundation review).
  */
-import { queryOptions, useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query'
+import { queryOptions, skipToken, useMutation, type QueryKey, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { nftSummarySchema, type ApiError, type FavoriteToggleResponse, type FavoritesResponse, type NftSummary } from '@/api/contracts'
 import { favoritesApi } from '@/api/endpoints'
@@ -14,7 +14,9 @@ import { isCurrentOwner, ownedQueryFn, type OwnerCredential } from './owner'
 import { useSession } from './session'
 import { keepNewest } from './versioned'
 
-export type UserOwner = Extract<OwnerCredential, { kind: 'user' }>
+const NO_FAVORITES_KEY = ['favorites', 'none'] as const
+
+export type UserOwner =Extract<OwnerCredential, { kind: 'user' }>
 
 export const favoritesQueryOptions = (owner: UserOwner) =>
   queryOptions({
@@ -33,9 +35,13 @@ export function useUserOwner(): UserOwner | null {
 /** Favorites of the logged user. Without a session no request is made. */
 export function useFavorites() {
   const owner = useUserOwner()
-  const query = useQuery({
-    ...favoritesQueryOptions(owner ?? { kind: 'user', userId: 'none', token: '' }),
-    enabled: owner !== null,
+  // Without an owner the observer sits on a non-private placeholder key (never fetched), so nothing
+  // is created under `['u', ...]` after a teardown (same pattern as `useCart`).
+  const query = useQuery<FavoritesResponse, ApiError, FavoritesResponse, QueryKey>({
+    queryKey: owner ? favoritesQueryOptions(owner).queryKey : NO_FAVORITES_KEY,
+    queryFn: owner ? ownedQueryFn(owner, (as, signal) => favoritesApi.listFavorites({ signal, as })) : skipToken,
+    staleTime: STALE.account,
+    structuralSharing: keepNewest,
   })
   return { ...query, owner }
 }

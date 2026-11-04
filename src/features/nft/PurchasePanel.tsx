@@ -5,7 +5,7 @@
  *   (CONFLICT_AVAILABILITY / VALIDATION) are mapped back to that field, with `aria-describedby`.
  */
 import { useEffect, useId, useMemo } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
 import { Minus, Plus, ShoppingCart } from 'lucide-react'
@@ -84,13 +84,13 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
   const max = maxQuantityOf(edition)
   const unavailable = max === 0
   const resolver = useMemo(() => zodResolver<QuantityInput, unknown, QuantityOutput>(quantitySchema(edition)), [edition])
-  const { register, handleSubmit, setValue, getValues, watch, setError, clearErrors, trigger, formState } = useForm<QuantityInput, unknown, QuantityOutput>({
+  const { register, handleSubmit, setValue, getValues, control, setError, clearErrors, trigger, formState } = useForm<QuantityInput, unknown, QuantityOutput>({
     resolver,
     mode: 'onChange',
     defaultValues: { quantity: '1' },
   })
   const error = formState.errors.quantity?.message
-  const typed = parseInt(watch('quantity'), 10)
+  const typed = parseInt(useWatch({ control, name: 'quantity' }), 10)
   const atMax = !Number.isNaN(typed) && typed >= max
   const atMin = !Number.isNaN(typed) && typed <= 1
   const serverError = formState.errors.root?.server?.message
