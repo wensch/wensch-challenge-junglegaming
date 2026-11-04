@@ -4,7 +4,7 @@
  */
 import { z } from 'zod'
 import { displayNameSchema, emailSchema, passwordSchema, usernameSchema } from './auth'
-import { ensNameSchema, idSchema, isoDateTimeSchema, versionSchema } from './common'
+import { avatarUrlSchema, ensNameSchema, idSchema, isoDateTimeSchema, versionSchema } from './common'
 
 export const profileSchema = z.object({
   userId: idSchema,
@@ -13,7 +13,8 @@ export const profileSchema = z.object({
   email: emailSchema,
   ensName: ensNameSchema,
   walletAlias: z.string().min(2).max(40),
-  avatarUrl: z.string().min(1).nullable(),
+  /** v1.2.0: https, same-origin path or data:image/(png|jpeg|webp);base64 only. */
+  avatarUrl: avatarUrlSchema.nullable(),
   version: versionSchema,
   updatedAt: isoDateTimeSchema,
 })

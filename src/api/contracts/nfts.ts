@@ -12,9 +12,9 @@ import {
   NETWORKS,
   paginationMetaSchema,
   stockSchema,
+  compareEthStrings,
   versionSchema,
 } from './common'
-import { compare } from '@/lib/money'
 
 /** Collections sidebar of the home frame ("Coleções"). */
 export const CATEGORIES = [
@@ -134,7 +134,7 @@ export const catalogSearchSchema = z
   })
   .transform((s) => {
     // Swap an inverted range instead of producing an always-empty result.
-    if (s.priceMin !== undefined && s.priceMax !== undefined && compare(s.priceMin, s.priceMax) > 0) {
+    if (s.priceMin !== undefined && s.priceMax !== undefined && compareEthStrings(s.priceMin, s.priceMax) > 0) {
       return { ...s, priceMin: s.priceMax, priceMax: s.priceMin }
     }
     return s

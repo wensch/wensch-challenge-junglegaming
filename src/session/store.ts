@@ -76,23 +76,49 @@ export function subscribeSession(listener: Listener): () => void {
   }
 }
 
-/** Visitor id for the guest cart; created lazily, validated on every read. */
-export function getGuestId(): string {
-  const current = safeGet(localStorage, GUEST_KEY)
-  if (current && uuidSchema.safeParse(current).success) return current
-  const id = crypto.randomUUID()
-  localStorage.setItem(GUEST_KEY, id)
-  return id
+// ---------------------------------------------------------------------------
+// Visitor id (reactive: `subscribeGuestId` + `useGuestId` via useSyncExternalStore).
+// ---------------------------------------------------------------------------
+const guestListeners = new Set<Listener>()
+function notifyGuest() {
+  for (const l of guestListeners) l()
 }
 
-/** Returns the existing guest id without creating one (used to decide whether a merge is needed). */
+/** Subscribe to guest-id changes in this tab and in other tabs (storage event). */
+export function subscribeGuestId(listener: Listener): () => void {
+  guestListeners.add(listener)
+  const onStorage = (e: StorageEvent) => {
+    if (e.key === GUEST_KEY || e.key === null) listener()
+  }
+  window.addEventListener('storage', onStorage)
+  return () => {
+    guestListeners.delete(listener)
+    window.removeEventListener('storage', onStorage)
+  }
+}
+
+/** Returns the existing guest id without creating one (render-safe snapshot). */
 export function peekGuestId(): string | null {
   const current = safeGet(localStorage, GUEST_KEY)
   return current && uuidSchema.safeParse(current).success ? current : null
 }
 
+/**
+ * Returns the visitor id, creating it if needed. Call it explicitly right before the first visitor
+ * mutation (e.g. "add to cart"), so the cart owner — and its query key — exist before the request.
+ */
+export function ensureGuestId(): string {
+  const current = peekGuestId()
+  if (current) return current
+  const id = crypto.randomUUID()
+  localStorage.setItem(GUEST_KEY, id)
+  notifyGuest()
+  return id
+}
+
 export function clearGuestId(): void {
   localStorage.removeItem(GUEST_KEY)
+  notifyGuest()
 }
 
 /** sessionStorage key for a per-user draft (checkout form, purchase attempt). */

@@ -1,5 +1,5 @@
 /** Order endpoints (API-6, API-10). */
-import { buildPath, endpoints, HEADERS, uuidSchema, type CreateOrderRequest, type OrderStatus } from '@/api/contracts'
+import { ApiError, buildPath, endpoints, HEADERS, uuidSchema, type CreateOrderRequest, type OrderStatus } from '@/api/contracts'
 import { send, type CallOptions } from '@/api/client'
 
 /**
@@ -7,7 +7,14 @@ import { send, type CallOptions } from '@/api/client'
  * (ARCHITECTURE §6); the caller owns its lifecycle (sessionStorage per user).
  */
 export const createOrder = (body: CreateOrderRequest, idempotencyKey: string, opts: CallOptions = {}) => {
-  const key = uuidSchema.parse(idempotencyKey)
+  const checked = uuidSchema.safeParse(idempotencyKey)
+  if (!checked.success) {
+    // Same shape the server uses (v1.1.0), so callers handle a single error type.
+    return Promise.reject(
+      new ApiError({ code: 'VALIDATION', message: 'Chave de idempotência inválida.', fieldErrors: { [HEADERS.idempotencyKey]: ['Idempotency-Key deve ser um UUID.'] } }, 0),
+    )
+  }
+  const key = checked.data
   return send(endpoints.createOrder, {
     path: buildPath(endpoints.createOrder.path),
     body,

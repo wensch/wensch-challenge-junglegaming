@@ -2,32 +2,23 @@
  * Desktop/tablet header (Figma "Header With Divider", 1200x45 at y=24 of every desktop frame).
  * KURIO | Início · Mercado · Criadores · Aprenda | busca · carrinho (badge) · Entrar / conta.
  * Below `md` the header is replaced by the mobile tab bar (MobileTabBar), as in the mobile frames.
+ *
+ * Layout (D6, ARCHITECTURE §13): from `xl` (1200 px column) the nav sits where the Figma puts it
+ * (x = 376 px inside the column, i.e. "Início" at x = 496 in the 1440 frame). Below `xl` the nav is
+ * in the flex flow between logo and actions (`flex-1`, centered in the free space), so it can never
+ * overlap the search/cart/account group at tablet widths.
  */
-import { Link, useNavigate } from '@tanstack/react-router'
-import { useQueryClient } from '@tanstack/react-query'
-import { Heart, LogIn, LogOut, Search, ShoppingCart, User, Wallet } from 'lucide-react'
+import { lazy, Suspense } from 'react'
+import { Link } from '@tanstack/react-router'
+import { LogIn, Search, ShoppingCart, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { useCart } from '@/queries/cart'
-import { teardownSession, useSession } from '@/queries/session'
+import { useSession } from '@/queries/session'
 import { cn } from '@/lib/utils'
+import { accountButtonClass } from './header-styles'
 
-export function useLogout() {
-  const queryClient = useQueryClient()
-  const navigate = useNavigate()
-  return async () => {
-    await teardownSession(queryClient, 'logout')
-    await navigate({ to: '/' })
-  }
-}
+// The account menu (DropdownMenu) is only needed for logged users: loaded on demand.
+const AccountDropdown = lazy(() => import('./AccountDropdown'))
 
 export function CartBadgeIcon({ className }: { className?: string }) {
   const cart = useCart()
@@ -52,11 +43,10 @@ export function cartLabel(count: number) {
 }
 
 const navLink =
-  'relative flex h-full items-start pt-0.5 text-body-md font-normal text-text-primary transition-colors hover:text-text-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-primary after:opacity-0 data-[status=active]:font-bold data-[status=active]:text-text-accent data-[status=active]:after:opacity-100'
+  'relative flex h-full items-start pt-0.5 text-body-md font-normal whitespace-nowrap text-text-primary transition-colors hover:text-text-accent after:absolute after:inset-x-0 after:-bottom-px after:h-[3px] after:bg-primary after:opacity-0 data-[status=active]:font-bold data-[status=active]:text-text-accent data-[status=active]:after:opacity-100'
 
 function AccountMenu() {
   const session = useSession()
-  const logout = useLogout()
 
   if (session.isPending) return <span aria-hidden="true" className="inline-block h-[35px] w-[100px]" />
 
@@ -73,40 +63,17 @@ function AccountMenu() {
 
   const { user } = session.data
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="h-[35px] max-w-[180px] gap-1.5 rounded-control border-primary px-2.5 text-body-sm">
-          <User aria-hidden="true" className="size-5" strokeWidth={1.75} />
+    <Suspense
+      fallback={
+        // Same box as the trigger while its chunk loads (no layout shift, not interactive yet).
+        <span aria-hidden="true" className={cn('inline-flex items-center rounded-control border px-2.5', accountButtonClass)}>
+          <User className="size-5" strokeWidth={1.75} />
           <span className="truncate">{user.displayName}</span>
-          <span className="sr-only">: abrir menu da conta</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel className="truncate">{user.email}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link to="/profile">
-              <User aria-hidden="true" /> Meu perfil
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/wallets">
-              <Wallet aria-hidden="true" /> Carteiras
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/favorites">
-              <Heart aria-hidden="true" /> Lista de interesse
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => void logout()}>
-          <LogOut aria-hidden="true" /> Sair
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </span>
+      }
+    >
+      <AccountDropdown user={user} />
+    </Suspense>
   )
 }
 
@@ -115,13 +82,13 @@ export function SiteHeader() {
   return (
     <header className="hidden md:block">
       <div className="mx-auto w-full max-w-page px-gutter pt-6 xl:px-0">
-        <div className="relative flex h-header items-start border-b border-line">
-          <Link to="/" className="flex h-[35px] items-center text-body-sm font-bold tracking-figma text-text-primary">
+        <div className="relative flex h-header items-start gap-4 border-b border-line">
+          <Link to="/" className="flex h-[35px] shrink-0 items-center text-body-sm font-bold tracking-figma text-text-primary">
             KURIO<span className="sr-only"> — página inicial</span>
           </Link>
 
-          <nav aria-label="Principal" className="absolute inset-y-0 left-1/2 -translate-x-1/2">
-            <ul className="flex h-full gap-6 lg:gap-10">
+          <nav aria-label="Principal" className="flex h-full min-w-0 flex-1 justify-center xl:absolute xl:inset-y-0 xl:left-[376px] xl:flex-none">
+            <ul className="flex h-full gap-4 lg:gap-10">
               <li>
                 <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={navLink}>
                   Início
@@ -145,7 +112,7 @@ export function SiteHeader() {
             </ul>
           </nav>
 
-          <div className="ml-auto flex h-[35px] items-center gap-6">
+          <div className="ml-auto flex h-[35px] shrink-0 items-center gap-4 lg:gap-6">
             <Link to="/" hash="busca" aria-label="Buscar NFTs" className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
               <Search aria-hidden="true" className="size-6" strokeWidth={1.75} />
             </Link>

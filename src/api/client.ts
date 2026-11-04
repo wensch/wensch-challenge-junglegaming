@@ -12,7 +12,7 @@ import axios, { AxiosError, AxiosHeaders, type AxiosRequestConfig } from 'axios'
 import type { z } from 'zod'
 import { ApiError, apiErrorBodySchema, HEADERS, type EndpointAuth, type EndpointDef, type FieldErrors } from '@/api/contracts'
 import { env } from '@/env'
-import { getGuestId, getToken } from '@/session/store'
+import { ensureGuestId, getToken } from '@/session/store'
 
 export const REQUEST_TIMEOUT_MS = 10_000
 
@@ -22,8 +22,17 @@ declare module 'axios' {
     credentialMode?: EndpointAuth
     /** Do not fire the global session-expired flow (boot-time `GET /session` just falls back to visitor). */
     silentSessionExpiry?: boolean
+    /** Explicit credential (owner of the query key); overrides the ambient session/guest id. */
+    credential?: Credential
   }
 }
+
+/**
+ * Credential a request is bound to. Private/guest queries pass the credential of the OWNER of their
+ * query key (`['u', userId]` -> that user's token; `['guest', guestId]` -> that guest id), so a
+ * response can never be written under the key of somebody else (ARCHITECTURE §4, §9).
+ */
+export type Credential = { token: string } | { guestId: string }
 
 export const http = axios.create({
   baseURL: env.apiUrl,
@@ -36,10 +45,14 @@ http.interceptors.request.use(
     const headers = AxiosHeaders.from(config.headers)
     headers.set(HEADERS.requestId, crypto.randomUUID())
     const mode = config.credentialMode ?? 'public'
-    if (mode !== 'public' && !headers.has(HEADERS.authorization)) {
+    const explicit = config.credential
+    if (mode !== 'public' && explicit) {
+      if ('token' in explicit) headers.set(HEADERS.authorization, `Bearer ${explicit.token}`)
+      else if (mode === 'guest') headers.set(HEADERS.guestId, explicit.guestId)
+    } else if (mode !== 'public' && !headers.has(HEADERS.authorization)) {
       const token = getToken()
       if (token) headers.set(HEADERS.authorization, `Bearer ${token}`)
-      else if (mode === 'guest') headers.set(HEADERS.guestId, getGuestId())
+      else if (mode === 'guest') headers.set(HEADERS.guestId, ensureGuestId())
     }
     config.headers = headers
     return config
@@ -51,15 +64,20 @@ http.interceptors.request.use(
 )
 
 // ---------------------------------------------------------------------------
-// Session expiry hook (ARCHITECTURE §4): fired once per expired token, even when several
-// requests fail in parallel.
+// Session invalidation hook (ARCHITECTURE §4). A private call made WITH a Bearer token that answers
+// 401 means the session is gone server-side:
+//  - SESSION_EXPIRED   -> re-authentication flow (login with redirect back);
+//  - UNAUTHENTICATED   -> token unknown/revoked (logout in another tab, mock reset): teardown only.
+// Fired once per token, and ONLY if that token is still the current one: a late 401 for a session
+// that was already replaced (logout + new login, other tab) must not tear down the new session.
 // ---------------------------------------------------------------------------
-type SessionExpiredHandler = () => void
-let sessionExpiredHandler: SessionExpiredHandler | null = null
-let lastExpiredToken: string | null = null
+export type SessionInvalidReason = 'expired' | 'unauthenticated'
+type SessionInvalidHandler = (reason: SessionInvalidReason) => void
+let sessionInvalidHandler: SessionInvalidHandler | null = null
+let lastInvalidToken: string | null = null
 
-export function setSessionExpiredHandler(handler: SessionExpiredHandler | null): void {
-  sessionExpiredHandler = handler
+export function setSessionInvalidHandler(handler: SessionInvalidHandler | null): void {
+  sessionInvalidHandler = handler
 }
 
 function bearerOf(config: AxiosRequestConfig | undefined): string | null {
@@ -67,11 +85,11 @@ function bearerOf(config: AxiosRequestConfig | undefined): string | null {
   return typeof value === 'string' && value.startsWith('Bearer ') ? value.slice(7) : null
 }
 
-function notifySessionExpired(config: AxiosRequestConfig | undefined) {
+function notifySessionInvalid(config: AxiosRequestConfig | undefined, reason: SessionInvalidReason) {
   const token = bearerOf(config)
-  if (!token || token === lastExpiredToken) return
-  lastExpiredToken = token
-  sessionExpiredHandler?.()
+  if (!token || token !== getToken() || token === lastInvalidToken) return
+  lastInvalidToken = token
+  sessionInvalidHandler?.(reason)
 }
 
 // ---------------------------------------------------------------------------
@@ -120,8 +138,9 @@ export function toApiError(error: unknown): unknown {
 
 http.interceptors.response.use(undefined, (error: unknown) => {
   const normalized = toApiError(error)
-  if (normalized instanceof ApiError && normalized.is('SESSION_EXPIRED') && error instanceof AxiosError && !error.config?.silentSessionExpiry) {
-    notifySessionExpired(error.config)
+  if (normalized instanceof ApiError && error instanceof AxiosError && error.config && !error.config.silentSessionExpiry && (error.config.credentialMode ?? 'public') !== 'public') {
+    if (normalized.code === 'SESSION_EXPIRED') notifySessionInvalid(error.config, 'expired')
+    else if (normalized.code === 'UNAUTHENTICATED') notifySessionInvalid(error.config, 'unauthenticated')
   }
   return Promise.reject(normalized)
 })
@@ -133,6 +152,8 @@ export interface CallOptions {
   signal?: AbortSignal
   headers?: Record<string, string>
   silentSessionExpiry?: boolean
+  /** Bind the request to this credential instead of the ambient session/guest id (see `Credential`). */
+  as?: Credential
 }
 
 type ResponseOf<D extends EndpointDef> = D['response'] extends z.ZodType ? z.output<D['response']> : undefined
@@ -159,6 +180,12 @@ function zodToFieldErrors(error: z.ZodError): FieldErrors {
  * first: an invalid body never leaves the client and surfaces as ApiError VALIDATION.
  */
 export async function send<D extends EndpointDef>(def: D, args: SendArgs): Promise<ResponseOf<D>> {
+  if (def.query && args.query) {
+    const checkedQuery = def.query.safeParse(args.query)
+    if (!checkedQuery.success) {
+      throw new ApiError({ code: 'VALIDATION', message: 'Parâmetros inválidos.', fieldErrors: zodToFieldErrors(checkedQuery.error) }, 0)
+    }
+  }
   let data: unknown = args.body
   if (def.body && def.body !== 'multipart') {
     const checked = def.body.safeParse(args.body)
@@ -177,6 +204,7 @@ export async function send<D extends EndpointDef>(def: D, args: SendArgs): Promi
     ...(args.signal ? { signal: args.signal } : {}),
     ...(args.headers ? { headers: args.headers } : {}),
     ...(args.silentSessionExpiry ? { silentSessionExpiry: true } : {}),
+    ...(args.as ? { credential: args.as } : {}),
   })
 
   if (def.response === null) return undefined as ResponseOf<D>

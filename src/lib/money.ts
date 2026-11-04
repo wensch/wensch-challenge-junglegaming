@@ -7,13 +7,15 @@
  * line subtotals (price x quantity) and comparisons (e.g. detecting a price change).
  */
 import Decimal from 'decimal.js'
+// Single source of the ETH format: the frozen contract (lib depends on contracts, never the reverse).
+import { ETH_PATTERN } from '@/api/contracts/common'
 
 /** Isolated Decimal constructor: 40 significant digits, no exponent notation in toString. */
 const D = Decimal.clone({ precision: 40, rounding: Decimal.ROUND_HALF_UP, toExpNeg: -40, toExpPos: 40 })
 type D = InstanceType<typeof D>
 
 export const ETH_DECIMALS = 18
-const ETH_RE = /^\d+(\.\d{1,18})?$/
+const ETH_RE = ETH_PATTERN
 
 export class InvalidEthError extends Error {
   constructor(value: unknown) {

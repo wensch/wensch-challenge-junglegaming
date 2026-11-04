@@ -6,7 +6,11 @@
  * - Private data: ALWAYS `['u', userId, ...]`. Teardown removes the whole `['u']` prefix.
  * - Visitor data: `['guest', guestId, ...]` (cart and quote before login).
  */
-import type { NftListQuery, Network, OrderStatus } from '@/api/contracts'
+import type { DataTag } from '@tanstack/react-query'
+import type { ApiError, Cart, FeaturedResponse, NftDetail, NftListQuery, Network, Order, OrderStatus } from '@/api/contracts'
+
+/** Attaches the cached data type to a key (getQueryData/setQueryData infer it; queryOptions check it). */
+const tag = <T>() => <const K extends readonly unknown[]>(key: K) => key as DataTag<K, T, ApiError>
 
 export const PRIVATE_PREFIX = 'u' as const
 export const GUEST_PREFIX = 'guest' as const
@@ -24,8 +28,8 @@ export const queryKeys = {
     lists: () => ['nfts', 'list'] as const,
     list: (query: Partial<NftListQuery>) => ['nfts', 'list', query] as const,
     details: () => ['nfts', 'detail'] as const,
-    detail: (nftId: string) => ['nfts', 'detail', nftId] as const,
-    featured: () => ['nfts', 'featured'] as const,
+    detail: (nftId: string) => tag<NftDetail>()(['nfts', 'detail', nftId]),
+    featured: () => tag<FeaturedResponse>()(['nfts', 'featured']),
   },
 
   /** Every private key of every user (teardown target). */
@@ -36,14 +40,14 @@ export const queryKeys = {
     all: () => [PRIVATE_PREFIX, userId] as const,
     favorites: () => [PRIVATE_PREFIX, userId, 'favorites'] as const,
     orders: () => [PRIVATE_PREFIX, userId, 'orders'] as const,
-    order: (orderId: string) => [PRIVATE_PREFIX, userId, 'orders', 'detail', orderId] as const,
+    order: (orderId: string) => tag<Order>()([PRIVATE_PREFIX, userId, 'orders', 'detail', orderId]),
     orderList: (status?: OrderStatus) => [PRIVATE_PREFIX, userId, 'orders', 'list', status ?? 'all'] as const,
     profile: () => [PRIVATE_PREFIX, userId, 'profile'] as const,
     wallets: () => [PRIVATE_PREFIX, userId, 'wallets'] as const,
   }),
 
   owner: (owner: CartOwner) => ({
-    cart: () => [...ownerRoot(owner), 'cart'] as const,
+    cart: () => tag<Cart>()([...ownerRoot(owner), 'cart']),
     quotes: () => [...ownerRoot(owner), 'quote'] as const,
     quote: (network: Network) => [...ownerRoot(owner), 'quote', network] as const,
   }),

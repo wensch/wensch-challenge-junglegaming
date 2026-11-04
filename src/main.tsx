@@ -1,4 +1,6 @@
 import './index.css'
+// Before any schema is created (mocks and app): no eval-based JIT under the production CSP.
+import './lib/zod-config'
 
 // MSW must patch globalThis.WebSocket BEFORE socket.io-client (engine.io-client)
 // is evaluated, because engine.io captures the WebSocket constructor at module
