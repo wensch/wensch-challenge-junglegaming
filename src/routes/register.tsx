@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { authSearchSchema } from '@/api/contracts'
-import { UnderConstruction } from '@/components/layout/PageStates'
+import { RegisterForm } from '@/features/auth/RegisterForm'
 
 export const Route = createFileRoute('/register')({
   validateSearch: authSearchSchema,
@@ -9,5 +9,5 @@ export const Route = createFileRoute('/register')({
 })
 
 function RegisterPage() {
-  return <UnderConstruction title="Criar conta" slice="S2 — Conta" />
+  return <RegisterForm search={Route.useSearch()} />
 }

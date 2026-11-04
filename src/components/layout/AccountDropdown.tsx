@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Avatar, renderableAvatarSrc } from '@/features/profile/avatar'
 import { useLogout } from '@/session/hooks'
 import { accountButtonClass } from './header-styles'
 
@@ -24,7 +25,11 @@ export default function AccountDropdown({ user }: { user: SessionUser }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className={accountButtonClass}>
-          <User aria-hidden="true" className="size-5" strokeWidth={1.75} />
+          {renderableAvatarSrc(user.avatarUrl) ? (
+            <Avatar decorative url={user.avatarUrl} name={user.displayName} className="size-5" />
+          ) : (
+            <User aria-hidden="true" className="size-5" strokeWidth={1.75} />
+          )}
           <span className="truncate">{user.displayName}</span>
           <span className="sr-only">: abrir menu da conta</span>
         </Button>

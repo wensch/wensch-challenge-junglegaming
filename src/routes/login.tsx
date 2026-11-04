@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { authSearchSchema } from '@/api/contracts'
-import { UnderConstruction } from '@/components/layout/PageStates'
+import { LoginForm } from '@/features/auth/LoginForm'
 
 // `redirect` is validated by safeRedirectSchema (same-origin relative path only).
 export const Route = createFileRoute('/login')({
@@ -10,5 +10,5 @@ export const Route = createFileRoute('/login')({
 })
 
 function LoginPage() {
-  return <UnderConstruction title="Entrar" slice="S2 — Conta" />
+  return <LoginForm search={Route.useSearch()} />
 }
