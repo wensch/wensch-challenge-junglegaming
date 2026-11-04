@@ -117,7 +117,10 @@ test.describe('logout explícito', () => {
     // The token expires server-side while the menu is open (idle tab), then the user clicks "Sair".
     const sair = await openLogout(page, alice.user.displayName, mobile)
     await mock.setScenarios(['session.expired'])
-    await sair.click()
+    // Two correct orders race here: the click reaches `POST /auth/logout` (401 answered as a silent
+    // logout) or a background GET sees the 401 first and tears the session down silently, which removes
+    // the menu before the click lands. The guarantee is the OUTCOME below, so a detached menu is fine.
+    await sair.click({ timeout: 5_000 }).catch(() => undefined)
     await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
     await page.waitForTimeout(800)
     const url = new URL(page.url())
