@@ -49,7 +49,10 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | **CHANGES_REQUESTED** ×3 — [fidelidade](reports/fundacao/fidelidade-visual.md) · [qa](reports/fundacao/qa-features.md) · [segurança](reports/fundacao/seguranca.md) · [BUGS](BUGS.md) |
 | Revisor sênior volta 1 | revisor-frontend-senior | **CHANGES_REQUESTED** — 25 achados (5 altos) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
 | Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | **OK** — verify GREEN, R2 passa; merge 3d52cf7. Obs.: `latency.variable` falhou 1× com 6 workers (175 ms vs limite 150 ms), possível flake |
-| Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, etc. | arquiteto-contratos | em andamento (PW_PORT 4176) |
+| Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, contratos v1.2.0 | arquiteto-contratos | **OK** — merge 0c27e52 |
+| verify em main (0c27e52) | orquestrador | **GREEN** — e2e 169 ✓ (11 skip), visual 6 ✓, a11y 9 ✓ |
+| Gates volta 2 | fidelidade ‖ qa ‖ segurança → revisor | em andamento |
+| **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
 ## Próximo passo
 Integrar as duas correções da volta 2, verify em main, rodar de novo os 3 gates e o revisor (volta 2 de 3).
