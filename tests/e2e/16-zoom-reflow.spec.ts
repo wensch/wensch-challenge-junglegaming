@@ -12,15 +12,10 @@ const VIEWPORTS = [
   { name: 'reflow 320px', width: 320, height: 568 },
 ] as const
 
-async function expectReflow(page: Page, width: number, where: string, actions: Locator[], strictDocument = width > 320) {
-  // Emulação mobile a 320 px: o viewport de layout cresce com o rodapé (BUG-QA-012) e o teste de acerto fica impreciso;
-  // a cobertura de clique a 320 px vem do projeto desktop.
-  const hitTest = !(width === 320 && test.info().project.name === 'mobile')
+async function expectReflow(page: Page, width: number, where: string, actions: Locator[], strictDocument = true) {
   await page.evaluate(() => document.fonts.ready)
   const m = await page.evaluate(() => {
     const d = document.documentElement
-    // Conteúdo fora do rodapé: o rodapé em 320 px é o BUG-QA-012 (teste fixme abaixo), não esconde o resto.
-    // A barra inferior fixa acompanha o viewport de layout (que cresce com o rodapé, BUG-QA-012).
     // Itens dentro de uma região com rolagem/recorte próprio (carrossel) podem passar da largura por desenho.
     const clipped = (e: Element) => {
       for (let p = e.parentElement; p && p !== document.body; p = p.parentElement) if (/auto|scroll|hidden|clip/.test(getComputedStyle(p).overflowX)) return true
@@ -38,7 +33,7 @@ async function expectReflow(page: Page, width: number, where: string, actions: L
     const box = (await a.boundingBox())!
     expect(box.x, `${where}: ${String(a)} cortado à esquerda`).toBeGreaterThanOrEqual(-0.5)
     expect(box.x + box.width, `${where}: ${String(a)} cortado à direita`).toBeLessThanOrEqual(width + 0.5)
-    if (hitTest) await a.click({ trial: true, timeout: 5_000 }) // falha se outro elemento cobrir o botão
+    await a.click({ trial: true, timeout: 5_000 }) // falha se outro elemento cobrir o botão
   }
 }
 
@@ -100,8 +95,7 @@ for (const vp of VIEWPORTS) {
   })
 }
 
-// BUG-QA-012: o rodapé tem largura mínima de 360 px; em 320 px todas as telas ganham rolagem horizontal.
-test.fixme('reflow 320px: o documento inteiro (rodapé incluso) não rola na horizontal (BUG-QA-012)', async ({ page, boot }) => {
+test('reflow 320px: o documento inteiro (rodapé incluso) não rola na horizontal (BUG-QA-012)', async ({ page, boot }) => {
   await boot('/')
   await page.setViewportSize({ width: 320, height: 568 })
   await expect(page.getByTestId('nft-card').first()).toBeVisible()

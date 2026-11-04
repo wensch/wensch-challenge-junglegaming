@@ -77,12 +77,12 @@ export function SiteFooter() {
       <div className="bg-card">
         {/* 1. Highlights + newsletter */}
         {/* Figma 1440: padding 32/48/18/30, dividers at x = 297/563/829 of the column (249/266/266 px columns). */}
-        <div className="grid gap-8 px-6 py-8 md:grid-cols-2 md:px-12 lg:grid-cols-[1fr_1fr_1fr_1.25fr] lg:gap-0 xl:grid-cols-[249px_266px_266px_1fr] xl:pt-8 xl:pr-[30px] xl:pb-[18px]">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8 px-6 py-8 md:grid-cols-2 md:px-12 lg:grid-cols-[1fr_1fr_1fr_1.25fr] lg:gap-0 xl:grid-cols-[249px_266px_266px_1fr] xl:pt-8 xl:pr-[30px] xl:pb-[18px]">
           {highlights.map((h, i) => (
             <section
               key={h.letter}
               aria-labelledby={`footer-hl-${i}`}
-              className={`grid grid-cols-[3rem_1fr] gap-x-4 md:block ${i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4 xl:pl-[17px]'}`}
+              className={`grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 md:block ${i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4 xl:pl-[17px]'}`}
             >
               <span aria-hidden="true" className="row-span-2 grid size-12 place-items-center rounded-full bg-primary text-body-lg font-bold text-primary-foreground md:size-[74px] md:text-heading">
                 {h.letter}
