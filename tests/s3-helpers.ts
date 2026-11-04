@@ -3,7 +3,7 @@
  * `fetch` inside the page; everything asserted afterwards is observed in the UI.
  */
 import type { Page } from '@playwright/test'
-import { loginViaApi, USERS } from './fixtures'
+import { expect, loginViaApi, USERS } from './fixtures'
 
 export interface Seeded {
   nftId: string
@@ -68,3 +68,17 @@ export async function loginWithCart(page: Page, items: { item: Seeded; quantity:
 export async function updateNft(page: Page, nftId: string, patch: { price?: string; editions?: { id: string; price?: string; available?: number }[] }) {
   await page.evaluate(([id, p]) => window.__mock!.updateNft(id, p), [nftId, patch] as const)
 }
+
+export async function connectWallet(page: Page) {
+  await page.getByRole('button', { name: 'Conectar carteira' }).click()
+  await expect(page.getByTestId('wallet-status')).toHaveAttribute('data-state', 'connected')
+}
+
+export async function sendOrder(page: Page) {
+  await page.getByRole('button', { name: 'Confirmar compra' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Revisar pedido' })
+  await expect(dialog).toBeVisible()
+  await expect(dialog.getByRole('button', { name: 'Enviar pedido' })).toBeEnabled()
+  await dialog.getByRole('button', { name: 'Enviar pedido' }).click()
+}
+
