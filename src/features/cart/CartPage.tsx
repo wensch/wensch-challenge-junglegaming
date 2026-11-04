@@ -190,7 +190,7 @@ export function CartPage() {
       ) : (
         <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_332px] lg:gap-[86px]">
           <div>
-            <div aria-hidden="true" className="mb-3 hidden grid-cols-[minmax(0,1fr)_77px_75px_87px_24px] gap-x-[61px] border-b border-line pr-6 pb-3 text-body-sm font-bold text-text-primary lg:grid">
+            <div aria-hidden="true" className="mb-3 hidden grid-cols-[minmax(0,1fr)_110px_75px_110px_24px] gap-x-6 xl:gap-x-10 border-b border-line pr-6 pb-3 text-body-sm font-bold text-text-primary lg:grid">
               <span>NFTs</span>
               <span>Preço</span>
               <span>Edições</span>

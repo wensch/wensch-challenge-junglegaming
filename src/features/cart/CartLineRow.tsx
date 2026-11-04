@@ -57,7 +57,7 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
       data-line-id={line.id}
       className={cn(
         'relative flex min-h-[100px] items-stretch gap-3 overflow-hidden rounded-card bg-surface-card pr-4',
-        'lg:grid lg:min-h-[70px] lg:grid-cols-[minmax(0,1fr)_77px_75px_87px_24px] lg:items-center lg:gap-x-[61px] lg:rounded-none lg:pr-6',
+        'lg:grid lg:min-h-[70px] lg:grid-cols-[minmax(0,1fr)_110px_75px_110px_24px] lg:items-center lg:gap-x-6 xl:gap-x-10 lg:rounded-none lg:pr-6',
       )}
     >
       {/* NFT */}
@@ -79,7 +79,7 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
       </div>
 
       {/* Preço (desktop) */}
-      <p className="hidden text-body-md font-bold text-text-accent lg:block">{formatEth(line.unitPrice)}</p>
+      <p className="hidden whitespace-nowrap text-body-md font-bold text-text-accent lg:block">{formatEth(line.unitPrice)}</p>
 
       {/* Quantidade */}
       <div className="flex shrink-0 flex-col items-center justify-center gap-1 self-end pb-3 lg:self-center lg:pb-0">
@@ -110,7 +110,7 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
       </div>
 
       {/* Total (desktop) */}
-      <p data-testid="line-total" className="hidden text-body-md font-bold text-text-accent lg:block">
+      <p data-testid="line-total" className="hidden whitespace-nowrap text-body-md font-bold text-text-accent lg:block">
         {formatEth(line.lineTotal)}
       </p>
 

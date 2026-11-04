@@ -39,11 +39,13 @@ export function OrderTotals({ subtotal, discount, discountLabel, networkFee, tot
       </div>
       <div className="mt-3 flex items-baseline justify-between gap-4">
         <dt>Taxa de rede</dt>
-        <dd data-testid={`${testIdPrefix}-fee`} className="text-body-md">
-          {formatEth(networkFee)}
+        <dd className="text-right">
+          <span data-testid={`${testIdPrefix}-fee`} className="text-body-md">
+            {formatEth(networkFee)}
+          </span>
+          {feeEstimated && <span className="mt-2 block text-caption-sm text-text-accent">Taxa estimada</span>}
         </dd>
       </div>
-      {feeEstimated && <p className="mt-2 text-right text-caption-sm text-text-accent">Taxa estimada</p>}
       <div className="mt-4 flex items-baseline justify-between gap-4 text-body-md font-bold">
         <dt>Total</dt>
         <dd data-testid={`${testIdPrefix}-total`} className="text-text-accent">
