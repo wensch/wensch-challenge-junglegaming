@@ -48,6 +48,30 @@ test.describe('skeletons e recuperação', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible({ timeout: 15_000 })
   })
 
+  test('detalhe lento: o rodapé não se move quando o conteúdo chega (CLS < 0,1)', async ({ page }) => {
+    await page.addInitScript(() => {
+      const w = window as unknown as { __cls: number }
+      w.__cls = 0
+      new PerformanceObserver((list) => {
+        for (const e of list.getEntries() as unknown as { value: number; hadRecentInput: boolean }[]) if (!e.hadRecentInput) w.__cls += e.value
+      }).observe({ type: 'layout-shift', buffered: true })
+    })
+    await page.goto('/?scenario=latency.slow')
+    await page.waitForFunction(() => !!window.__mock)
+    await page.evaluate(() => window.__mock!.setScenarios(['latency.slow']))
+    await page.goto('/nft/nft_002')
+    const skeleton = page.getByRole('status', { name: 'Carregando detalhes do NFT' })
+    await expect(skeleton).toBeVisible()
+    const footer = page.locator('footer').first()
+    const before = await footer.boundingBox()
+    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible({ timeout: 20_000 })
+    const after = await footer.boundingBox()
+    expect(Math.abs(before!.y - after!.y)).toBeLessThan(40)
+    await page.waitForTimeout(300)
+    expect(await page.evaluate(() => (window as unknown as { __cls: number }).__cls)).toBeLessThan(0.05)
+  })
+
   test('detalhe: falha 5xx mostra erro com retry e recupera', async ({ page, boot, mock }) => {
     await boot('/nft/nft_002', ['http.503'])
     await expect(page.getByRole('heading', { name: 'Não foi possível carregar o NFT' })).toBeVisible({ timeout: 15_000 })
