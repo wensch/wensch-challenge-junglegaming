@@ -97,7 +97,7 @@ test('S2+S3: troca de usuario pela UI nao deixa dados de alice (cache, DOM, stor
   await page.goto('/profile')
   await expect(page.getByRole('main').getByLabel('E-mail')).toHaveValue(USERS.alice.email)
   await page.goto('/wallets')
-  await expect(page.getByRole('main')).toContainText(aliceAddress.slice(0, 6))
+  await expect.poll(() => domText(page)).toContain(aliceAddress)
 
   // 4) Logout pela UI.
   await logoutThroughUi(page, alice.user.displayName, mobile)
@@ -149,7 +149,10 @@ test('S2+S3: troca de usuario pela UI nao deixa dados de alice (cache, DOM, stor
   const probe = page.getByTestId('realtime-probe')
   const last = await probe.getAttribute('data-last-event')
   if (last === 'evt_sec_s23') await expect(probe).toHaveAttribute('data-last-outcome', 'foreign')
-  expect(await cacheBlob(page)).not.toContain(aliceOrderId)
+  // bob tem apenas a propria chave ['u', bob, 'orders', 'detail', id] com data null (FORBIDDEN), sem dados de alice
+  const blob2 = await cacheBlob(page)
+  for (const s of ['NOTA_ALICE_SEGREDO', aliceAddress, USERS.alice.email, aliceId, '"declined"']) expect(blob2).not.toContain(s)
+  expect(blob2).toContain(`[[\"u\",\"${bobId}\",\"orders\",\"detail\",\"${aliceOrderId}\"],null]`)
 
   // 8) Senhas nunca em claro (storage incl. DB do mock, URLs, console).
   const all = JSON.stringify(await storageDump(page))
