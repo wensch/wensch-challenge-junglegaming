@@ -175,11 +175,14 @@ test('CSP: sem violacao nem erro de console em todas as rotas (visitante e logad
   const viol: string[] = []
   for (const logged of [false, true]) {
     await boot('/')
-    if (logged) await loginViaApi(page, USERS.alice)
+    const user = logged ? (await loginViaApi(page, USERS.alice)).user.id : 'guest'
     for (const p of all) {
       await page.goto(p)
       await page.waitForFunction(() => !!window.__mock)
       await expect(page.getByRole('heading').first()).toBeVisible()
+      // Wait for the session to settle before leaving the page: a GET /session still in flight when
+      // the document unloads loses its MSW client and falls through to the preview server (404).
+      await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', user)
       viol.push(...(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).map((v) => `${logged ? 'logado' : 'visitante'} ${p}: ${v}`))
     }
   }
