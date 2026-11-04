@@ -54,7 +54,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Gates volta 2 | fidelidade ‖ qa ‖ segurança | **APPROVED** ×3 |
 | Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
 | Volta 3: N1 + R3 | arquiteto-contratos | em andamento (PW_PORT 4176) |
-| Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | em andamento (PW_PORT 4175) |
+| Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | **OK** — verify GREEN (e2e 199 ✓); merge 998f27c |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
 ## Próximo passo
