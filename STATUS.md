@@ -73,8 +73,12 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | S3 checkout | implementador-checkout | — | **entregue** — merge dbf2418 |
 | **verify em main com S1+S2+S3** | orquestrador | **GREEN** — e2e 374 ✓, visual 22 ✓, a11y 28 ✓, 0 flaky |
 | Gates rodada 1 (main integrado) | QA · segurança · revisor sênior · fidelidade | QA **APPROVED** ([rel](reports/s-integrada/qa-features.md)) · Segurança **APPROVED** ([rel](reports/s-integrada/seguranca.md)) · Revisor **APPROVED**, 5 médios/7 baixos ([rel](reports/s-integrada/revisor-frontend-senior.md)) · Fidelidade **CHANGES_REQUESTED**, 2 altos (overflow a 768 px em Detalhe e Perfil) ([rel](reports/s-integrada/fidelidade-visual.md)) |
-| Volta 2: S3 (chave de idempotência ao abrir pedido terminal, foco no recibo, ownerChanged, fidelidade da Confirmação) | implementador-checkout | em andamento (PW_PORT 4183) |
-| Volta 2: S1+S2 (overflow 768 px Detalhe/Perfil, imagem do Detalhe, favoritos com scope, ownerChanged) | implementador-conta | em andamento (PW_PORT 4182) |
+| Volta 2: S3 checkout | implementador-checkout | **OK** — merge dcf43a4 |
+| Volta 2: S1+S2 (overflow 768 px, favoritos seriais, owner checks) | implementador-conta | **OK** — merge 0d52b21; verify em main GREEN (390 e2e, 22 visuais, 28 a11y) |
+| Push + CI | orquestrador | main em fd8f5b5 no GitHub; produção serve fd8f5b5 (READY); baselines Linux: 22 (a1e3bbf, local) |
+| Matriz de requisitos | auditor-requisitos | 121 OK · 18 parcial · 8 pendente ([rel](reports/s-integrada/auditor-requisitos.md)) |
+| README + ARCHITECTURE final | release | **OK** — 63fe476 (README com declaração de IA) |
+| Lighthouse | a11y-performance | em andamento (checkout principal; evitar CPU pesada durante a medição) |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
@@ -90,4 +94,7 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
 ## Próximo passo
-Gates da rodada 1 sobre o main integrado (QA ‖ segurança → revisor sênior), depois fidelidade por script, correções, auditor (Sonnet) e Fase 3.
+1. Lighthouse: tabela de medianas; correções de performance em src/vite.config/vercel.json por implementador.
+2. Página `/favorites` (hoje "Em construção").
+3. Teste de checkout limpo (`git clone` → `npm ci` → `verify`), push final, deploy == HEAD, smoke em produção, matriz fechada.
+4. Pendências baixas (se sobrar orçamento): dedupe entre slices, BUG-QA-009, baixas de segurança.
