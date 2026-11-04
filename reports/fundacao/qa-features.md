@@ -1,28 +1,29 @@
-# qa-features — fundacao — 2026-11-03
-Veredito: CHANGES_REQUESTED
+# qa-features — fundacao (volta 2) — 2026-11-03
+Veredito: APPROVED
 
-Servidor: preview em http://localhost:4173 (main 6205fed; mesmo build de 6a48902 para estes arquivos). Nada de build/verify rodado.
+Alvo: `main` @ 2ad75fc, preview em http://localhost:4173 (sem build/verify). Playwright com `BASE_URL`.
 
-## Execução
-- Suíte existente (`00-smoke`, `mocks`, `90-visual-shell`, `91-a11y-shell`) em desktop e mobile: 96 passed, 2 skipped (testes específicos de projeto), 0 falhas. Os 24 cenários de `mocks.spec.ts` passam.
-- Novo spec permanente `tests/e2e/qa-fundacao-shell.spec.ts`: 56 passed, 2 skipped; inclui 3 testes `test.fail` que documentam BUG-QA-001 (x2 projetos) e BUG-QA-002 (x2). Remover as marcas ao corrigir.
-- Cobertura do novo spec: deep link + refresh de todas as rotas públicas e privadas (com e sem sessão); `?redirect=` com 9 variantes maliciosas; todos os links do shell resolvem e `/em-breve` mostra "Nenhuma ação foi realizada" sem `role=status` de sucesso; Tab no header (desktop); Sheet com foco preso, Esc devolve o foco e tab bar por teclado (mobile).
+## Suíte completa (4 projetos), 228 testes, 214 passed, 14 skipped, 0 failed
+Execução 1 (antes do spec novo, 198 testes): desktop 56 passed/3 skipped; mobile 48/11; desktop-harness 40/0; mobile-harness 40/0. Execução final com `tests/e2e/qa-volta2.spec.ts` (+30): 214 passed. Skips são por viewport (`test.skip(isMobile)` ou desktop-only), conforme desenho.
 
-## Stack
-- Nenhum `fetch`/XHR fora de `src/mocks`; todas as chamadas passam por `src/api/client.ts` (Axios, instância única). Socket só via `src/realtime/socket.ts` (`socket.io-client`).
-- Importações de `mocks` fora de `src/mocks`: apenas `src/main.tsx` (dynamic import); as demais ocorrências são comentários.
+## Reteste de BUGS.md
+QA-001 a QA-006 todos FECHADOS com evidência (ver `BUGS.md`): redirect com controles, `/.//evil.com`, `/..//evil.com`, `/%2e//evil.com` descartados; primeiro Tab no skip link; 409 CONFLICT_VERSION em profile e wallets; `endpoints.ts` v1.2.0 declara NOT_FOUND/VALIDATION/CONFLICT_VERSION e o runtime coincide; `/em-breve` foca o h1 na navegação client-side.
 
-## Mock × contrato
-- O `route()` valida entrada (query/body) e saída com os schemas de `endpoints.ts`; sem divergência de schema de sucesso observada (status de sucesso vem de `def.status`, 200 no replay).
-- Idempotência (mesma chave = mesmo pedido 200; corpo diferente = 409 IDEMPOTENCY_CONFLICT), reset, isolamento de `order.updated` entre Alice e Bob: verdes em `mocks.spec.ts`.
-- Divergências de status/erro: BUG-QA-003, 004, 005.
+## Flake `latency.variable`
+`--repeat-each=10` (20 execuções, 6 workers): 20/20; stress 16 workers x15: 30/30. Não reproduzido; margem do teste frágil (150 ms sobre tempo medido). BUG-QA-007 (baixa).
+
+## Exploratório
+- Sessão entre abas (logout e troca de usuário): `20-session-tabs.spec.ts` verde, desktop e mobile (cache `['u',...]` vazio, sem token/e-mail, socket guest, guard redireciona).
+- Cancelamento/refresh: logout com GETs privados lentos em voo (`latency.slow`) + reload: sem dados da Alice, `kurio.session` nulo, socket guest.
+- CSP: 12 rotas (inclui 404) como visitante e logado, nenhuma `securitypolicyviolation`, nenhum erro de console/pageerror.
+- Header 768/800/820/850/900/1024/1100/1199/1200/1280/1440 sem sobreposição nem scroll horizontal (`92-header-tablet.spec.ts`).
+- Lazy: Sheet e AccountDropdown abrem com foco dentro e Esc devolve o foco ao gatilho. Achado menor: BUG-QA-008.
+- Contrato x mock: `httpsUrlSchema`/`avatarUrlSchema` rejeitam http:, SVG, javascript:, data:text/html, `//host`, blob:; seeds (NFTs, usuários, perfil, pedidos, carteiras) sem `http:` nem SVG; 3 URLs explorer/avatar no seed, todas https; upload PNG devolve `data:image/png`, SVG/GIF/HTML rejeitados com 422.
 
 ## Achados
-| # | Severidade | Descrição | Evidência | Correção sugerida |
+| # | Severidade (crítica/alta/média/baixa) | Descrição | Evidência (comando/print/trace) | Correção sugerida |
 |---|---|---|---|---|
-| 1 | alta (latente) | BUG-QA-001: `safeRedirectSchema` aceita `/<TAB>/evil.com`; vira `//evil.com` ao resolver | spec `login redirect="/\t/evil.com"` | rejeitar caracteres de controle e checar origem com `new URL` |
-| 2 | média | BUG-QA-002: foco no h1 na carga completa; primeiro Tab pula skip link e header | spec `primeiro Tab apos carga completa...` | focar h1 só em navegação client-side |
-| 3 | média | BUG-QA-003: mock devolve 422 VALIDATION em vez de 409 CONFLICT_VERSION (conhecido) | `profile.ts`, `wallets.ts` | emitir CONFLICT_VERSION e atualizar mocks.spec |
-| 4 | baixa | BUG-QA-004: `createOrder` devolve NOT_FOUND não declarado | `handlers/orders.ts` vs `endpoints.ts` | declarar no contrato |
-| 5 | baixa | BUG-QA-005: endpoints guest devolvem VALIDATION não declarado | `GET /cart` sem credenciais -> 422 | declarar no contrato |
-| 6 | baixa | BUG-QA-006: `/em-breve` não foca o título | `UnavailablePage` | usar PageFrame/foco |
+| 1 | baixa | BUG-QA-007: `latency.variable` com margem de 150 ms frágil sob carga; não reproduzido | `--repeat-each=10` 20/20, stress 30/30 | Comparar atraso nominal ou tolerância proporcional |
+| 2 | baixa | BUG-QA-008: chunk AccountDropdown baixado no mobile onde não é exibido | `qa-volta2.spec.ts` (lazy), log de requests | Montar o dropdown só a partir de md (opcional) |
+
+Nenhum achado alto ou crítico. Specs novas: `tests/e2e/qa-volta2.spec.ts`.
