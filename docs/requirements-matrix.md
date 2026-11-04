@@ -3,9 +3,9 @@
 Fonte: [challenge.md](challenge.md) (seção entre parênteses). Status: `—` pendente · `parcial` · `OK` (só com evidência executada).
 Evidência = spec Playwright, arquivo, relatório ou print. Mantida pelo agente **auditor-requisitos**.
 
-**Última auditoria:** 2026-11-04, slice `s-integrada` (S1 catálogo + S2 conta + S3 checkout, rodada 2), base `main` fd8f5b5 (= `origin/main`, conferido com `git ls-remote`).
-Evidência desta auditoria: leitura de `reports/s-integrada/{qa-features,seguranca,revisor-frontend-senior,fidelidade-visual}.md`, dos specs de `tests/e2e/` e de `src`; greps executados (abaixo). Por instrução do orquestrador **não** rodei build, preview nem verify: vale o `npm run verify` GREEN em fd8f5b5 (`reports/verify-latest.md`: typecheck, lint, build, e2e 390, visual 22, a11y 28). Os relatórios de QA (6/6 do `qa-integrada.spec.ts`) e de segurança (4/4 do `s2s3.sec.spec.ts`, `npm audit` 0) foram executados pelos respectivos agentes.
-Greps executados em fd8f5b5: `Number(`/`parseFloat` em `src` fora de `src/mocks` = só o comentário de `src/lib/money.ts:3`; `Number(` em `tests` = zero; import de `@/mocks` ou `../mocks` fora de `src/mocks` = zero (resta `src/main.tsx`, permitido); `setQueryData`/`.handle(` em `tests` = só `05-unit-cache` (QueryClient isolado, teste de unidade); `queryKey: [` fora da factory = só `reconcile.ts`, com `owner` vindo de `queryKeys`; `fetch(`/`XMLHttpRequest` fora dos mocks = zero; `useMutation` em 8 arquivos de `src`; `eslint.config.js` proíbe `Number()` em todo o app fora dos mocks.
+**Última auditoria:** 2026-11-04, fechamento final da slice `s-integrada`, base `main` 824a22f (commits após 9b0f011 só tocam testes e relatórios).
+Evidência executada pelo orquestrador e pelos agentes (não repetida aqui, por instrução): clone limpo em 9b0f011 com `npm ci` + `npm run verify` GREEN (408 e2e, 22 visuais, 28 a11y); GitHub Actions `verify` (Ubuntu) success em 16 min com baselines Linux versionadas; suíte completa contra a produção 458 passed, 22 skipped, 0 failed (Vercel serve 9b0f011); `npm run lighthouse` com medianas de 3 execuções; gates de revisão aprovados (rodada 1, volta 2 e reteste final de QA e revisor sênior).
+Greps executados por mim em 824a22f: `Number(`/`parseFloat` em `src` fora de `src/mocks` = só o comentário de `src/lib/money.ts:3`; import de `@/mocks` ou `../mocks` fora de `src/mocks` em `src` e `tests` = zero (resta `src/main.tsx`, permitido); `setQueryData`/`.handle(` em `tests` fora de `05-unit-cache` = zero; `waitForTimeout` em `tests` = 6 (BUG-QA-009, aberto); `ls` confirma `README.md`, `lighthouse/{run.mjs,config,environment.md,reports}` e 22 baselines Linux.
 Abreviações: **verify** = verify fd8f5b5 · **harness** = `tests/e2e/mocks.spec.ts` · **QA/SEG/REV/FID** = relatórios de `reports/s-integrada/`.
 
 ## §9 Testes: grupo → spec
@@ -17,38 +17,39 @@ Os specs não seguem a numeração do §9 (QA #1). Todos rodam no verify, em des
 | 1 | Busca, filtros, ordenação, paginação, histórico | `01-catalog` |
 | 2 | Detalhe direto e inexistente | `02-detail` |
 | 3 | Cadastro, login, expiração, logout, troca de usuário | `03-conta-sessao`, `20-session-tabs`, `21-session-clock-expiry`, `07-pagamento-falhas` (expira no envio) |
-| 4 | Favoritos com falha e recuperação | `04-favorites` |
+| 4 | Favoritos com falha e recuperação | `04-favorites`, `04b-favorites-page` (página `/favorites`, isolamento alice/bob, rollback, `nft.updated`), `14-reteste-final` |
 | 5 | Carrinho, quantidades, remoção, cupom, persistência | `05-cart`, `qa-integrada` |
-| 6 | Compra completa até o recibo | `06-compra`, `qa-integrada` |
-| 7 | Falha de pagamento, clique repetido, timeout com o mesmo pedido | `07-pagamento-falhas` |
+| 6 | Compra completa até o recibo | `06-compra`, `qa-integrada`, `14-reteste-final` (compra duplicada após timeout) |
+| 7 | Falha de pagamento, clique repetido, timeout com o mesmo pedido | `07-pagamento-falhas` (inclui a chave de idempotência que sobrevive a outro pedido terminal), `14-reteste-final` |
 | 8 | Perfil, avatar, senha, carteiras com erros | `08-perfil-carteiras` |
 | 9 | Preço/disponibilidade via Socket.IO no checkout | `09-realtime-checkout`, `05-cart` (nft.updated) |
 | 10 | Duplicados/antigos, desconexão, pedido pendente | `10-pedido-pendente`, `00-smoke` (tempo real) |
 | 11 | Teclado, foco de diálogos, validação | `11-formularios-teclado`, `07-focus`, `qa-fundacao-shell`, `08` (validação) |
 | 12 | Skeletons em lentidão, falha e retry | `12-skeletons`, `05-cart` (estados, resumo lento), `08` (estados) |
 
-Apoio: `mocks.spec` (harness do mock), `05-unit-cache` e `money-unit` (unidade), `13-overflow`, `90/94/96-visual-*`, `91/93/95-a11y-*`, `06-csp`.
+Apoio: `mocks.spec` (harness do mock), `05-unit-cache` e `money-unit` (unidade), `13-overflow` (768 px), `90/94/96-visual-*`, `91/93/95-a11y-*`, `06-csp`.
 
 ## Pendências que bloqueiam entrega
 
-1. **ELIM-1 / STK-9 / LH-1..5 / DEL-6: Lighthouse.** Confirmado ausente: não há diretório `lighthouse/` (o script `npm run lighthouse` aponta para `lighthouse/run.mjs`, inexistente) nem relatórios. Em andamento por outro agente (não verificável aqui).
-2. **DEL-4 / DEL-8: README.** Confirmado: `README.md` não existe na raiz. Faltam setup, env, credenciais, cenários e reset, falhas, comandos e a declaração de uso de IA.
-3. **E2E-14 / STK-8 / DEL-7: baselines visuais Linux.** Confirmado: `tests/__screenshots__/linux` tem 6 imagens (só shell e `92-header-tablet`); `win32` tem 22. Faltam catálogo, detalhe, carrinho, pagamento, login, cadastro, perfil e carteiras. O CI (`verify.yml`) fica vermelho no passo visual até isso. Gerar com o workflow `visual-baselines` (workflow_dispatch), revisar as imagens e commitar.
-4. **DEL-7: checkout limpo.** Não executado (nenhum `npm ci` num clone novo nesta auditoria). Depende das pendências 1 a 3: sem README o setup não está documentado e o CI de checkout limpo falha no visual.
-5. **DEL-2: deploy igual ao HEAD.** `git ls-remote origin main` = fd8f5b5 = HEAD (push feito) e a produção responde 200, mas **não confirmei** que o deploy servido é fd8f5b5 (sem build id exposto) e o smoke `BASE_URL=https://wensch-challenge-junglegaming.vercel.app npx playwright test` não foi executado. Refazer depois de cada push (cada push publica).
+**Nenhuma.** As cinco pendências da rodada anterior foram fechadas com evidência executada: Lighthouse (STK-9, LH-1..5, DEL-6), README (DEL-4, DEL-8), baselines Linux e CI verde (E2E-14, STK-8), checkout limpo (DEL-7) e deploy == HEAD com suíte em produção (DEL-2, DEL-3).
 
-Abertos que não bloqueiam: (a) FID tem veredito `CHANGES_REQUESTED` sem relatório de reverificação; os achados altos de 768 px (Detalhe, Perfil) têm cobertura posterior em `13-overflow` (verify verde, commit 0d52b21), mas a imagem principal do Detalhe (404 px contra 444 px no Figma, média) e a Confirmação (`/orders/$id`) nunca foram medidas; (b) REV médias #4 (`throw new Error` em vez de `ApiError`) e #5 (duplicações entre slices) sem evidência de correção; #1, #2 e #3 estão corrigidas (`OrderPage.tsx:53`, `OrderPage.tsx:45/94`, `favorites.ts:94`; specs `07` "abrir um pedido terminal antigo…", `10` "o foco vai para o título", `04` "cliques rápidos"); (c) flake F1 do CSP sweep sem reconfirmação da correção (um único verify verde); (d) `waitForTimeout` em 5 pontos (QA #4); (e) zoom 200% não testado (A11Y-7).
+Não bloqueia (abertas de propósito):
+- LH-2: Perf mobile 70 e 68 contra meta 90, justificada em `lighthouse/README.md` (enunciado aceita "ou justificado").
+- Deduplicação entre slices (revisor item 5); R2 a R5 do revisor (retestes de carga em ambiente).
+- BUG-QA-009: 5 `waitForTimeout` mais 1 em `12-skeletons:72`. BUG-QA-010: link "Lista de interesse" no menu do sheet mobile.
+- Baixas de segurança 1 a 5; avisos de CRLF.
+- Parciais de fidelidade e a11y: imagem do Detalhe 404 px contra 444 px e Confirmação não medida (UI-1, UI-2, TEL-10); foco preso no diálogo de revisão (A11Y-2, E2E-11); liberação de listeners por componente (RT-7); zoom 200% (A11Y-7); estados de erro/vazio das telas novas e ações auxiliares (TEL-11, TEL-12).
 
 ## Eliminatórios (§11)
 
 | ID | Requisito | Status | Evidência e o que falta |
 |---|---|---|---|
-| ELIM-1 | Uso efetivo de toda a stack obrigatória (§2) | parcial | React, TS, Router, Query (queries e `useMutation` em 8 arquivos), Axios (zero `fetch` fora dos mocks), socket.io-client, Tailwind, shadcn, MSW e Playwright participam de verdade. **Falta:** Lighthouse (zero) |
+| ELIM-1 | Uso efetivo de toda a stack obrigatória (§2) | OK | React, TS, Router, Query, Axios (zero `fetch` fora dos mocks), socket.io-client, Tailwind, shadcn, MSW, Playwright e Lighthouse (`npm run lighthouse`, `lighthouse/` (run.mjs, config/, environment.md, reports/2026-11-04/ com HTML/JSON e summary.md)) participam de verdade |
 | ELIM-2 | Fluxos principais funcionais (não apenas visuais) | OK | `qa-integrada` (6/6 pela UI: visitante adiciona, login com merge, cupom, checkout, pendente, confirmado/recusado, logout e troca), `06-compra`, `03`, `05-cart`, `08`; verify 390 e2e |
 | ELIM-3 | Compra confirmada apenas com resposta da simulação | OK | `10-pedido-pendente` "recusado é terminal… confirmação só vem da simulação", `qa-integrada` (pendente: reload mantém pendente, sem recibo; `settleOrder confirmed` → recibo), `06-compra`, SEG passo 1; QA: `OrderPage`/`Receipt` só com `status === 'confirmed'` |
 | ELIM-4 | Sem exposição de dados entre usuários | OK | SEG `s2s3.sec` (alice → bob: DOM, cache, storage, socket sem dados; 403/404 em recurso alheio; 4/4), `03` "troca de usuário pela tela de login", `20-session-tabs`, `qa-integrada`. Toda chave privada sai de `queryKeys` (`['u', userId]`, REV). Baixas SEG #1 a #5 abertas, nenhuma bloqueia |
 | ELIM-5 | Eventos passam por `socket.io-client` (nunca direto na UI) | OK | `09`, `10`, `05-cart` e `00-smoke` disparam só por `window.__mock` (`emit`/`updateNft`/`settleOrder`) → MSW `ws.link` → socket.io-client → reconciler; único `.handle(` fora dos mocks é o do socket (QA). `05-unit-cache` usa QueryClient isolado, é teste de unidade e não é citado como evidência de §9 |
-| ELIM-6 | Testes E2E executáveis | parcial | verify GREEN: 390 e2e + 22 visuais + 28 a11y, desktop e mobile, 12 grupos do §9 cobertos (tabela acima). **Falta:** baselines Linux (o CI de checkout limpo falha no visual) e reconfirmar a estabilidade do gate (flake F1; um verify verde só) |
+| ELIM-6 | Testes E2E executáveis | OK | Checkout limpo (clone GitHub em 9b0f011, `npm ci`, `npm run verify`): GREEN, 408 e2e, 22 visuais, 28 a11y; CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens); 12 grupos do §9 cobertos (tabela acima); estabilidade: 2 verdes independentes (clone limpo e CI) mais produção |
 
 ## Stack (§2)
 
@@ -61,8 +62,8 @@ Abertos que não bloqueiam: (a) FID tem veredito `CHANGES_REQUESTED` sem relató
 | STK-5 | Socket.IO em tempo real | OK | `src/realtime/socket.ts`; `09`, `10`, `05-cart`, `00-smoke` via `window.__mock` |
 | STK-6 | Tailwind CSS + shadcn/ui adaptado à identidade (§8) | OK | `src/index.css` `@theme`, `components.json`, `src/components/ui/*` usados nas telas (Dialog da revisão, Select, Sheet, Dropdown); FID mediu cores e tipografia das 8 telas |
 | STK-7 | MSW para REST e eventos | OK | `src/mocks/browser.ts` + `ws.link`; toda a suíte de app roda sobre ele; harness exercita os 24 cenários |
-| STK-8 | Playwright E2E + regressão visual | parcial | `playwright.config.ts` (desktop e mobile), verify: 390 e2e, 22 visuais, 28 a11y. Baselines só `win32` para as telas (Linux: 6 de 28) |
-| STK-9 | Lighthouse | — | Sem dependência e sem `lighthouse/run.mjs` (pendência 1) |
+| STK-8 | Playwright E2E + regressão visual | OK | `playwright.config.ts` (desktop e mobile); Checkout limpo (clone GitHub em 9b0f011, `npm ci`, `npm run verify`): GREEN, 408 e2e, 22 visuais, 28 a11y; CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens) |
+| STK-9 | Lighthouse | OK | `npm run lighthouse` existe e roda; `lighthouse/` (run.mjs, config/, environment.md, reports/2026-11-04/ com HTML/JSON e summary.md); medianas de 3 execuções em `summary.md` |
 
 ## Telas (§3)
 
@@ -240,7 +241,7 @@ Mapeamento grupo → spec na tabela do topo.
 | E2E-11 | Teclado, foco de diálogos, validação | parcial | `11`, `07-focus`, `08`. Falta o foco do diálogo de revisão (ver A11Y-2) |
 | E2E-12 | Skeletons em lentidão, falha e retry | OK | `12-skeletons`, `05-cart` (estados), `08` (estados) |
 | E2E-13 | Chromium desktop + mobile | OK | `playwright.config.ts` (desktop 1440 + Pixel 7 390); verify roda os dois |
-| E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | parcial | `90-visual-catalog`, `96-visual-checkout` (carrinho, pagamento), `94-visual-conta` (verify: 22 visuais) com baselines `win32`. **Falta:** baselines Linux (6 de 28), pendência 3 |
+| E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | OK | `90-visual-catalog`, `96-visual-checkout`, `94-visual-conta` (22 visuais); baselines `win32` e Linux versionadas (22 imagens em `tests/__screenshots__/linux/`); CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens) |
 | E2E-15 | Estado isolado; controle de relógio, latência e eventos | OK | `tests/fixtures.ts` (`boot` isola e reseta), `page.clock` em `21`, `mock.emit`, cenários de latência em `05-cart`, `08`, `12` |
 | E2E-16 | Relatório HTML e traces de falha | OK | Reporter `html` + `trace: 'retain-on-failure'`; `.github/workflows/verify.yml` publica o relatório |
 
@@ -248,21 +249,21 @@ Mapeamento grupo → spec na tabela do topo.
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| LH-1 | Início e detalhe, mobile e desktop, build otimizado, cenário padrão | — | Nada de Lighthouse no repositório |
-| LH-2 | Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90 (ou justificado) | — | |
-| LH-3 | 3 medições, mediana; LCP, CLS, TBT | — | |
-| LH-4 | Config, relatórios HTML/JSON, versões, ambiente versionados | — | |
-| LH-5 | Sem simplificações exclusivas para a nota | — | |
+| LH-1 | Início e detalhe, mobile e desktop, build otimizado, cenário padrão | OK | Início e detalhe, mobile e desktop, sobre o build de produção: 12 relatórios HTML/JSON em `lighthouse/reports/2026-11-04/` (`inicio|detalhe-desktop|mobile-1..3`) |
+| LH-2 | Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90 (ou justificado) | parcial | Medianas: A11y 100, BP 100, SEO 100 (meta ≥95/≥95/≥90, atingidas); Perf desktop 97 e 98 (atingida); **Perf mobile 70 e 68 (meta 90, não atingida), justificada** em `lighthouse/README.md` (LCP observado ~0,65 s, simulado 5,8 s; 528 KB gz de JS, 175 KB são os mocks exigidos; LH-5 proíbe simplificar para a nota). O enunciado aceita "ou justificado" |
+| LH-3 | 3 medições, mediana; LCP, CLS, TBT | OK | `lighthouse/run.mjs`: 3 execuções por página/formato e mediana; LCP, CLS (0 em todas) e TBT em `lighthouse/reports/2026-11-04/summary.md` e `summary.json` |
+| LH-4 | Config, relatórios HTML/JSON, versões, ambiente versionados | OK | `lighthouse/config/`, `lighthouse/environment.md` (versões e ambiente), `lighthouse/reports/2026-11-04/*.html|json` versionados |
+| LH-5 | Sem simplificações exclusivas para a nota | OK | `lighthouse/README.md` (seção de justificativa) recusa simplificar mocks/app para a nota; build medido é o mesmo da produção |
 
 ## Entrega (§12)
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| DEL-1 | Código, lockfile, assets, mocks, fixtures, testes, configs de auditoria | parcial | `package-lock.json`, `src/mocks`, `tests/`, `scripts/verify.mjs`. Falta a configuração do Lighthouse |
-| DEL-2 | Deploy público == código; mocks e tempo real funcionando | parcial | `origin/main` = HEAD = fd8f5b5; produção responde 200. **Falta:** confirmar que o deploy é fd8f5b5 e rodar `BASE_URL=<prod> npx playwright test` |
-| DEL-3 | Acesso direto e refresh no ambiente publicado | parcial | Contra `vite preview`: `00-smoke`, `qa-fundacao-shell`, `06` (pedido por URL); rewrite SPA em `vercel.json`. Em produção só no spike 3 (build antigo) |
-| DEL-4 | README: setup, env, credenciais, cenários/reset, comandos, reprodução de falhas | — | `README.md` não existe (só `src/mocks/README.md`) |
-| DEL-5 | ARCHITECTURE: contratos, eventos, sessão, carrinho, cache, reconciliação, limitações, UX, desvios Figma | OK | `ARCHITECTURE.md` §2 a §13 (contratos, eventos, sessão, cache, reconciliação, mocks, desvios D6 a D21); atualizar se mudar algo na rodada final |
-| DEL-6 | Comandos: dev c/ mocks, build, preview, typecheck, lint, Playwright, Lighthouse | parcial | `package.json` scripts; `npm run lighthouse` → `lighthouse/run.mjs` inexistente |
-| DEL-7 | Executa de checkout limpo sem serviços privados | parcial | `.github/workflows/verify.yml` roda sem backend; passo visual vermelho sem baselines Linux; README ausente; nenhum clone limpo executado |
-| DEL-8 | README declara uso de IA | — | Sem README |
+| DEL-1 | Código, lockfile, assets, mocks, fixtures, testes, configs de auditoria | OK | `package-lock.json`, `src/mocks`, `tests/`, `scripts/verify.mjs`, `lighthouse/` (config e relatórios) |
+| DEL-2 | Deploy público == código; mocks e tempo real funcionando | OK | Suíte completa contra https://wensch-challenge-junglegaming.vercel.app: 458 passed, 22 skipped, 0 failed; Vercel serve 9b0f011 (READY), igual ao HEAD enviado naquele momento (9b0f011); commits posteriores (421ab7e, 824a22f) só alteram testes e relatórios. Refazer o smoke se o app mudar |
+| DEL-3 | Acesso direto e refresh no ambiente publicado | OK | Suíte completa contra https://wensch-challenge-junglegaming.vercel.app: 458 passed, 22 skipped, 0 failed; Vercel serve 9b0f011 (READY) (acesso direto e refresh cobertos: `00-smoke`, `qa-fundacao-shell`, `06`; headers CSP, Permissions-Policy, COOP e HSTS presentes) |
+| DEL-4 | README: setup, env, credenciais, cenários/reset, comandos, reprodução de falhas | OK | `README.md` (185 linhas): setup, env, credenciais fictícias, cenários e reset, comandos, reprodução de falhas, resultados do Lighthouse |
+| DEL-5 | ARCHITECTURE: contratos, eventos, sessão, carrinho, cache, reconciliação, limitações, UX, desvios Figma | OK | `ARCHITECTURE.md` §2 a §13: decisões D1..D22, D30..D32 e D40; D23..D29 não existem (renumeração), lacuna registrada na tabela; D40 = página `/favorites` |
+| DEL-6 | Comandos: dev c/ mocks, build, preview, typecheck, lint, Playwright, Lighthouse | OK | `package.json` scripts, todos existentes; `npm run lighthouse` → `lighthouse/run.mjs` presente e executado (relatórios de 2026-11-04) |
+| DEL-7 | Executa de checkout limpo sem serviços privados | OK | Checkout limpo (clone GitHub em 9b0f011, `npm ci`, `npm run verify`): GREEN, 408 e2e, 22 visuais, 28 a11y; CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens); sem serviços privados |
+| DEL-8 | README declara uso de IA | OK | `README.md` traz a declaração de uso de IA (grep) |
