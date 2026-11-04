@@ -37,8 +37,8 @@ function toggle<T extends string>(list: readonly T[], value: T): T[] {
 function FacetRow({ label, count, checked, onChange }: { label: string; count: number | undefined; checked: boolean; onChange: () => void }) {
   return (
     <li>
-      <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 text-body-sm text-text-accent has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring has-[:checked]:font-bold">
-        <input type="checkbox" checked={checked} onChange={onChange} className="peer sr-only" />
+      <label className="relative flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 text-body-sm text-text-accent has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring has-[:checked]:font-bold">
+        <input type="checkbox" checked={checked} onChange={onChange} className="absolute inset-0 size-full cursor-pointer opacity-0" />
         <Check aria-hidden="true" className={cn('size-3.5 shrink-0', checked ? 'opacity-100' : 'opacity-0')} strokeWidth={3} />
         <span className="flex-1">{label}</span>
         {count === undefined ? <Skeleton className="h-4 w-8" /> : <span className="tabular-nums" aria-label={`${count} ${count === 1 ? 'resultado' : 'resultados'}`}>({count})</span>}

@@ -59,13 +59,14 @@ test.describe('catálogo', () => {
     expect(isAscending(prices)).toBe(true)
 
     // Busca textual, composta com os filtros.
-    await searchFor(page, mobile, 'Neon')
-    await expect(page).toHaveURL(/q=Neon/)
+    const term = prices.length ? (await cardNames(page))[0]!.split(' ')[0]! : 'Neon'
+    await searchFor(page, mobile, term)
+    await expect(page).toHaveURL(new RegExp('q=' + term))
     await expect(page).toHaveURL(/categories=/)
 
     // Refresh mantém tudo; voltar no histórico restaura o estado anterior.
     await page.reload()
-    await expect(page).toHaveURL(/q=Neon/)
+    await expect(page).toHaveURL(new RegExp('q=' + term))
     await gridReady(page)
     await page.goBack()
     await expect(page).toHaveURL(filteredUrl)

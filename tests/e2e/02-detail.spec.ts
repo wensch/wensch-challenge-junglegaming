@@ -25,7 +25,7 @@ test.describe('detalhe do NFT', () => {
     await expect(page.getByRole('tab', { name: 'Detalhes do NFT' })).toBeVisible()
     await page.getByRole('tab', { name: /Avaliações de colecionadores/ }).click()
     await expect(page.getByRole('tabpanel')).toBeVisible()
-    await expect(page.getByRole('region', { name: 'Mais desta coleção' }).or(page.getByRole('heading', { name: 'Mais desta coleção' }))).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Mais desta coleção' })).toBeVisible()
   })
 
   test('NFT inexistente mostra estado próprio com saída; id malformado é 404', async ({ page, boot }) => {

@@ -33,6 +33,7 @@ test.describe('favoritos', () => {
     await expect(heart(page, mobile).first()).toHaveAttribute('aria-pressed', 'true')
     await heart(page, mobile).first().click()
     await expect(heart(page, mobile).first()).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.getByRole('region', { name: 'Notificações' })).toContainText('removido dos favoritos')
     await page.reload()
     await expect(heart(page, mobile).first()).toBeEnabled()
     await expect(heart(page, mobile).first()).toHaveAttribute('aria-pressed', 'false')
@@ -52,6 +53,8 @@ test.describe('favoritos', () => {
     await expect(page.getByRole('region', { name: 'Notificações' })).toContainText('A alteração foi desfeita')
     // Recuperação: sem o cenário de falha, o mesmo clique persiste.
     await mock.setScenarios(['default'])
+    // O toast de erro cobre o topo da tela no mobile: espera sumir antes do novo clique.
+    await expect(page.getByRole('region', { name: 'Notificações' }).getByRole('listitem')).toHaveCount(0, { timeout: 15_000 })
     await button.click()
     await expect(button).toHaveAttribute('aria-pressed', 'true')
     await expect(page.getByRole('region', { name: 'Notificações' })).toContainText('adicionado aos favoritos')

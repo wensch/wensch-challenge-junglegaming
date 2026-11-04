@@ -84,12 +84,15 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
   const max = maxQuantityOf(edition)
   const unavailable = max === 0
   const resolver = useMemo(() => zodResolver<QuantityInput, unknown, QuantityOutput>(quantitySchema(edition)), [edition])
-  const { register, handleSubmit, setValue, getValues, setError, clearErrors, trigger, formState } = useForm<QuantityInput, unknown, QuantityOutput>({
+  const { register, handleSubmit, setValue, getValues, watch, setError, clearErrors, trigger, formState } = useForm<QuantityInput, unknown, QuantityOutput>({
     resolver,
     mode: 'onChange',
     defaultValues: { quantity: '1' },
   })
   const error = formState.errors.quantity?.message
+  const typed = parseInt(watch('quantity'), 10)
+  const atMax = !Number.isNaN(typed) && typed >= max
+  const atMin = !Number.isNaN(typed) && typed <= 1
   const serverError = formState.errors.root?.server?.message
 
   // The limit changes with the edition and with real-time stock: re-validate the current value.
@@ -138,7 +141,7 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
           <button
             type="button"
             aria-label="Diminuir quantidade"
-            disabled={unavailable}
+            disabled={unavailable || atMin}
             onClick={() => step(-1)}
             className="grid size-[26px] place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
           >
@@ -160,7 +163,7 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
           <button
             type="button"
             aria-label="Aumentar quantidade"
-            disabled={unavailable}
+            disabled={unavailable || atMax}
             onClick={() => step(1)}
             className="grid size-[26px] place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
           >
