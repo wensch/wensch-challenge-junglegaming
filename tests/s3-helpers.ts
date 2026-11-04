@@ -70,7 +70,9 @@ export async function updateNft(page: Page, nftId: string, patch: { price?: stri
 }
 
 export async function connectWallet(page: Page) {
-  await page.getByRole('button', { name: 'Conectar carteira' }).click()
+  // A connection kept in the checkout draft is restored on return: connect only when needed.
+  if ((await page.getByTestId('wallet-status').getAttribute('data-state')) === 'connected') return
+  await page.getByRole('button', { name: 'Conectar carteira', exact: true }).click()
   await expect(page.getByTestId('wallet-status')).toHaveAttribute('data-state', 'connected')
 }
 
