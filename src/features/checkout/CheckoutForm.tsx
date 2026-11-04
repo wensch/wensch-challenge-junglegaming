@@ -9,7 +9,7 @@
  *  - API field errors are mapped back onto the form fields (`aria-describedby` on each message).
  */
 import { useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -21,6 +21,7 @@ import { applyFieldErrors } from '@/features/shared/forms'
 import { invalidateCartAndQuote } from '@/queries/cart'
 import type { OwnerCredential } from '@/queries/owner'
 import { useCreateOrder, type UserCredential } from '@/queries/orders'
+import { queryKeys } from '@/queries/keys'
 import { quoteQueryKey, useQuote } from '@/queries/quote'
 import { ensureAttempt, fingerprintOf, recordAttemptOrder } from './attempt'
 import { diffQuotes } from './diff'
@@ -88,17 +89,22 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
   const submitting = useRef(false)
 
   const form = useForm<CheckoutFormInput, unknown, CheckoutFormValues>({ resolver: zodResolver(checkoutFormSchema), defaultValues: initial.values, mode: 'onTouched' })
-  const { register, handleSubmit, setValue, setError, setFocus, watch, formState } = form
+  const { register, handleSubmit, setValue, setError, setFocus, formState } = form
   const { errors } = formState
-  const walletId = watch('walletId')
-  const network: Network = watch('network')
+  const walletId = useWatch({ control: form.control, name: 'walletId' })
+  const network: Network = useWatch({ control: form.control, name: 'network' })
   const wallet = wallets.find((w) => w.id === walletId)
 
   // Draft: written only on user edits (never on mount) and only while this user owns the session.
+  const credentialRef = useRef(credential)
+  useEffect(() => {
+    credentialRef.current = credential
+  }, [credential])
   useEffect(() => {
     const persist = (values: Partial<CheckoutFormInput>) => {
-      if (!isSameUser(credential)) return
-      writeDraft(credential.userId, {
+      const cred = credentialRef.current
+      if (!isSameUser(cred)) return
+      writeDraft(cred.userId, {
         values: {
           ...(typeof values.displayName === 'string' ? { displayName: values.displayName } : {}),
           ...(typeof values.username === 'string' ? { username: values.username } : {}),
@@ -113,9 +119,8 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
         connection: connectionRef.current,
       })
     }
-    const sub = watch((values) => persist(values))
-    return () => sub.unsubscribe()
-  }, [watch, credential])
+    return form.subscribe({ formState: { values: true }, callback: ({ values }) => persist(values) })
+  }, [form])
 
   const quote = useQuote(owner, network, cartLines.length > 0)
 
@@ -212,6 +217,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
       setSubmitError(`${error.message} Volte ao carrinho para ajustar as quantidades.`)
       if (owner) void invalidateCartAndQuote(qc, owner)
     } else if (error.is('IDEMPOTENCY_CONFLICT')) {
+      recordAttemptOrder(credential.userId, error.payload.orderId)
       await navigate({ to: '/orders/$id', params: { id: error.payload.orderId } })
     } else if (error.is('VALIDATION')) {
       const unmatched = applyFieldErrors(error, setError, CHECKOUT_FIELDS, { 'collector.ensName': 'ensLabel' })
@@ -226,7 +232,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
       onConnection(null)
     } else if (error.is('TRANSIENT')) {
       setSubmitError('Não foi possível confirmar o envio. Seu pedido pode ter sido criado: ao tentar de novo usamos a mesma chave de idempotência, então nada é cobrado em duplicidade.')
-      void qc.invalidateQueries({ queryKey: [...['u', credential.userId, 'orders'], 'list'] })
+      void qc.invalidateQueries({ queryKey: queryKeys.user(credential.userId).orders() })
     } else {
       setSubmitError('Não foi possível enviar o pedido. Tente novamente.')
     }

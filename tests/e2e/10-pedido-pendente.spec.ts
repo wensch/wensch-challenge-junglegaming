@@ -48,6 +48,14 @@ test.describe('pedido pendente', () => {
     await expect(page.getByTestId('receipt')).toBeVisible()
   })
 
+  test('pendente -> confirmado: o foco vai para o título do recibo', async ({ page, boot, mock }) => {
+    await boot('/', ['payment.hold'])
+    const { orderId } = await pendingOrder(page, boot)
+    await mock.settleOrder(orderId, 'confirmed')
+    await expect(page.getByTestId('receipt')).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Seus NFTs agora estão na sua carteira' })).toBeFocused()
+  })
+
   test('conexão cai com o pedido pendente: ao reconectar o estado é recuperado do REST', async ({ page, boot, mock }) => {
     await boot('/', ['payment.hold'])
     const { orderId } = await pendingOrder(page, boot)

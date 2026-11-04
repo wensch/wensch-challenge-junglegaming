@@ -47,14 +47,14 @@ function blockingMessages(quote: Quote | undefined): string[] {
 
 function CartSkeleton() {
   return (
-    <div data-testid="cart-skeleton" className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_332px]" aria-hidden="true">
+    <div data-testid="cart-skeleton" className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-10 lg:mt-3 lg:grid-cols-[minmax(0,1fr)_332px] lg:gap-[86px]" aria-hidden="true">
       <div className="flex flex-col gap-3">
         <Skeleton className="hidden h-4 w-full lg:block" />
         {Array.from({ length: 3 }, (_, i) => (
           <Skeleton key={i} className="h-[100px] w-full rounded-card lg:h-[70px] lg:rounded-none" />
         ))}
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 lg:min-h-[423px]">
         <Skeleton className="h-7 w-full" />
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-28 w-full" />
@@ -264,7 +264,7 @@ export function CartPage() {
         </div>
       )}
 
-      {!loading && <RelatedNfts excludeNftIds={new Set(lines.map((l) => l.nftId))} />}
+      {loading ? <div aria-hidden="true" className="mt-24 hidden md:block" style={{ minHeight: 411 }} /> : <RelatedNfts excludeNftIds={new Set(lines.map((l) => l.nftId))} />}
     </section>
   )
 }

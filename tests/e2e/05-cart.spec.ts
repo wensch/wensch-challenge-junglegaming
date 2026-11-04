@@ -200,4 +200,23 @@ test.describe('carrinho', () => {
     await page.waitForURL('**/checkout')
     await expect(page.getByRole('heading', { level: 1, name: 'Pagamento' })).toBeVisible()
   })
+  test('carrinho lento: skeleton do resumo sem CLS', async ({ page, boot, mock }) => {
+    await boot('/')
+    const [a] = await pickEditions(page, 1)
+    const guestId = await setGuestId(page)
+    await addToCart(page, { guestId }, a!, 2)
+    await mock.setScenarios(['latency.slow'])
+    await page.evaluate(() => {
+      const w = window as unknown as { __cls: number }
+      w.__cls = 0
+      new PerformanceObserver((list) => {
+        for (const e of list.getEntries() as unknown as { value: number; hadRecentInput: boolean }[]) if (!e.hadRecentInput) w.__cls += e.value
+      }).observe({ type: 'layout-shift', buffered: true })
+    })
+    await page.getByRole('link', { name: /carrinho/i }).first().click()
+    await expect(page.getByTestId('cart-skeleton')).toBeVisible()
+    await expect(page.getByTestId('cart-line')).toHaveCount(1, { timeout: 20_000 })
+    await expect(page.getByTestId('cart-skeleton')).toHaveCount(0)
+    expect(await page.evaluate(() => (window as unknown as { __cls: number }).__cls)).toBeLessThan(0.05)
+  })
 })

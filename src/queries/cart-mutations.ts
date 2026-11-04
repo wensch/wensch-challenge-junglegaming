@@ -15,7 +15,7 @@ import { cartApi } from '@/api/endpoints'
 import { mulQty, sum } from '@/lib/money'
 import { invalidateCartAndQuote, useCartOwner } from './cart'
 import { queryKeys } from './keys'
-import { credentialOf, isCurrentOwner, ownerKey, type OwnerCredential } from './owner'
+import { credentialOf, isCurrentOwner, ownerChangedError, ownerKey, type OwnerCredential } from './owner'
 
 type Ctx = { owner: OwnerCredential; previous: Cart | undefined }
 
@@ -24,7 +24,7 @@ const scopeOf = (owner: OwnerCredential | null) => ({ id: `cart:${ownerId(owner)
 const mutationKeyOf = (owner: OwnerCredential | null) => ['cart-mutation', ownerId(owner)] as const
 
 function requireOwner(owner: OwnerCredential | null): OwnerCredential {
-  if (!owner) throw new Error('Sem dono de carrinho.')
+  if (!owner) throw ownerChangedError()
   return owner
 }
 
