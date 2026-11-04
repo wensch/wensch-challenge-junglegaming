@@ -4,7 +4,7 @@ import { add, lt, mulQty, percentOf, subClamped, sum } from '@/lib/money'
 import { findEdition, findNft } from './catalog'
 import { db, nowIso, persist, type CartRec, type QuoteRec } from './db'
 import { isActive } from './scenario-state'
-import { NETWORK_FEES } from './seed'
+import { NETWORK_FEES } from './fees'
 
 const QUOTE_TTL_MS = 15 * 60_000
 
