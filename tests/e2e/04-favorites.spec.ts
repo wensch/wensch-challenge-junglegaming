@@ -61,4 +61,32 @@ test.describe('favoritos', () => {
     await page.reload()
     await expect(page.getByRole('button', { name: /^Favorit/ }).first()).toHaveAttribute('aria-pressed', 'true')
   })
+
+  test('cliques rápidos chegam em ordem e o estado final é o do último clique', async ({ page, boot, mock }) => {
+    await boot('/')
+    await loginViaApi(page, USERS.alice)
+    await page.goto('/nft/nft_003')
+    const button = page.getByRole('button', { name: /^Favorit/ }).first()
+    await expect(button).toBeEnabled()
+    const methods: string[] = []
+    const done: string[] = []
+    page.on('request', (r) => {
+      if (/\/api\/favorites\//.test(r.url()) && r.method() !== 'GET') methods.push(r.method())
+    })
+    page.on('response', (r) => {
+      if (/\/api\/favorites\//.test(r.url()) && r.request().method() !== 'GET') done.push(r.request().method())
+    })
+    await mock.setScenarios(['latency.slow'])
+    // nft_003 starts unfavorited: add -> remove -> add. Serial mutations keep this exact order.
+    await button.dispatchEvent('click')
+    await button.dispatchEvent('click')
+    await button.dispatchEvent('click')
+    await expect(button).toHaveAttribute('aria-pressed', 'true')
+    await expect.poll(() => methods, { timeout: 20_000 }).toEqual(['PUT', 'DELETE', 'PUT'])
+    await expect.poll(() => done.length, { timeout: 20_000 }).toBe(3)
+    await mock.setScenarios(['default'])
+    await page.reload()
+    await expect(page.getByRole('button', { name: /^Favorit/ }).first()).toBeEnabled()
+    await expect(page.getByRole('button', { name: /^Favorit/ }).first()).toHaveAttribute('aria-pressed', 'true')
+  })
 })

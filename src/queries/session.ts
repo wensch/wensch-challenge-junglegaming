@@ -212,11 +212,15 @@ export async function establishSessionAndMergeCart(queryClient: QueryClient, ses
   if (!guestId) return { session, adjusted: [], mergeError: null }
   try {
     const merged = await cartApi.mergeCart({ guestId }, { as: { token: session.token } })
+    // The identity may have changed while the request was in flight (logout, expiry, another login):
+    // then neither the merged cart nor the guest cleanup belong to the current owner.
+    if (getToken() !== session.token) return { session, adjusted: [], mergeError: null }
     const cartKey = queryKeys.owner({ kind: 'user', userId: session.user.id }).cart()
     // R4: the header cart may already be fetching for the new user (the session was just stored).
     // Cancel that GET before writing the merged cart so its (older) response cannot overwrite it
     // (the cart query also uses `keepNewest`, which refuses a lower `version`).
     await queryClient.cancelQueries({ queryKey: cartKey })
+    if (getToken() !== session.token) return { session, adjusted: [], mergeError: null }
     queryClient.setQueryData(cartKey, merged.cart)
     clearGuestId()
     await queryClient.cancelQueries({ queryKey: queryKeys.allGuest() })

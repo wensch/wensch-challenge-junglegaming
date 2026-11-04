@@ -20,7 +20,7 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
   const navigate = useNavigate()
   const location = useLocation()
   const { owner, ready, isFavorite } = useFavoriteState()
-  const toggle = useToggleFavorite()
+  const toggle = useToggleFavorite(owner ? `${owner.userId}:${nft.id}` : nft.id)
   const active = isFavorite(nft.id)
 
   const onClick = () => {
@@ -56,7 +56,7 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
       className={cn('h-10 w-[130px] gap-2 rounded-control border-primary bg-transparent px-0 text-body-md font-medium text-text-primary hover:bg-surface-dark', className)}
     >
       <Heart aria-hidden="true" className="size-5" fill={active ? 'currentColor' : 'none'} strokeWidth={1.75} />
-      {active ? 'Favoritado' : 'Favoritar'}
+      Favoritar
     </Button>
   )
 }
