@@ -14,7 +14,7 @@ import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { errorMessageOf } from '@/components/layout/PageStates'
-import { clearAttempt } from '@/features/checkout/attempt'
+import { clearAttempt, readAttempt } from '@/features/checkout/attempt'
 import { clearDraft } from '@/features/checkout/draft'
 import { usePageHeadingFocus } from '@/features/shared/usePageHeading'
 import { formatEth } from '@/lib/money'
@@ -50,7 +50,7 @@ export function OrderPage({ orderId }: { orderId: string }) {
     if (!user || !status || status === 'pending' || settledFor.current === `${orderId}:${status}`) return
     settledFor.current = `${orderId}:${status}`
     if (!isCurrentOwner({ kind: 'user', ...user })) return // F8
-    clearAttempt(user.userId)
+    if (readAttempt(user.userId)?.orderId === orderId) clearAttempt(user.userId)
     if (status === 'confirmed') {
       clearDraft(user.userId)
       if (owner) void invalidateCartAndQuote(qc, owner)
@@ -91,7 +91,7 @@ export function OrderPage({ orderId }: { orderId: string }) {
           <Link to="/" aria-label="Fechar e voltar ao início" className="absolute top-4 right-4 z-10 text-text-accent outline-none focus-visible:ring-3 focus-visible:ring-ring/60">
             <X aria-hidden="true" className="size-5" />
           </Link>
-          <ConfirmedReceipt order={data} />
+          <ConfirmedReceipt order={data} headingRef={headingRef} />
           <p className="mt-6 text-center">
             <Link to="/" hash="mercado" className="text-body-md text-text-accent underline-offset-4 hover:underline">
               Continuar explorando

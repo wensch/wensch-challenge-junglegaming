@@ -43,6 +43,8 @@ export function CheckoutPage() {
   const wallets = useWallets()
   const headingRef = usePageHeadingFocus()
   const [announcement, setAnnouncement] = useState('')
+  // Identical consecutive messages alternate a trailing NBSP so the live region announces them again.
+  const announce = (text: string) => setAnnouncement((prev) => (prev === text ? text + String.fromCharCode(160) : text))
 
   const user = session.data?.user
   const lines = cart.data?.lines ?? []
@@ -110,7 +112,7 @@ export function CheckoutPage() {
           </Button>
         </div>
       ) : user && credential ? (
-        <CheckoutForm user={user} credential={credential} cartLines={lines} wallets={walletList(wallets.data)} onAnnounce={setAnnouncement} />
+        <CheckoutForm user={user} credential={credential} cartLines={lines} wallets={walletList(wallets.data)} onAnnounce={announce} />
       ) : null}
     </section>
   )

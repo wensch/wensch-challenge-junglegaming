@@ -9,7 +9,7 @@ import type { ApiError, Network, Wallet, WalletConnection, WalletsResponse } fro
 import { walletsApi } from '@/api/endpoints'
 import { STALE } from '@/queries/client'
 import { queryKeys } from '@/queries/keys'
-import { isCurrentOwner, ownedQueryFn } from '@/queries/owner'
+import { isCurrentOwner, ownedQueryFn, ownerChangedError } from '@/queries/owner'
 import { useUserCredential, type UserCredential } from '@/queries/orders'
 import { keepNewest } from '@/queries/versioned'
 
@@ -36,7 +36,7 @@ export function useConnectWallet() {
   const user = useUserCredential()
   return useMutation<WalletConnection, ApiError, { walletId: string; network: Network }>({
     mutationFn: ({ walletId, network }) => {
-      if (!user) throw new Error('Sem sessão.')
+      if (!user) throw ownerChangedError()
       return walletsApi.connectWallet(walletId, { network }, { as: { token: user.token } })
     },
     // No cache writes: the caller applies the result after checking it is still the same user (F8).
@@ -47,7 +47,7 @@ export function useDisconnectWallet() {
   const user = useUserCredential()
   return useMutation<undefined, ApiError, { walletId: string }>({
     mutationFn: async ({ walletId }) => {
-      if (!user) throw new Error('Sem sessão.')
+      if (!user) throw ownerChangedError()
       await walletsApi.disconnectWallet(walletId, { as: { token: user.token } })
       return undefined
     },

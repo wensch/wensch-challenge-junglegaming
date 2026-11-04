@@ -3,6 +3,7 @@
  * is read from the catalog or the cart, so later catalog changes cannot alter it. The confirmed panel
  * (Figma "Confirmação de Pedido") is rendered by the caller only when `order.status === 'confirmed'`.
  */
+import type { Ref } from 'react'
 import type { Order, Receipt as ReceiptData } from '@/api/contracts'
 import { OrderTotals } from '@/features/shared/OrderTotals'
 import { NETWORK_LABELS, WALLET_TYPE_LABELS } from '@/features/checkout/labels'
@@ -53,13 +54,13 @@ export function ReceiptTotals({ receipt }: { receipt: ReceiptData }) {
   )
 }
 
-export function ConfirmedReceipt({ order }: { order: Order }) {
+export function ConfirmedReceipt({ order, headingRef }: { order: Order; headingRef?: Ref<HTMLHeadingElement> }) {
   const tx = order.transaction
   const { receipt } = order
   return (
     <article data-testid="receipt" aria-labelledby="receipt-title" className="mx-auto w-full max-w-[578px] overflow-hidden bg-surface-card">
       <header className="border-b border-line-soft px-6 pt-8 pb-5 text-center">
-        <h1 id="receipt-title" tabIndex={-1} className="text-body-md font-bold text-brand-secondary">
+        <h1 id="receipt-title" ref={headingRef} tabIndex={-1} className="outline-none text-body-md font-bold text-brand-secondary">
           Seus NFTs agora estão na sua carteira
         </h1>
       </header>
