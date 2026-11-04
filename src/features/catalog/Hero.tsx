@@ -144,7 +144,7 @@ export function Hero() {
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
           {items.length > 1 && (
-            <div role="group" aria-label="Escolher destaque" className="flex gap-1.5 md:ml-[560px] md:gap-1.5">
+            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex md:ml-[548px]">
               {items.map((item, i) => (
                 <button
                   key={item.id}
@@ -152,7 +152,7 @@ export function Hero() {
                   aria-label={`Destaque ${i + 1} de ${items.length}: ${item.name}`}
                   aria-current={i === index ? 'true' : undefined}
                   onClick={() => setSelected(i)}
-                  className="grid size-4 place-items-center rounded-full"
+                  className="grid size-6 shrink-0 place-items-center rounded-full"
                 >
                   <span className={cn('block size-[7px] rounded-full', i === index ? 'bg-primary' : 'bg-primary/40')} />
                 </button>

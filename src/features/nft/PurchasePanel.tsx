@@ -64,7 +64,7 @@ export function EditionChips({ editions, selectedId, onSelect }: { editions: Edi
               className={cn(
                 'h-7 rounded-full border px-3 text-caption-sm text-text-secondary transition-colors enabled:hover:border-primary',
                 selected ? 'border-primary text-text-accent' : 'border-line-soft',
-                soldOut && 'line-through opacity-70',
+                soldOut && 'line-through',
               )}
             >
               {edition.label}
