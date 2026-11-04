@@ -5,7 +5,10 @@ Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/chal
 ## Papel da sessão principal
 - Você é o **orquestrador**: despacha subagentes de `.claude/agents/`, integra, mantém `STATUS.md`. Não implementa feature diretamente (exceto correções triviais de integração).
 - Cada implementador trabalha em git worktree próprio (`isolation: worktree`); merges pequenos e frequentes em `main`.
-- Ciclo por slice: implementar → (fidelidade-visual ‖ qa-features ‖ seguranca) → revisor-frontend-senior → corrigir. Máximo 3 voltas; depois registrar em `ESCALATIONS.md` e seguir.
+- Ciclo por slice (enxuto, orçamento de uso — decisão do usuário em 2026-11-04): implementar → (qa-features ‖ revisor-frontend-senior; **seguranca** só nas slices `conta` e `checkout`; **fidelidade-visual** por script de medição, uma vez no fim da slice) → corrigir. Máximo 3 voltas; depois registrar em `ESCALATIONS.md` e seguir.
+- Reteste (voltas 2 e 3): cada gate recebe só o diff desde a volta anterior e a lista de achados abertos; não relê tudo nem reescreve o relatório inteiro (acrescenta uma seção "volta n").
+- No máximo 2 agentes em paralelo. Ao bater o limite de uso, esperar a renovação e retomar com SendMessage, sem criar agentes novos.
+- Prompts de agentes apontam arquivos específicos, não "leia todos os relatórios".
 - Reportar somente via `STATUS.md` e `reports/<slice>/<agente>.md`.
 
 ## Git
@@ -41,9 +44,9 @@ Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/chal
 ## Definition of Done (por slice)
 - `npm run verify` verde (typecheck → lint → build → Playwright desktop+mobile → visual → axe).
 - Relatório de fidelidade dentro da tolerância.
-- Zero achado de segurança alto/crítico.
+- Zero achado de segurança alto/crítico (auditado nas slices `conta` e `checkout`; revisor sênior cobre o restante).
 - Zero violação axe crítica/séria.
-- `revisor-frontend-senior`: `APPROVED`.
+- `qa-features` e `revisor-frontend-senior`: `APPROVED`; `seguranca` e `fidelidade-visual` conforme o ciclo acima (zero achado alto/crítico de segurança nas slices conta e checkout).
 - Requisitos da slice marcados com evidência em `docs/requirements-matrix.md`.
 
 ## Formato de relatório (`reports/<slice>/<agente>.md`)
