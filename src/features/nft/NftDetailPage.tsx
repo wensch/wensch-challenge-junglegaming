@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils'
 import { DetailTabs } from './DetailTabs'
 import { FavoriteButton } from './FavoriteButton'
 import { Gallery, GallerySkeleton } from './Gallery'
-import { NftPrice } from './NftCard'
+import { NftCardSkeleton, NftPrice } from './NftCard'
 import { EditionChips, PurchasePanel } from './PurchasePanel'
 import { RelatedNfts } from './RelatedNfts'
 import { StarRating } from './StarRating'
@@ -68,17 +68,32 @@ function DetailSkeleton() {
     <Frame>
       <div aria-busy="true" aria-label="Carregando detalhes do NFT" role="status">
         <Skeleton className="hidden h-4 w-36 md:block" />
-        <div className="mt-4 flex flex-col gap-8 md:mt-7 lg:flex-row">
+        <div className="mt-4 flex flex-col gap-8 md:mt-7 lg:min-h-[582px] lg:flex-row">
           <div className="lg:w-[573px] lg:shrink-0">
             <GallerySkeleton />
           </div>
-          <div className="flex flex-1 flex-col gap-6" aria-hidden="true">
+          <div className="flex min-h-[596px] flex-1 flex-col gap-6 lg:min-h-0" aria-hidden="true">
             <Skeleton className="h-[37px] w-3/4" />
             <Skeleton className="h-5 w-1/3" />
             <Skeleton className="h-[72px] w-full" />
             <Skeleton className="h-7 w-52" />
             <Skeleton className="h-[50px] w-full" />
             <Skeleton className="h-[84px] w-1/2" />
+          </div>
+        </div>
+        {/* Tabs + "Mais desta coleção": reserved so the footer does not move when the content lands. */}
+        <div className="mt-12 md:mt-[96px]" aria-hidden="true">
+          <Skeleton className="h-[34px] w-full" />
+          <Skeleton className="mt-4 h-[631px] w-full md:h-[308px]" />
+        </div>
+        <div className="mt-16 md:mt-24" aria-hidden="true">
+          <Skeleton className="h-5 w-40" />
+          <div className="mt-6 flex gap-4 overflow-hidden md:grid md:grid-cols-5 md:gap-[7px]">
+            {Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className="w-[190px] shrink-0 md:w-auto">
+                <NftCardSkeleton size="related" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
