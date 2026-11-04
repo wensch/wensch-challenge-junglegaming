@@ -63,3 +63,67 @@ Nenhum achado crítico, alto ou médio.
 - `reports/fundacao/seguranca-evidence/crosstab.sec.spec.ts` (novo: DB entre abas, sessão e socket revogados, troca de senha, 401)
 - `reports/fundacao/seguranca-evidence/redirect-v2.mjs` (novo: vetores extras contra os schemas reais)
 - `reports/fundacao/seguranca-evidence/playwright.security.config.ts`
+
+---
+
+# seguranca — fundacao — volta 3 — 2026-11-03
+Veredito: APPROVED
+
+Escopo: `git diff ceb4a39..a79823d`. O diff traz a expiração natural pelo relógio (N1) em `src/session/store.ts`, `src/queries/session.ts`, `src/queries/owner.ts`, `src/api/client.ts`, `src/routes/_authed.tsx` e `src/bootstrap.tsx`. Também traz o contador de revisão (`DB_REV_KEY`) e o `liveUser` no mock. Todos os testes rodaram contra o preview de `main` em http://localhost:4173, com a CSP ativa e sem `bypassCSP`. Não rodei build, preview nem verify, e não editei código.
+
+Evidência executável:
+```
+BASE_URL=http://localhost:4173 npx playwright test -c reports/fundacao/seguranca-evidence/playwright.security.config.ts
+  -> 14 passed (8 da volta 2 + 6 novos em expiry.sec.spec.ts)
+BASE_URL=http://localhost:4173 npx playwright test tests/e2e/20-session-tabs.spec.ts tests/e2e/21-session-clock-expiry.spec.ts tests/e2e/06-csp.spec.ts --project=desktop --project=mobile
+  -> 14 passed
+npm audit --omit=dev                                                   -> found 0 vulnerabilities
+grep -rn "dangerouslySetInnerHTML|innerHTML|eval(|new Function" src    -> só o comentário em zod-config.ts
+```
+O spec novo é `reports/fundacao/seguranca-evidence/expiry.sec.spec.ts`. Ele só lê o cache, pela fibra do `QueryClientProvider`. O tempo avança com `page.clock`, e os eventos são emitidos sempre por `window.__mock.emit`.
+
+## Verificações pedidas
+
+### 1. Token vencido enviado ao servidor: o risco não aumenta
+- **O servidor rejeita.** Avancei o relógio 8h05 e chamei `GET /session`, `/cart`, `/profile`, `/orders` e `PATCH /profile` com o Bearer vencido. Todas as chamadas deram **401 `SESSION_EXPIRED`**: `{"session":{"status":401,"code":"SESSION_EXPIRED"},"cart":…,"patchProfile":{"status":401,"code":"SESSION_EXPIRED"}}`. O servidor nunca devolve 200, porque `resolveAuth` passa por `findSession`, que compara `expiresAt` com o relógio.
+- **Endpoints públicos continuam sem Bearer**, pela condição `mode !== 'public'` em `client.ts`.
+- **O socket não entrega nada.** Um evento privado emitido depois do vencimento não chega, porque `stillAuthorised` passa por `findSession`, que também checa a expiração. Vale na página pública, mesmo com o cliente ainda mostrando o socket como `usr_001`, e também depois do teardown.
+- **Nada vaza.** Nenhuma URL, navegação ou mensagem de console contém o token (`token leaks: []`). Não houve requisição para outra origem. O redirect leva só o path (`/login?reason=expired&redirect=%2Fwallets`). Depois do teardown, nem o `localStorage` nem o `sessionStorage` contêm o token.
+- **Outra aba:** o token sempre ficou no `localStorage` da mesma origem, compartilhado por design, e isso não mudou. O `getStoredSession` antigo só ignorava o token vencido na leitura, sem apagá-lo, então o token fica guardado pelo mesmo tempo de antes. O servidor o rejeita nas duas abas.
+- **401 atrasado não derruba outra sessão.** `notifySessionInvalid` mantém a guarda `token === getToken()`, então um 401 tardio de alice não encerra a sessão de bob. Quando o handler devolve `false` (GET em página pública), não há laço, porque o refetch só acontece no foco ou na reconexão.
+
+### 2. Rascunhos
+- Os rascunhos ficam em `sessionStorage`, que é separado por aba. A aba 2 nunca vê o rascunho da aba 1 (`tab2 sees tab1 draft: null`).
+- Na expiração, o rascunho de alice fica preservado na própria aba, como pede o §3.
+- Quando bob entra pela aba 2, a aba 1 passa a ser de bob sem nada de alice no cache nem na UI (`cacheHasAlice:false`, `aliceNameVisible:0`). A aba 2 não tem nenhuma chave `kurio.u.*`.
+- **Resíduo (achado #13):** o rascunho de alice continua no `sessionStorage` da aba 1 depois que ela passa a ser de bob. A UI de bob não lê esse rascunho, porque a chave tem o prefixo do userId. Hoje nenhum código de produção grava rascunho (`grep userDraftKey src` só encontra `store.ts`), então o problema ainda é latente.
+
+### 3. Isolamento entre abas da volta 2
+Continua passando. Os 8 testes de `isolation.sec` e `crosstab.sec` passam, e `20-session-tabs` passa no desktop e no mobile.
+
+### 4. Timer de expiração em rota privada
+- Com `/checkout` aberto e o relógio avançado, a página vai para `/login?reason=expired&redirect=%2Fcheckout` sem nenhum dado privado no DOM nem no cache: `{"nameVisible":0,"emailInDom":false,"idInDom":false,"privateKeys":[],"cacheHasAlice":false,"socketUser":"guest"}`.
+- Nenhum `POST /orders` sai depois do vencimento (teste 21).
+- Simulei a máquina dormindo em `/wallets`, mudando só o relógio de parede com `setSystemTime`. O fluxo também roda e limpa cache e UI.
+- Observação: nesse teste o redirect aconteceu em menos de 300 ms, antes do `visibilitychange` que eu disparei. Ou seja, o caminho `onVisibility` não ficou testado isoladamente, mas o resultado que importa está provado: os dados somem.
+
+### 5. Contador de revisão: sessão revogada não volta
+- O cenário `session.expire-on-checkout` na aba A responde `401 SESSION_EXPIRED` e muda o rev (`nvkuluot:1 -> vle7ldw3:3`).
+- Em seguida, a aba B e a aba A escrevem no DB (login de bob) com estado velho em memória. O token de alice continua `SESSION_EXPIRED` nas duas.
+- Bob faz logout na aba B e depois a aba A escreve. O token de bob fica `UNAUTHENTICATED` nas duas.
+- **Revisão de código:** a releitura só é pulada quando `rev === lastRev`. `persist` grava o DB antes do rev, e `clearPersisted` apaga os dois. Sem rev, a comparação cai no `raw`. O `tabId` é aleatório (8 caracteres em base 36), então revs de abas diferentes não colidem.
+- **Risco teórico residual:** se `setItem(DB)` der certo e `setItem(rev)` falhar por quota, as outras abas não percebem a escrita até o próximo rev mudar. É improvável, porque o rev é pequeno e substitui um valor do mesmo tamanho. Também não afeta a autorização: revogar é remover a sessão, e uma aba que perde a escrita fica com o estado anterior até o próximo rev.
+- **`liveUser`:** relê o usuário do DB sincronizado. Isso corrige escritas num objeto órfão e não muda quem está autorizado, porque `auth.user` continua vindo de `findSession`.
+
+## Achados (volta 3)
+| # | Severidade (crítica/alta/média/baixa) | Descrição | Evidência (comando/print/trace) | Correção sugerida |
+|---|---|---|---|---|
+| 13 | baixa | **O rascunho do usuário que expirou fica no `sessionStorage` da aba depois que outro usuário a assume.** Acontece quando bob entra por outra aba e a aba 1 sincroniza pelo evento `storage`. `syncSessionWithStorage` só chama `clearUserDrafts(next.user.id)` dentro de `if (cached)`, e depois do teardown `expired` o `cached` já é `null`. O mesmo acontece no boot quando o storage traz outro usuário, porque `sessionQueryOptions` não limpa rascunhos. A UI de bob não lê a chave, que tem o prefixo do userId, e hoje nenhum rascunho é gravado. Quando a S3 gravar o formulário do checkout (e-mail e nome do colecionador), os dados de alice ficariam acessíveis pelo devtools durante a sessão de bob. | `npx playwright test -c …/playwright.security.config.ts expiry -g "aba 2"` → `[sec] tab1 after bob login in tab2: {…"aliceDraftStillInTab1":"{\"secret\":\"rascunho-de-alice\"}","draftKeys":["kurio.u.usr_001.checkout"]}` | Em `syncSessionWithStorage`, quando `stored` não for nulo e o `fetchQuery` resolver, chamar `clearUserDrafts(next?.user.id)` mesmo com `cached === null`. Assim os rascunhos de quem voltar continuam lá. Fazer o mesmo depois do primeiro `GET /session` bem-sucedido no boot. Criar um teste em `20-session-tabs`: a sessão expira e outro usuário entra por outra aba. |
+| 14 | baixa | **Em página pública, a sessão vencida continua exibida até a próxima ação.** É uma decisão de UX documentada (ARCHITECTURE §4): o timer e o GET de fundo não fazem teardown fora de `/_authed`. Continuam lá o nome no header, o carrinho `['u',id,'cart']` no cache, o token no storage e o socket marcado `usr_001` no cliente. O servidor não entrega evento nem dado novo, e o que fica exposto é o que já estava na tela antes do vencimento. Num dispositivo compartilhado, porém, a identidade continua visível por tempo indeterminado. Isso pesa mais quando a S3 renderizar `/cart`, que é pública, a partir desse cache. | `… expiry -g "pagina publica"` → `[sec] public page after expiry: {"path":"/","tokenInStorage":true,"privateKeys":[["u","usr_001","cart"]],"nameVisible":1,"socketUser":"usr_001","lastEvent":""}` | Quando o timer disparar em página pública, fazer um teardown `expired` silencioso, sem redirecionar: limpar cache, socket e token e manter os rascunhos. A próxima ação privada ainda cai no guard com `reason=expired`, porque `sessionEndedByExpiry` já fica marcado. Isso preserva o contexto sem deixar a identidade na tela. |
+| 9 | baixa | (Herdado, aceito) Vulnerabilidades só em devDependencies. | `npm audit --omit=dev` → `found 0 vulnerabilities` | Como na volta 2. |
+| 10, 11, 12 | baixa | (Herdados da volta 2, fora deste diff) `import()` por template literal, `persist-credentials` e produção atrás de `main`. | Não reavaliados nesta volta. | Como na volta 2. |
+
+Nenhum achado crítico, alto ou médio. Enviar o token vencido não aumenta o risco: o servidor o rejeita no REST e no socket, e o token não vaza para URL, console, redirect nem outra origem. O isolamento entre usuários e entre abas continua intacto.
+
+## Arquivos de evidência (volta 3)
+- `reports/fundacao/seguranca-evidence/expiry.sec.spec.ts` (novo). São 6 testes: token vencido no REST, no socket e na URL; timer no checkout; máquina dormindo; expiração e troca de usuário entre abas com rascunho; contador de revisão; resíduo em página pública.
