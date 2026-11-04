@@ -74,7 +74,10 @@ export function HeroSkeleton() {
   return (
     <HeroFrame>
       <HeroCopy>
-        <ExploreLink />
+        <div className="flex flex-col gap-4 md:gap-6">
+          <ExploreLink />
+          <div className="h-4" />
+        </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">
         <Skeleton className="size-[138px] rounded-[20px] md:size-[450px] md:rounded-[28px]" />

@@ -87,9 +87,9 @@ export function NftCardSkeleton({ size = 'grid' }: { size?: 'grid' | 'related' }
   return (
     <div className="flex min-w-0 flex-col" aria-hidden="true">
       <Skeleton className={cn('rounded-card md:rounded-control', related ? 'h-[255px]' : 'h-[200px] md:h-[300px]')} />
-      <div className="mt-3 flex flex-col gap-1.5 px-2 md:px-0">
-        <Skeleton className="h-4 w-3/5" />
-        <Skeleton className="h-4 w-1/3" />
+      <div className="mt-3 flex flex-col gap-0.5 px-2 md:gap-1.5 md:px-0">
+        <Skeleton className="h-[22px] w-3/5 md:h-4" />
+        <Skeleton className="h-5 w-1/3" />
       </div>
     </div>
   )

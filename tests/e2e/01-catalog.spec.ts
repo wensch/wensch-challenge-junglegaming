@@ -107,7 +107,7 @@ test.describe('catálogo', () => {
     await boot('/', ['http.503'])
     await expect(page.getByRole('heading', { name: 'Não foi possível carregar o catálogo' })).toBeVisible({ timeout: 15_000 })
     await mock.setScenarios(['default'])
-    await page.getByRole('button', { name: 'Tentar novamente' }).first().click()
+    await page.getByRole('alert').filter({ hasText: 'carregar o catálogo' }).getByRole('button', { name: 'Tentar novamente' }).click()
     await gridReady(page)
     await expect(cards(page)).toHaveCount(9)
   })
