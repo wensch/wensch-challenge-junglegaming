@@ -69,8 +69,8 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Slice | Agente | Porta | Status |
 |---|---|---|---|
 | S1 catálogo | implementador-catalogo | PW_PORT 4181 | volta 1 retomada após limite (14:05) |
-| S2 conta | implementador-conta | PW_PORT 4182 | volta 1 retomada após limite (14:05) |
-| S3 checkout | implementador-checkout | PW_PORT 4183 | **em espera** (limite de 2 agentes em paralelo); worktree com 1 commit; retomar quando S1 ou S2 entregar |
+| S2 conta | implementador-conta | PW_PORT 4182 | **entregue** — merge 2962718, verify em main GREEN (e2e 270 ✓, visual 14 ✓, a11y 13 ✓). Gates pendentes: qa-features, revisor sênior, seguranca (aguardando vaga de agente) |
+| S3 checkout | implementador-checkout | PW_PORT 4183 | volta 1 retomada (com main + S2 mesclados) |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
