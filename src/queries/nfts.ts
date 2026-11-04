@@ -3,18 +3,15 @@
  * cache shape of each key is declared once (`DataTag`) and every write goes through `keepNewest`.
  */
 import { keepPreviousData, queryOptions } from '@tanstack/react-query'
-import { nftListQuerySchema, type NftListQuery } from '@/api/contracts'
+import type { NftListQuery } from '@/api/contracts'
 import { nftsApi } from '@/api/endpoints'
 import { STALE } from './client'
-import { queryKeys } from './keys'
+import { normalizeNftListQuery, queryKeys } from './keys'
 import { keepNewest } from './versioned'
 
 export type NftListQueryInput = Partial<NftListQuery>
 
-/** Canonical list query: defaults applied, lists sorted/unique, so `{}` and `{ pageSize: 9 }` share one key. */
-export function normalizeNftListQuery(query: NftListQueryInput): NftListQuery {
-  return nftListQuerySchema.parse(query)
-}
+export { normalizeNftListQuery, type NormalizedNftListQuery } from './keys'
 
 export const nftQueries = {
   list: (query: NftListQueryInput) => {

@@ -23,6 +23,11 @@ export function ownerKey(owner: OwnerCredential): CartOwner {
   return owner.kind === 'user' ? { kind: 'user', userId: owner.userId } : { kind: 'guest', guestId: owner.guestId }
 }
 
+/**
+ * True while `owner` is still the current identity. Uses the STORED token even if locally expired:
+ * the request then goes out and the server answers SESSION_EXPIRED, which runs the `expired` flow
+ * (instead of a silent "owner changed" error that would leave the UI stuck).
+ */
 export function isCurrentOwner(owner: OwnerCredential): boolean {
   const token = getToken()
   return owner.kind === 'user' ? token === owner.token : token === null && peekGuestId() === owner.guestId

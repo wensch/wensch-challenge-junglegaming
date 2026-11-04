@@ -41,16 +41,27 @@ function notify() {
   for (const l of listeners) l()
 }
 
-export function getStoredSession(): StoredSession | null {
+/** Stored session plus its local expiry state (`expired` = the local clock passed `expiresAt`). */
+export type StoredSessionState = StoredSession & { expired: boolean }
+
+/**
+ * Reads `kurio.session`. Distinguishes "no session" (`null`: absent, corrupted or tampered) from
+ * "session expired by the local clock" (`expired: true`). An expired entry is NOT dropped here: the
+ * caller decides (ARCHITECTURE §4) — requests still carry the token so the server answers
+ * `SESSION_EXPIRED`, and the guard/sync run the `expired` flow, which preserves the context.
+ */
+export function readStoredSession(now: number = Date.now()): StoredSessionState | null {
   const parsed = storedSessionSchema.safeParse(readJson(SESSION_KEY))
   if (!parsed.success) return null
-  // Locally expired tokens are dropped without a round-trip; the server stays the authority otherwise.
-  if (Date.parse(parsed.data.expiresAt) <= Date.now()) return null
-  return parsed.data
+  return { ...parsed.data, expired: Date.parse(parsed.data.expiresAt) <= now }
 }
 
+/**
+ * Token in storage, EVEN IF locally expired (the server is the authority and answers
+ * `SESSION_EXPIRED`, which feeds the re-authentication flow). `null` = no session stored.
+ */
 export function getToken(): string | null {
-  return getStoredSession()?.token ?? null
+  return readStoredSession()?.token ?? null
 }
 
 export function setStoredSession(session: StoredSession): void {
