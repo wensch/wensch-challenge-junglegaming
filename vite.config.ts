@@ -22,7 +22,13 @@ function preloadBootstrapGraph(): Plugin {
         const bundle = ctx.bundle
         if (!bundle) return []
         const rootRe = /\/src\/(bootstrap\.tsx|mocks\/browser\.ts|mocks\/seed\.ts)$/
-        const roots = Object.values(bundle).filter((c) => c.type === 'chunk' && rootRe.test(c.facadeModuleId?.replace(/\\/g, '/') ?? ''))
+        // Landing routes ('/' and '/nft/:id') are code-split by the router plugin; their component chunks are
+        // otherwise only discovered after the app boots.
+        const landingRe = /\/src\/routes\/(index|nft\.\$id)\.tsx\?tsr-split/
+        const norm = (p: string) => p.replace(/\\/g, '/')
+        const roots = Object.values(bundle).filter(
+          (c) => c.type === 'chunk' && (rootRe.test(norm(c.facadeModuleId ?? '')) || c.moduleIds.some((m) => landingRe.test(norm(m)))),
+        )
         if (!roots.length) return []
         const files = new Set<string>()
         const css = new Set<string>()
