@@ -72,7 +72,9 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | S2 conta | implementador-conta | — | **entregue** — merge 2962718 |
 | S3 checkout | implementador-checkout | — | **entregue** — merge dbf2418 |
 | **verify em main com S1+S2+S3** | orquestrador | **GREEN** — e2e 374 ✓, visual 22 ✓, a11y 28 ✓, 0 flaky |
-| Gates (rodada 1, sobre main integrado) | qa-features ‖ seguranca; depois revisor sênior | em andamento |
+| Gates rodada 1 (main integrado) | QA · segurança · revisor sênior · fidelidade | QA **APPROVED** ([rel](reports/s-integrada/qa-features.md)) · Segurança **APPROVED** ([rel](reports/s-integrada/seguranca.md)) · Revisor **APPROVED**, 5 médios/7 baixos ([rel](reports/s-integrada/revisor-frontend-senior.md)) · Fidelidade **CHANGES_REQUESTED**, 2 altos (overflow a 768 px em Detalhe e Perfil) ([rel](reports/s-integrada/fidelidade-visual.md)) |
+| Volta 2: S3 (chave de idempotência ao abrir pedido terminal, foco no recibo, ownerChanged, fidelidade da Confirmação) | implementador-checkout | em andamento (PW_PORT 4183) |
+| Volta 2: S1+S2 (overflow 768 px Detalhe/Perfil, imagem do Detalhe, favoritos com scope, ownerChanged) | implementador-conta | em andamento (PW_PORT 4182) |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
@@ -82,6 +84,10 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - Desvios do Figma renumerados sem colisão: S2 = D9–D13, S1 = D14–D18, S3 = D19–D21 (ARCHITECTURE §13).
 - Instabilidade corrigida: `21-session-clock-expiry` exigia que o GET vencesse o caminho de expiração local (as duas rotas são corretas); agora fixa o resultado (200/200 sem retry). `playwright.config.ts`: 4 workers locais, 1 retry (testes que só passam no retry aparecem como "flaky").
 - Pendente: baselines Linux de S1/S2/S3 (rodar workflow `visual-baselines`), `README.md`, Lighthouse, push (cada push publica em produção).
+
+## Adiado de propósito
+- Deduplicação entre slices (dois `Field`, duas `useWallets`, três hooks de credencial, dois mapeadores de erro, mensagens de `QuoteIssue`): refatoração depois da integração, sem mudança de comportamento (revisor item 5).
+- BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
 ## Próximo passo
 Gates da rodada 1 sobre o main integrado (QA ‖ segurança → revisor sênior), depois fidelidade por script, correções, auditor (Sonnet) e Fase 3.
