@@ -111,10 +111,23 @@ test.describe('expiração natural da sessão (relógio local)', () => {
     await page.clock.setSystemTime(Date.parse(session.expiresAt) + 5 * 60_000)
     // Refetch-on-focus of the header cart (a private GET). Dispatched on `window` (TanStack Query's
     // focus listener) and not on `document`, so the app's expiry-timer re-arm does not run first.
-    await page.evaluate(() => window.dispatchEvent(new Event('visibilitychange')))
+    // Two correct paths notice the expiry: the private GET (server answers 401 SESSION_EXPIRED) or the local
+    // clock check (no request at all). Which one wins is a race, so the test pins the OUTCOME (silent
+    // expiry, below) and, only when a request did go out after the jump, that it carried the stored token
+    // and was rejected. The event is re-dispatched because a refetch is skipped while the first GET is in flight.
+    const sessionEnded = () => page.evaluate(() => localStorage.getItem('kurio.session') === null)
     await expect
-      .poll(() => expiredCalls.find((c) => c.status === 401))
-      .toEqual({ auth: `Bearer ${session.token}`, status: 401, code: 'SESSION_EXPIRED' })
+      .poll(
+        async () => {
+          await page.evaluate(() => window.dispatchEvent(new Event('visibilitychange')))
+          return (await sessionEnded()) || expiredCalls.some((c) => c.status === 401)
+        },
+        { intervals: [100, 250, 500, 1000], timeout: 15_000 },
+      )
+      .toBe(true)
+    for (const c of expiredCalls.filter((x) => x.status !== 200)) {
+      expect(c).toEqual({ auth: `Bearer ${session.token}`, status: 401, code: 'SESSION_EXPIRED' })
+    }
 
     await expectSilentExpiry(page, session.user.displayName, draftKey, isMobileProject(info.project.name))
   })

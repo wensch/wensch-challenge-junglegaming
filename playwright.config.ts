@@ -12,8 +12,12 @@ const MOCK_HARNESS = /mocks\.spec\.ts$/
 export default defineConfig({
   testDir: 'tests/e2e',
   fullyParallel: true,
+  // The suite boots MSW + a service worker per page; with every core busy the boot races with navigation
+  // (spurious 404 on /api/* in the CSP sweep, timeouts). 4 workers keeps `verify` deterministic on a laptop.
+  workers: process.env.PW_WORKERS ? Number(process.env.PW_WORKERS) : CI ? 2 : 4,
   forbidOnly: CI,
-  retries: CI ? 1 : 0,
+  // One retry everywhere: a test that only passes on retry is listed as "flaky" in the summary (never silent).
+  retries: 1,
   reporter: [['html', { open: 'never' }], ['list']],
   use: { baseURL: process.env.BASE_URL ?? LOCAL_URL, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   // Baselines are per platform (font rasterization differs between Windows and Linux).

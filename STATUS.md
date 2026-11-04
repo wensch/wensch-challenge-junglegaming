@@ -68,17 +68,20 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 ## Fase 2 — slices
 | Slice | Agente | Porta | Status |
 |---|---|---|---|
-| S1 catálogo | implementador-catalogo | PW_PORT 4181 | volta 1 retomada após limite (14:05) |
-| S2 conta | implementador-conta | PW_PORT 4182 | **entregue** — merge 2962718, verify em main GREEN (e2e 270 ✓, visual 14 ✓, a11y 13 ✓). Gates pendentes: qa-features, revisor sênior, seguranca (aguardando vaga de agente) |
-| S3 checkout | implementador-checkout | PW_PORT 4183 | volta 1 retomada (com main + S2 mesclados) |
+| S1 catálogo | implementador-catalogo | — | **entregue** — merge 539fb16 |
+| S2 conta | implementador-conta | — | **entregue** — merge 2962718 |
+| S3 checkout | implementador-checkout | — | **entregue** — merge dbf2418 |
+| **verify em main com S1+S2+S3** | orquestrador | **GREEN** — e2e 374 ✓, visual 22 ✓, a11y 28 ✓, 0 flaky |
+| Gates (rodada 1, sobre main integrado) | qa-features ‖ seguranca; depois revisor sênior | em andamento |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
 CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 
+## Notas de integração (orquestrador)
+- Desvios do Figma renumerados sem colisão: S2 = D9–D13, S1 = D14–D18, S3 = D19–D21 (ARCHITECTURE §13).
+- Instabilidade corrigida: `21-session-clock-expiry` exigia que o GET vencesse o caminho de expiração local (as duas rotas são corretas); agora fixa o resultado (200/200 sem retry). `playwright.config.ts`: 4 workers locais, 1 retry (testes que só passam no retry aparecem como "flaky").
+- Pendente: baselines Linux de S1/S2/S3 (rodar workflow `visual-baselines`), `README.md`, Lighthouse, push (cada push publica em produção).
+
 ## Próximo passo
-Integrar cada slice ao entregar (verify verde) e rodar o ciclo enxuto.
-
-Antes de abrir as slices (revisor): favorites.ts fica com a S1, cart-mutations.ts/useAddToCart com a S3 (cart.ts congelado), SiteHeader por bloco (S1 busca, S3 badge, S2 AccountDropdown), routeTree.gen.ts regenerado no merge.
-
-Decisões de F1a aceitas pelo orquestrador: recusa de carteira = 200 `{status:'rejected'}`; recurso alheio = 403 FORBIDDEN; token em localStorage (trade-off documentado em ARCHITECTURE §4); 12 códigos de erro (PLANO será atualizado em F1c).
+Gates da rodada 1 sobre o main integrado (QA ‖ segurança → revisor sênior), depois fidelidade por script, correções, auditor (Sonnet) e Fase 3.
