@@ -39,7 +39,7 @@ Formato: id · severidade · slice · passos · esperado · obtido · evidência
 - Esperado: teste determinístico. Obtido: uma falha anterior (175 ms contra limite de 150 ms), não reproduzida.
 - Causa provável: a asserção final compara a duração medida por `performance.now()` de duas rodadas da mesma sequência semeada (`Math.abs(a[i]-b[i]) < 150`). O atraso nominal é igual, mas cada medição soma o jitter de `setTimeout` + fila do MSW/worker; com 6 workers disputando CPU (e delays de até 2100 ms) o jitter de uma rodada isolada pode passar de 150 ms. É falha de margem do teste, não do mock. Classificado como risco de flake (baixo).
 - Correção sugerida (dono dos mocks/QA): comparar o atraso solicitado (exposto pelo mock/`latency.ts`) em vez do tempo medido, ou tolerância proporcional (`max(150, 15% do atraso)`) com `test.retry` apenas para esse caso.
-- Status: aberto (baixa).
+- Status: FECHADO (volta 3). O mock expõe o atraso sorteado no cabeçalho de resposta `X-Mock-Delay-Ms` (`src/mocks/http.ts`); o teste compara a sequência nominal entre as duas rodadas (igualdade exata, preserva o determinismo por semente) e usa só limites folgados para o tempo medido. Evidência: `--repeat-each=10` (20/20 verdes, desktop+mobile-harness) e `verify` verde.
 
 ## BUG-QA-008 · baixa · fundacao · Chunk `AccountDropdown` é baixado também no mobile, onde o dropdown não aparece
 - Passos: viewport 390 px, logar e observar requests (`qa-volta2.spec.ts`, teste lazy, log `chunks antes do clique`).

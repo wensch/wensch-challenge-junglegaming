@@ -211,20 +211,31 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
     expect(r.ms).toBeGreaterThan(2400)
   },
   'latency.variable': async (page) => {
+    // Determinism is asserted on the nominal delay the mock drew (X-Mock-Delay-Ms), not on wall-clock
+    // time, which adds timer/worker jitter. The measured time only needs to be >= nominal (loose upper bound).
     const run = async () => {
       await setScenarios(page, ['latency.variable'])
-      const out: number[] = []
-      for (let i = 0; i < 4; i++) out.push((await api(page, 'GET', '/nfts/featured')).ms)
-      return out
+      return page.evaluate(async () => {
+        const out: { nominal: number; ms: number }[] = []
+        for (let i = 0; i < 4; i++) {
+          const t0 = performance.now()
+          const r = await fetch('/api/nfts/featured')
+          await r.text()
+          out.push({ nominal: Number(r.headers.get('X-Mock-Delay-Ms')), ms: performance.now() - t0 })
+        }
+        return out
+      })
     }
     const a = await run()
-    for (const ms of a) {
-      expect(ms).toBeGreaterThan(90)
-      expect(ms).toBeLessThan(2100)
+    for (const { nominal, ms } of a) {
+      expect(nominal).toBeGreaterThanOrEqual(100)
+      expect(nominal).toBeLessThan(1800)
+      expect(ms).toBeGreaterThanOrEqual(nominal - 20) // timers never fire much early
+      expect(ms).toBeLessThan(nominal + 1500) // generous: CPU contention only
     }
-    expect(new Set(a.map((x) => Math.round(x / 50))).size).toBeGreaterThan(1)
+    expect(new Set(a.map((x) => Math.round(x.nominal / 50))).size).toBeGreaterThan(1)
     const b = await run() // fixed seed: same sequence after re-selecting the scenario
-    a.forEach((ms, i) => expect(Math.abs(ms - b[i]!)).toBeLessThan(150))
+    expect(b.map((x) => x.nominal)).toEqual(a.map((x) => x.nominal))
   },
   'catalog.out-of-order': async (page) => {
     await setScenarios(page, ['catalog.out-of-order'])
