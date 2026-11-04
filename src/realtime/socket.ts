@@ -10,7 +10,7 @@
  */
 import { io, type Socket } from 'socket.io-client'
 import type { QueryClient } from '@tanstack/react-query'
-import { EVENT_TYPES, type RealtimeEvent } from '@/api/contracts'
+import { EVENT_TYPES, type ClientToServerEvents, type RealtimeEvent, type ServerToClientEvents } from '@/api/contracts'
 import { env } from '@/env'
 import { createReconciler, type ReconcileOutcome, type Reconciler } from './reconcile'
 
@@ -32,7 +32,9 @@ export interface StartOptions {
 }
 
 type EventListener = (event: RealtimeEvent) => void
-type Factory = (url: string, token: string | null) => Socket
+/** Typed with the contract maps; incoming payloads are still validated by the reconciler (zod). */
+export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+type Factory = (url: string, token: string | null) => AppSocket
 
 const defaultFactory: Factory = (url, token) =>
   io(url, { transports: ['websocket'], auth: { token }, reconnection: true, reconnectionDelay: 500, reconnectionDelayMax: 5_000 })
@@ -40,7 +42,7 @@ const defaultFactory: Factory = (url, token) =>
 const INITIAL: RealtimeState = { status: 'idle', userId: null, connections: 0, lastEvent: null, applied: 0 }
 
 export function createRealtimeManager(url: string, factory: Factory = defaultFactory) {
-  let socket: Socket | null = null
+  let socket: AppSocket | null = null
   let reconciler: Reconciler | null = null
   let state: RealtimeState = INITIAL
   const stateListeners = new Set<() => void>()
@@ -58,6 +60,7 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
       socket.disconnect()
     }
     socket = null
+    reconciler?.dispose()
     reconciler = null
     setState(INITIAL)
   }
@@ -81,17 +84,25 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
     })
     s.on('connect_error', () => setState({ status: 'reconnecting' }))
 
-    for (const type of EVENT_TYPES) {
-      s.on(type, (payload: unknown) => {
-        if (socket !== s) return // late frame of a closed session
-        const { outcome, event } = rec.handle(payload)
-        setState({
-          lastEvent: { id: event?.id ?? null, type: event?.type ?? null, outcome },
-          applied: state.applied + (outcome === 'applied' ? 1 : 0),
-        })
-        if (outcome === 'applied' && event) for (const l of eventListeners) l(event)
+    const onPayload = (payload: unknown) => {
+      if (socket !== s) return // late frame of a closed session
+      const { outcome, event } = rec.handle(payload)
+      setState({
+        lastEvent: { id: event?.id ?? null, type: event?.type ?? null, outcome },
+        applied: state.applied + (outcome === 'applied' ? 1 : 0),
       })
+      if (outcome !== 'applied' || !event) return
+      // One failing slice listener must not starve the others (nor break the socket handler).
+      for (const l of eventListeners) {
+        try {
+          l(event)
+        } catch (err) {
+          console.error('[realtime] event listener failed', err)
+        }
+      }
     }
+    // The payload type of `on` is the contract type, but the frame is untrusted until zod validates it.
+    for (const type of EVENT_TYPES) s.on(type, onPayload)
   }
 
   return {

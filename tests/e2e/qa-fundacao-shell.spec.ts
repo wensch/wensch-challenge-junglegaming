@@ -60,7 +60,6 @@ test.describe('guard _authed', () => {
   const evil = ['//evil.com', 'https://evil.com', '/\\evil.com', '/\t/evil.com', '///evil.com', 'javascript:alert(1)', '%2F%2Fevil.com', '/%2F/evil.com', '/%5Cevil.com']
   for (const v of evil) {
     test(`login redirect=${JSON.stringify(v)} nao vira destino externo`, async ({ page, boot }) => {
-      test.fail(v.includes(String.fromCharCode(9)), 'BUG-QA-001')
       await boot('/')
       await page.goto(`/login?redirect=${encodeURIComponent(v)}`)
       await expect(page.getByRole('heading', { level: 1, name: 'Entrar' })).toBeVisible()
@@ -111,9 +110,9 @@ test.describe('links fora de escopo', () => {
 })
 
 test.describe('teclado', () => {
-  // BUG-QA-002: on a full load PageFrame moves focus to the <h1>, so the first Tab skips skip link + header.
+  // BUG-QA-002 (fixed): on a full load the focus stays at the document start; only client-side
+  // navigations move it to the <h1>.
   test('primeiro Tab apos carga completa alcanca o skip link', async ({ page, boot }) => {
-    test.fail(true, 'BUG-QA-002')
     await boot('/login')
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await page.keyboard.press('Tab')

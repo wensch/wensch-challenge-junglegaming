@@ -66,11 +66,73 @@ export const ensNameSchema = z
   .string()
   .regex(/^[a-z0-9](?:[a-z0-9-]{1,61}[a-z0-9])?\.eth$/, 'Nome ENS inválido (use letras minúsculas, números e hífen, terminando em .eth)')
 
-/** Same-origin relative path; blocks open redirects (`//evil`, `https://...`, `/\\evil`). */
+/**
+ * Same-origin relative path; blocks open redirects (v1.2.0 hardening).
+ * Rejected: anything not starting with a single `/` (`//evil`, `https://...`, `javascript:`), any
+ * backslash and any C0 control / DEL character (WHATWG URL parsers silently drop TAB/LF/CR, so
+ * `"/\t/evil.com"` would resolve to `//evil.com`). Accepted values are resolved against a sentinel
+ * origin: if the origin changes the value is rejected; otherwise the output is normalized to
+ * `pathname + search + hash` (what the router navigates to).
+ */
+const REDIRECT_BASE = 'http://redirect.invalid'
+// eslint-disable-next-line no-control-regex -- control characters are exactly what we reject
+const REDIRECT_FORBIDDEN = /[\u0000-\u001F\u007F\\]/
+export function toSafeRedirect(value: string): string | null {
+  if (value.length > 512 || !value.startsWith('/') || value.startsWith('//') || REDIRECT_FORBIDDEN.test(value)) return null
+  let url: URL
+  try {
+    url = new URL(value, REDIRECT_BASE)
+  } catch {
+    return null
+  }
+  if (url.origin !== REDIRECT_BASE) return null
+  const normalized = `${url.pathname}${url.search}${url.hash}`
+  // Dot segments can collapse into a protocol-relative path (`/.//evil.com` -> `//evil.com`).
+  if (normalized.startsWith('//')) return null
+  return normalized
+}
 export const safeRedirectSchema = z
   .string()
   .max(512)
-  .refine((v) => v.startsWith('/') && !v.startsWith('//') && !v.startsWith('/\\'), 'Redirecionamento inválido')
+  .refine((v) => toSafeRedirect(v) !== null, 'Redirecionamento inválido')
+  .transform((v) => toSafeRedirect(v) ?? '/')
+
+/**
+ * URL that may be rendered as `href`/`src` (v1.2.0). Only `https:` — `javascript:`, `data:text/html`,
+ * `http:` and friends are rejected at the contract boundary.
+ */
+export const httpsUrlSchema = z.url({ protocol: /^https$/, hostname: z.regexes.domain })
+
+/**
+ * Avatar reference (v1.2.0): an `https:` URL, a same-origin absolute path (`/avatars/x.webp`) or an
+ * inline raster image (`data:image/png|jpeg|webp;base64,...`, as returned by the avatar upload).
+ * SVG and every other data/blob/script scheme are rejected.
+ */
+const AVATAR_DATA_URL = /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/
+export const avatarUrlSchema = z
+  .string()
+  .min(1)
+  .max(3_000_000)
+  .refine(
+    (v) => AVATAR_DATA_URL.test(v) || (v.startsWith('/') && toSafeRedirect(v) !== null) || httpsUrlSchema.safeParse(v).success,
+    'URL de avatar inválida',
+  )
+
+/**
+ * Compares two valid ETH decimal strings without float math (contracts must not depend on
+ * `src/lib`). Returns -1, 0 or 1.
+ */
+export function compareEthStrings(a: string, b: string): -1 | 0 | 1 {
+  const [ai = '0', af = ''] = a.split('.')
+  const [bi = '0', bf = ''] = b.split('.')
+  const aInt = ai.replace(/^0+(?=\d)/, '')
+  const bInt = bi.replace(/^0+(?=\d)/, '')
+  if (aInt.length !== bInt.length) return aInt.length < bInt.length ? -1 : 1
+  const width = Math.max(af.length, bf.length)
+  const aa = aInt + af.padEnd(width, '0')
+  const bb = bInt + bf.padEnd(width, '0')
+  return aa === bb ? 0 : aa < bb ? -1 : 1
+}
 
 /** HTTP headers shared by Axios client and MSW handlers. */
 export const HEADERS = {

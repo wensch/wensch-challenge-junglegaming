@@ -15,6 +15,14 @@ const noNumberCoercion = [
   { selector: "CallExpression[callee.object.name='z'][callee.property.name='number']", message: 'Use z.int() for quantities and ethSchema (string) for money; z.number() is forbidden in contracts.' },
 ]
 
+// `no-restricted-imports` does not see `import()`: dynamic imports of the mock layer are banned too.
+const noDynamicMocksImport = [
+  {
+    selector: 'ImportExpression[source.value=/mocks/]',
+    message: 'Only src/main.tsx may load the mock layer (dynamic import included). Fictitious data lives only in src/mocks.',
+  },
+]
+
 const mocksImportBan = {
   patterns: [
     {
@@ -44,7 +52,18 @@ export default tseslint.config(
     ignores: ['src/mocks/**', 'src/main.tsx'],
     rules: {
       'no-restricted-imports': ['error', mocksImportBan],
-      'no-restricted-syntax': ['error', ...noFloatMoney],
+      'no-restricted-syntax': ['error', ...noFloatMoney, ...noDynamicMocksImport],
+    },
+  },
+  {
+    // Type-aware rules for app code: un-awaited promises (invalidateQueries, navigate...) must be
+    // explicit (`void`) and promises must not leak into event handlers expecting `void`.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/mocks/**', 'src/routeTree.gen.ts'],
+    languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } },
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { attributes: false } }],
     },
   },
   {
@@ -53,7 +72,7 @@ export default tseslint.config(
   },
   {
     files: ['src/api/contracts/**/*.ts', 'src/lib/money.ts'],
-    rules: { 'no-restricted-syntax': ['error', ...noFloatMoney, ...noNumberCoercion] },
+    rules: { 'no-restricted-syntax': ['error', ...noFloatMoney, ...noNumberCoercion, ...noDynamicMocksImport] },
   },
   { files: ['scripts/**/*.mjs', '.claude/hooks/*.mjs', 'lighthouse/*.mjs'], languageOptions: { globals: globals.node } },
 )

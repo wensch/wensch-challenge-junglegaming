@@ -63,13 +63,15 @@ export const endpoints = {
   removeFavorite: { method: 'DELETE', path: '/favorites/:nftId', auth: 'session', response: favoriteToggleResponseSchema, status: 200, errors: [] },
 
   // --- Cart (API-4) ---
-  getCart: { method: 'GET', path: '/cart', auth: 'guest', response: cartSchema, status: 200, errors: [] },
+  // Guest endpoints called without Authorization and without a valid X-Guest-Id answer
+  // 422 VALIDATION with fieldErrors['X-Guest-Id'] (declared in v1.2.0).
+  getCart: { method: 'GET', path: '/cart', auth: 'guest', response: cartSchema, status: 200, errors: ['VALIDATION'] },
   addCartItem: { method: 'POST', path: '/cart/items', auth: 'guest', body: addCartItemRequestSchema, response: cartSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND', 'CONFLICT_AVAILABILITY'] },
   updateCartItem: { method: 'PATCH', path: '/cart/items/:lineId', auth: 'guest', body: updateCartItemRequestSchema, response: cartSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND', 'CONFLICT_AVAILABILITY'] },
-  removeCartItem: { method: 'DELETE', path: '/cart/items/:lineId', auth: 'guest', response: cartSchema, status: 200, errors: ['NOT_FOUND'] },
+  removeCartItem: { method: 'DELETE', path: '/cart/items/:lineId', auth: 'guest', response: cartSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND'] },
   mergeCart: { method: 'POST', path: '/cart/merge', auth: 'session', body: mergeCartRequestSchema, response: mergeCartResponseSchema, status: 200, errors: ['VALIDATION'] },
   applyCoupon: { method: 'PUT', path: '/cart/coupon', auth: 'guest', body: applyCouponRequestSchema, response: cartSchema, status: 200, errors: ['VALIDATION', 'COUPON_INVALID', 'COUPON_EXPIRED'] },
-  removeCoupon: { method: 'DELETE', path: '/cart/coupon', auth: 'guest', response: cartSchema, status: 200, errors: [] },
+  removeCoupon: { method: 'DELETE', path: '/cart/coupon', auth: 'guest', response: cartSchema, status: 200, errors: ['VALIDATION'] },
 
   // --- Quote (API-5) ---
   createQuote: { method: 'POST', path: '/quotes', auth: 'guest', body: createQuoteRequestSchema, response: quoteSchema, status: 200, errors: ['VALIDATION'] },
@@ -84,7 +86,8 @@ export const endpoints = {
     body: createOrderRequestSchema,
     response: orderSchema,
     status: 201,
-    errors: ['VALIDATION', 'FORBIDDEN', 'QUOTE_STALE', 'CONFLICT_AVAILABILITY', 'IDEMPOTENCY_CONFLICT'],
+    // NOT_FOUND (v1.2.0): `walletId` that does not exist.
+    errors: ['VALIDATION', 'NOT_FOUND', 'FORBIDDEN', 'QUOTE_STALE', 'CONFLICT_AVAILABILITY', 'IDEMPOTENCY_CONFLICT'],
     headers: [HEADERS.idempotencyKey],
   },
   getOrder: { method: 'GET', path: '/orders/:orderId', auth: 'session', response: orderSchema, status: 200, errors: ['NOT_FOUND', 'FORBIDDEN'] },

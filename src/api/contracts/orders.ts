@@ -9,7 +9,7 @@
  */
 import { z } from 'zod'
 import { displayNameSchema, emailSchema, usernameSchema } from './auth'
-import { ensNameSchema, ethSchema, idSchema, imageSchema, isoDateTimeSchema, networkSchema, quantitySchema, versionSchema } from './common'
+import { ensNameSchema, ethSchema, httpsUrlSchema, idSchema, imageSchema, isoDateTimeSchema, networkSchema, quantitySchema, versionSchema } from './common'
 import { walletTypeSchema } from './wallets'
 
 export const ORDER_STATUSES = ['pending', 'confirmed', 'declined'] as const
@@ -74,7 +74,8 @@ export type Receipt = z.infer<typeof receiptSchema>
 /** Simulated on-chain reference; only present when confirmed. */
 export const transactionSchema = z.object({
   hash: z.string().regex(/^0x[a-f0-9]{64}$/),
-  explorerUrl: z.url(),
+  /** v1.2.0: https only (rendered as an external link). */
+  explorerUrl: httpsUrlSchema,
   confirmedAt: isoDateTimeSchema,
 })
 

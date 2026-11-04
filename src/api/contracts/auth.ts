@@ -5,7 +5,7 @@
  * FROZEN: changes require an entry in ARCHITECTURE.md "Changelog de contratos".
  */
 import { z } from 'zod'
-import { idSchema, isoDateTimeSchema, safeRedirectSchema } from './common'
+import { avatarUrlSchema, idSchema, isoDateTimeSchema, safeRedirectSchema } from './common'
 
 export const emailSchema = z.email('Informe um e-mail válido').max(254)
 
@@ -32,7 +32,8 @@ export const userSchema = z.object({
   email: emailSchema,
   username: usernameSchema,
   displayName: displayNameSchema,
-  avatarUrl: z.string().min(1).nullable(),
+  /** v1.2.0: https, same-origin path or data:image/(png|jpeg|webp);base64 only. */
+  avatarUrl: avatarUrlSchema.nullable(),
 })
 export type User = z.infer<typeof userSchema>
 

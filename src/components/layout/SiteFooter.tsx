@@ -76,27 +76,28 @@ export function SiteFooter() {
     <footer className="mx-auto mt-16 w-full max-w-page px-gutter pb-[calc(var(--spacing-tabbar)+1.5rem)] md:mt-24 md:pb-6 xl:px-0">
       <div className="bg-card">
         {/* 1. Highlights + newsletter */}
-        <div className="grid gap-8 px-6 py-8 md:grid-cols-2 md:px-12 lg:grid-cols-[1fr_1fr_1fr_1.25fr] lg:gap-0">
+        {/* Figma 1440: padding 32/48/18/30, dividers at x = 297/563/829 of the column (249/266/266 px columns). */}
+        <div className="grid gap-8 px-6 py-8 md:grid-cols-2 md:px-12 lg:grid-cols-[1fr_1fr_1fr_1.25fr] lg:gap-0 xl:grid-cols-[249px_266px_266px_1fr] xl:pt-8 xl:pr-[30px] xl:pb-[18px]">
           {highlights.map((h, i) => (
             <section
               key={h.letter}
               aria-labelledby={`footer-hl-${i}`}
-              className={`grid grid-cols-[3rem_1fr] gap-x-4 md:block ${i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4'}`}
+              className={`grid grid-cols-[3rem_1fr] gap-x-4 md:block ${i === 0 ? 'lg:pr-4' : 'lg:border-l lg:border-primary/50 lg:px-4 xl:pl-[17px]'}`}
             >
               <span aria-hidden="true" className="row-span-2 grid size-12 place-items-center rounded-full bg-primary text-body-lg font-bold text-primary-foreground md:size-[74px] md:text-heading">
                 {h.letter}
               </span>
-              <h2 id={`footer-hl-${i}`} className="text-[17px] leading-6 font-bold text-text-primary md:mt-3">
+              <h2 id={`footer-hl-${i}`} className="text-[17px] leading-6 font-bold text-text-primary md:mt-2.5">
                 {h.title}
               </h2>
-              <p className="mt-1 text-body-sm text-text-secondary md:mt-2">{h.text}</p>
+              <p className="mt-1 text-body-sm text-text-secondary md:mt-1.5 xl:max-w-[210px]">{h.text}</p>
             </section>
           ))}
-          <section aria-labelledby="footer-newsletter" className="lg:border-l lg:border-primary lg:pl-4">
+          <section aria-labelledby="footer-newsletter" className="lg:border-l lg:border-primary lg:pl-4 xl:pl-4">
             <h2 id="footer-newsletter" className="text-[17px] leading-4 font-bold text-text-primary">
               Antecipe-se ao próximo lançamento
             </h2>
-            <form className="mt-5 flex" onSubmit={(e) => e.preventDefault()} aria-describedby="footer-newsletter-status">
+            <form className="mt-4 flex" onSubmit={(e) => e.preventDefault()} aria-describedby="footer-newsletter-status">
               <label htmlFor="footer-newsletter-email" className="sr-only">
                 E-mail para a newsletter
               </label>
@@ -117,26 +118,28 @@ export function SiteFooter() {
             </form>
             <p className="mt-4 text-caption text-text-secondary">Receba lançamentos selecionados, histórias de criadores e novidades do mercado.</p>
             <p id="footer-newsletter-status" className="mt-1 text-caption font-bold text-text-accent">
-              Newsletter em breve: inscrições ainda não estão abertas.
+              Newsletter em breve.<span className="sr-only"> Inscrições ainda não estão abertas.</span>
             </p>
           </section>
         </div>
 
         {/* 2. Brand band */}
-        <div className="grid gap-3 bg-surface-dark px-6 py-6 text-body-sm text-foreground md:grid-cols-4 md:items-center md:px-8">
+        {/* Figma 1440: 88 px band, texts at x = 32/335/638/940 of the column. */}
+        <div className="grid gap-3 bg-surface-dark px-6 py-6 text-body-sm text-foreground md:grid-cols-2 md:items-center md:px-8 lg:grid-cols-4 xl:grid-cols-[303px_303px_302px_1fr] xl:gap-0 xl:py-[22px]">
           <p className="font-bold tracking-figma text-text-primary">KURIO</p>
-          <p>Feito para colecionadores, criadores e cultura</p>
+          <p className="xl:max-w-[240px]">Feito para colecionadores, criadores e cultura</p>
           <p>contato@email.com</p>
           <p>+55 11 4002 8922</p>
         </div>
 
         {/* 3. Link columns */}
-        <div className="grid grid-cols-2 gap-8 px-6 pt-10 pb-12 md:grid-cols-4 md:px-8">
+        {/* Figma 1440: same columns as the brand band; heading 28 px from the top, 30 px rows, 34 px bottom. */}
+        <div className="grid grid-cols-2 gap-8 px-6 pt-10 pb-12 md:px-8 lg:grid-cols-4 xl:grid-cols-[303px_303px_302px_1fr] xl:gap-x-0 xl:pt-7 xl:pb-[34px]">
           <nav aria-labelledby="footer-profile">
             <h2 id="footer-profile" className={headingClass}>
               Meu perfil
             </h2>
-            <ul className="mt-2 flex flex-col gap-2">
+            <ul className="mt-2 flex flex-col gap-2 text-body-sm">
               {profileLinks.map((l) => (
                 <li key={l.label}>
                   <FooterItem link={l} />
@@ -148,7 +151,7 @@ export function SiteFooter() {
             <h2 id="footer-help" className={headingClass}>
               Central de ajuda
             </h2>
-            <ul className="mt-2 flex flex-col gap-2">
+            <ul className="mt-2 flex flex-col gap-2 text-body-sm">
               {helpLinks.map((l) => (
                 <li key={l.label}>
                   <FooterItem link={l} />
@@ -160,7 +163,7 @@ export function SiteFooter() {
             <h2 id="footer-collections" className={headingClass}>
               Coleções
             </h2>
-            <ul className="mt-2 flex flex-col gap-2">
+            <ul className="mt-2 flex flex-col gap-2 text-body-sm">
               {collectionLinks.map((c) => (
                 <li key={c.category}>
                   <Link to="/" search={{ categories: [c.category] }} className={linkClass}>
@@ -187,7 +190,7 @@ export function SiteFooter() {
               ))}
             </ul>
             <h2 className={`${headingClass} mt-6`}>Carteiras compatíveis</h2>
-            <p className="mt-2 inline-block rounded-control border border-line-soft bg-surface-dark px-2.5 py-1.5 text-tiny font-bold tracking-wide text-primary">
+            <p className="mt-2 inline-block rounded-control border border-line-soft bg-surface-dark px-2.5 py-1.5 text-tiny font-bold tracking-wide text-primary xl:text-micro xl:whitespace-nowrap">
               METAMASK · WALLETCONNECT · COINBASE
             </p>
           </div>
@@ -195,7 +198,7 @@ export function SiteFooter() {
       </div>
 
       {/* 4. Copyright */}
-      <p className="py-3 text-center text-body-sm text-foreground">© 2026 Kurio. Propriedade digital para todos.</p>
+      <p className="py-3 text-center text-body-sm text-foreground xl:py-[7px]">© 2026 Kurio. Propriedade digital para todos.</p>
     </footer>
   )
 }
