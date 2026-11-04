@@ -46,3 +46,8 @@ Formato: id · severidade · slice · passos · esperado · obtido · evidência
 - Esperado: no mobile só `MobileMenuSheet` (sob demanda/prefetch no hover/foco). Obtido: `AccountDropdown-*.js` carregado logo após o login mesmo em 390 px (header oculto), além de `MobileMenuSheet-*.js` ao abrir o menu.
 - Impacto: um chunk a mais no mobile (performance, sem efeito funcional). Foco: Sheet e dropdown abrem com foco dentro do diálogo/menu e Esc devolve o foco ao gatilho (sem flash nem foco perdido).
 - Status: aberto (baixa, opcional).
+
+## BUG-QA-009 · baixa · integrada · `waitForTimeout` remanescente em specs
+- Passos: `grep -n waitForTimeout tests/e2e/*.ts` -> `01-catalog:122`, `12-skeletons:32`, `20-session-tabs:122`, `mocks.spec:438,683`.
+- Esperado: sem espera arbitrária (regra de QA). Obtido: 5 ocorrências (passam, risco de flake/asserção negativa fraca).
+- Evidência: `reports/s-integrada/qa-features.md`. Status: aberto (baixa).
