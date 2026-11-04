@@ -6,6 +6,7 @@ import { CATEGORIES, type Category, type Coupon, type Edition, type Network, typ
 import { add, mulQty, percentOf, sub, sum } from '@/lib/money'
 import { hashPassword } from './crypto'
 import { DB_VERSION, type CartRec, type DbState, type NftRec, type UserRec, type WalletRec } from './db'
+import { NETWORK_FEES } from './fees'
 import { createRng, SEED, type Rng } from './rng'
 
 export const SEED_BASE_DATE = Date.parse('2026-06-01T12:00:00.000Z')
@@ -16,8 +17,6 @@ export const SEED_USERS = [
   { id: 'usr_001', email: 'alice@example.test', username: 'alice', displayName: 'Alice Colecionadora', password: 'Senha@123', salt: 'seed-salt-alice-0001' },
   { id: 'usr_002', email: 'bob@example.test', username: 'bob', displayName: 'Bob Artista', password: 'Senha@456', salt: 'seed-salt-bob-0002' },
 ] as const
-
-export const NETWORK_FEES: Record<Network, string> = { ethereum: '0.0021', polygon: '0.0003', solana: '0.00005' }
 
 const COUPONS: Coupon[] = [
   { code: 'WELCOME10', label: 'Boas-vindas 10%', kind: 'percent', value: '10', expiresAt: '2099-12-31T23:59:59.000Z' },

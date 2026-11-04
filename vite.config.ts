@@ -8,8 +8,8 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite'
 /**
  * `main.tsx` must start MSW before it imports the app (engine.io captures `WebSocket` at module
  * evaluation), so the app chunk (`bootstrap`) is only requested after the worker is up — a serial
- * network round trip on the critical path. This plugin emits `<link rel="modulepreload">` for the
- * whole static graph of `bootstrap` (and its CSS) in index.html: the browser downloads and compiles
+ * network round trip on the critical path (as is the mocks chunk, imported from the entry). This plugin emits `<link rel="modulepreload">` for the
+ * static graphs of `bootstrap`, the mocks (`browser`, plus the lazy `seed`) and the CSS in index.html: the browser downloads and compiles
  * it in parallel with the mocks, but does NOT evaluate it, so the WebSocket rule still holds.
  */
 function preloadBootstrapGraph(): Plugin {
@@ -21,8 +21,15 @@ function preloadBootstrapGraph(): Plugin {
       handler(html, ctx) {
         const bundle = ctx.bundle
         if (!bundle) return []
-        const entry = Object.values(bundle).find((c) => c.type === 'chunk' && c.facadeModuleId?.replace(/\\/g, '/').endsWith('/src/bootstrap.tsx'))
-        if (!entry || entry.type !== 'chunk') return []
+        const rootRe = /\/src\/(bootstrap\.tsx|mocks\/browser\.ts|mocks\/seed\.ts)$/
+        // Landing routes ('/' and '/nft/:id') are code-split by the router plugin; their component chunks are
+        // otherwise only discovered after the app boots.
+        const landingRe = /\/src\/routes\/(index|nft\.\$id)\.tsx\?tsr-split/
+        const norm = (p: string) => p.replace(/\\/g, '/')
+        const roots = Object.values(bundle).filter(
+          (c) => c.type === 'chunk' && (rootRe.test(norm(c.facadeModuleId ?? '')) || c.moduleIds.some((m) => landingRe.test(norm(m)))),
+        )
+        if (!roots.length) return []
         const files = new Set<string>()
         const css = new Set<string>()
         const visit = (fileName: string) => {
@@ -33,7 +40,7 @@ function preloadBootstrapGraph(): Plugin {
           for (const f of chunk.viteMetadata?.importedCss ?? []) css.add(f)
           for (const dep of chunk.imports) visit(dep)
         }
-        visit(entry.fileName)
+        for (const root of roots) visit(root.fileName)
         const base = ctx.server?.config.base ?? '/'
         // Skip what Vite already links for the entry chunk.
         const fresh = (f: string) => !html.includes(`${base}${f}`)

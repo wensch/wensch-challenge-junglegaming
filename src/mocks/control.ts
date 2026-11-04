@@ -6,7 +6,6 @@ import { resetLatencyState } from './latency'
 import { clearOrderTimers, settleOrder } from './orders'
 import { dropConnections, emitRaw } from './realtime'
 import { getScenarios, onScenarioChange, setScenarios } from './scenario-state'
-import { buildSeed } from './seed'
 import { clearLater } from './timers'
 
 declare global {
@@ -25,7 +24,7 @@ export const control: MockControl = {
     clearOrderTimers()
     clearLater()
     clearPersisted()
-    setDb(await buildSeed())
+    setDb(await (await import('./seed')).buildSeed())
     setScenarios(scenarios ?? ['default'])
   },
   setScenarios: (names) => setScenarios(names),

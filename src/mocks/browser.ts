@@ -6,7 +6,6 @@ import { API_BASE } from './http'
 import { resumePendingOrders } from './orders'
 import { realtimeHandlers } from './realtime'
 import { initScenarios } from './scenario-state'
-import { buildSeed } from './seed'
 
 export const worker = setupWorker(...restHandlers, ...realtimeHandlers)
 
@@ -16,9 +15,13 @@ export const worker = setupWorker(...restHandlers, ...realtimeHandlers)
  */
 export async function startMocks(): Promise<void> {
   initScenarios()
-  setDb(loadPersisted() ?? (await buildSeed()))
+  // The seed (lazy chunk, async password hashing) and the worker registration run in parallel; the DB is
+  // set before the app can fire its first request (the app is only imported after this function returns).
+  const persisted = loadPersisted()
+  const seeding = persisted ? Promise.resolve(persisted) : import('./seed').then((m) => m.buildSeed())
+  const [db] = await Promise.all([seeding, worker.start({ onUnhandledRequest: 'bypass', quiet: true })])
+  setDb(db)
   resumePendingOrders()
-  await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
   if (!(await ensureControlled())) {
     // A reload is in flight: never resolve, so the app does not boot in an uncontrolled document.
     await new Promise<never>(() => {})
