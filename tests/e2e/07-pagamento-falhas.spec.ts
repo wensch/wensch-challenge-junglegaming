@@ -67,6 +67,7 @@ test.describe('pagamento: falhas e recuperação', () => {
   })
 
   test('clique repetido: um único POST e um único pedido', async ({ page, boot }) => {
+    test.setTimeout(75_000)
     await boot('/', ['payment.hold', 'latency.slow'])
     const [a] = await pickEditions(page, 1)
     const session = await loginWithCart(page, [{ item: a!, quantity: 1 }])
