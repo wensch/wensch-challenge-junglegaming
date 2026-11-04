@@ -10,8 +10,9 @@
  */
 import { lazy, Suspense } from 'react'
 import { Link } from '@tanstack/react-router'
-import { LogIn, Search, ShoppingCart, User } from 'lucide-react'
+import { LogIn, ShoppingCart, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { HeaderSearch } from '@/features/catalog/HeaderSearch'
 import { useCart } from '@/queries/cart'
 import { useSession } from '@/queries/session'
 import { cn } from '@/lib/utils'
@@ -113,9 +114,7 @@ export function SiteHeader() {
           </nav>
 
           <div className="ml-auto flex h-[35px] shrink-0 items-center gap-4 lg:gap-6">
-            <Link to="/" hash="busca" aria-label="Buscar NFTs" className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
-              <Search aria-hidden="true" className="size-6" strokeWidth={1.75} />
-            </Link>
+            <HeaderSearch />
             <Link to="/cart" aria-label={cartLabel(cart.data?.itemCount ?? 0)} className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
               <CartBadgeIcon />
             </Link>
