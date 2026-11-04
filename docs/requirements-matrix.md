@@ -202,7 +202,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 | RT-4 | Tolerar duplicatas e eventos antigos sem regredir nem reaplicar efeitos | OK | `10` "eventos duplicados e antigos não reaplicam nem regridem o estado terminal"; `00-smoke` |
 | RT-5 | Reconciliação com REST após reconexão | OK | `10` "conexão cai com o pedido pendente: ao reconectar o estado é recuperado do REST" |
 | RT-6 | Eventos de sessão anterior não afetam outro usuário | OK | `00-smoke` (`foreign`), SEG passo 7 (`order.updated` de alice não chega a bob), `20-session-tabs` |
-| RT-7 | Listeners/subscriptions liberados no fim do ciclo de vida | parcial | Teardown desconecta o socket (`03`, `20-session-tabs`, SEG passo 4); REV leu `onEvent` e `watch` com cleanup. **Falta:** teste que prove a liberação dos listeners por componente |
+| RT-7 | Listeners/subscriptions liberados no fim do ciclo de vida | OK | `17-liberacao-listeners`: 10 ciclos catálogo → detalhe → carrinho → catálogo mantêm assinantes do QueryCache e observers no baseline e 1 conexão; logout e troca de usuário voltam ao footprint do visitante (1 socket por sessão, evento privado do usuário anterior não é aplicado); saída da tela do pedido volta ao baseline. Também `03`, `20-session-tabs`. Limitação: sem contadores diretos de listeners do socket (BUG-QA-013, baixa) |
 | RT-8 | Cenário: NFT no carrinho muda → UI informa e atualiza resumo → checkout bloqueia cotação desatualizada | OK | `05-cart` (resumo), `09` "preço muda com o checkout aberto: aviso, resumo novo e nova confirmação obrigatória" |
 | RT-9 | Queda de conexão com pedido pendente → recupera sem nova compra; confirmado/recusado terminais | OK | `10` (refresh e queda de conexão sem nova compra; recusado terminal) |
 
@@ -214,12 +214,12 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 | UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | `13-overflow` (telas públicas e da conta em 390/768/1440), `92-header-tablet`; FID. **Falta:** Confirmação e checkout em 768 sem medição |
 | UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | OK | `12-skeletons` (catálogo e detalhe, CLS, reduced-motion), `05-cart` "carrinho lento: skeleton do resumo sem CLS" |
 | A11Y-1 | Navegação por teclado e foco visível | OK | `11` (Tab, Enter, foco visível), `07-focus`, `qa-fundacao-shell` "teclado" |
-| A11Y-2 | Controle de foco em diálogos e drawers | parcial | `11` (menu da conta, Radix Select), `00-smoke` (menu mobile), `10` (foco no recibo). **Falta:** spec que prove foco preso e retorno no diálogo de revisão do pagamento (REV só leu o Radix) |
+| A11Y-2 | Controle de foco em diálogos e drawers | OK | `15-foco-dialogos`: diálogo de revisão do pagamento (foco dentro, Tab/Shift+Tab presos, Esc fecha e devolve o foco a "Confirmar compra" — BUG-QA-011 corrigido), Sheet do menu mobile (deslogado e logado) e menu da conta; também `11`, `00-smoke`, `10` |
 | A11Y-3 | Semântica, labels e erros associados | OK | `11` (`aria-describedby`, foco no primeiro inválido), `08`, `91/93/95` (axe sem crítico ou sério; verify a11y 28) |
 | A11Y-4 | Alternativas textuais | OK | axe `91/93/95` (verify) sobre catálogo, detalhe, conta e checkout |
 | A11Y-5 | Contraste e estados não dependentes só de cor | OK | axe (regra de contraste) no verify; erros com texto e `role=alert` |
 | A11Y-6 | Feedback acessível de mutations e tempo real | OK | `cart-announcer` (`05-cart`), `role=status` (`01`, `02`), toasts em região `aria-live`, anunciador do checkout (REV #10 baixa: repetição de mensagem idêntica) |
-| A11Y-7 | Sem overflow horizontal e sem perda com zoom | parcial | `13-overflow` em 390/768/1440 (telas públicas e da conta). **Falta:** zoom 200% e rolagem horizontal da Confirmação/checkout |
+| A11Y-7 | Sem overflow horizontal e sem perda com zoom | OK | `16-zoom-reflow` a 640 px (zoom 200%) e 320 px em início, detalhe, login, carrinho, pagamento, perfil e `/favorites`: sem rolagem horizontal e botões principais visíveis e clicáveis (BUG-QA-012 corrigido: rodapé a 320 px); `13-overflow` em 390/768/1440 |
 | UI-4 | Assets do arquivo usados; substituições e ajustes de a11y documentados | OK | ARCHITECTURE §13 (desvios D6 a D21); FID: "nenhum esconde defeito de layout" |
 
 ## Testes (§9)
@@ -238,7 +238,7 @@ Mapeamento grupo → spec na tabela do topo.
 | E2E-08 | Perfil, avatar, senha, carteiras com erros | OK | `08-perfil-carteiras` |
 | E2E-09 | Preço/disponibilidade via Socket.IO no checkout | OK | `09-realtime-checkout` |
 | E2E-10 | Duplicados/antigos, desconexão, pedido pendente | OK | `10-pedido-pendente` (asserções na UI: recibo, pendente, recusado); `00-smoke` lê também o `realtime-probe` (QA #3, aceitável) |
-| E2E-11 | Teclado, foco de diálogos, validação | parcial | `11`, `07-focus`, `08`. Falta o foco do diálogo de revisão (ver A11Y-2) |
+| E2E-11 | Teclado, foco de diálogos, validação | OK | `15-foco-dialogos` (foco de diálogos e primeiro campo inválido com `aria-invalid` e `aria-describedby` no pagamento e no perfil), `11`, `07-focus`, `08` |
 | E2E-12 | Skeletons em lentidão, falha e retry | OK | `12-skeletons`, `05-cart` (estados), `08` (estados) |
 | E2E-13 | Chromium desktop + mobile | OK | `playwright.config.ts` (desktop 1440 + Pixel 7 390); verify roda os dois |
 | E2E-14 | Regressão visual: início, detalhe, carrinho, pagamento; baselines versionadas | OK | `90-visual-catalog`, `96-visual-checkout`, `94-visual-conta` (22 visuais); baselines `win32` e Linux versionadas (22 imagens em `tests/__screenshots__/linux/`); CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens) |
