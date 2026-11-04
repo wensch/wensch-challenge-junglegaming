@@ -3,7 +3,8 @@
  * State is prepared through the real REST handlers; assertions observe the UI. Real-time changes are
  * produced with `window.__mock.updateNft` (REST state + `nft.updated` through socket.io-client).
  */
-import { expect, test } from '../fixtures'
+import { expect, test, USERS } from '../fixtures'
+import { submitLogin } from '../account-helpers'
 import { formatEth, mulQty, sub, add } from '../../src/lib/money'
 import { addToCart, loginWithCart, pickEditions, setGuestId, updateNft, type Seeded } from '../s3-helpers'
 
@@ -77,6 +78,8 @@ test.describe('carrinho', () => {
     await openGuestCart(page, boot, [{ item: a!, quantity: 1 }])
     const line = page.getByTestId('cart-line').first()
     await expect(line).toBeVisible()
+    await expect(page.getByTestId('cart-total')).toBeVisible()
+    await page.waitForLoadState('networkidle')
 
     await mock.setScenarios(['http.500.once'])
     await line.getByRole('button', { name: /Aumentar quantidade/ }).click()
@@ -180,11 +183,7 @@ test.describe('carrinho', () => {
     await addToCart(page, { guestId }, a!, 2)
     await page.goto('/login?redirect=/cart')
     await page.waitForFunction(() => !!window.__mock)
-    const email = page.getByLabel(/e-mail/i)
-    test.skip((await email.count()) === 0, 'tela de login pertence à S2; este caso roda depois do merge')
-    await email.fill('alice@example.test')
-    await page.getByLabel(/senha/i).first().fill('Senha@123')
-    await page.getByRole('button', { name: /^Entrar$/ }).click()
+    await submitLogin(page, USERS.alice)
     await page.waitForURL('**/cart')
     await expect(page.getByTestId('cart-line').first()).toContainText(a!.name)
     await expect(page.getByTestId('cart-line').first().getByTestId('line-quantity')).toHaveText('2')

@@ -82,7 +82,7 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
       <p className="hidden text-body-md font-bold text-text-accent lg:block">{formatEth(line.unitPrice)}</p>
 
       {/* Quantidade */}
-      <div className="flex shrink-0 flex-col items-center justify-center gap-1 self-center">
+      <div className="flex shrink-0 flex-col items-center justify-center gap-1 self-end pb-3 lg:self-center lg:pb-0">
         <div role="group" aria-label={`Quantidade de ${nft}`} className="flex items-center gap-3">
           <button
             type="button"
@@ -119,7 +119,7 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
         type="button"
         aria-label={`Remover ${nft} do carrinho`}
         onClick={() => onRemove(line)}
-        className="absolute top-2 right-2 grid size-6 place-items-center rounded-control text-text-accent outline-none hover:text-text-primary focus-visible:ring-3 focus-visible:ring-ring/60 lg:static"
+        className="absolute top-2 right-2 z-10 grid size-6 place-items-center rounded-control text-text-accent outline-none hover:text-text-primary focus-visible:ring-3 focus-visible:ring-ring/60 lg:static"
       >
         <Trash2 aria-hidden="true" className="size-5" strokeWidth={1.75} />
       </button>
