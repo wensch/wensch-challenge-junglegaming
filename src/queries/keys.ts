@@ -9,7 +9,7 @@
 import type { DataTag } from '@tanstack/react-query'
 import { nftListQuerySchema, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus } from '@/api/contracts'
 
-/** Attaches the cached data type to a key (getQueryData/setQueryData infer it; queryOptions check it). */
+/** Nominal brand: only `normalizeNftListQuery` produces a `NormalizedNftListQuery`. */
 declare const normalizedBrand: unique symbol
 /** `NftListQuery` that went through `normalizeNftListQuery` (defaults applied, lists canonical). */
 export type NormalizedNftListQuery = NftListQuery & { readonly [normalizedBrand]: true }
@@ -19,6 +19,7 @@ export function normalizeNftListQuery(query: Partial<NftListQuery>): NormalizedN
   return nftListQuerySchema.parse(query) as NormalizedNftListQuery
 }
 
+/** Attaches the cached data type to a key (getQueryData/setQueryData infer it; queryOptions check it). */
 const tag = <T>() => <const K extends readonly unknown[]>(key: K) => key as DataTag<K, T, ApiError>
 
 export const PRIVATE_PREFIX = 'u' as const

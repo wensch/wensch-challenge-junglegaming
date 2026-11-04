@@ -48,7 +48,11 @@ export const sessionQueryOptions = () =>
       }
       try {
         // Silent: an expired token at boot just means "visitor", not the re-authentication flow.
-        return await authApi.getSession({ signal, silentSessionExpiry: true, as: { token } })
+        const session = await authApi.getSession({ signal, silentSessionExpiry: true, as: { token } })
+        // The owner of this tab is now known: drafts of anyone else (e.g. a user whose session
+        // expired here before another user logged in) are dropped; this user's drafts are kept.
+        clearUserDrafts(session.user.id)
+        return session
       } catch (e) {
         if (isApiError(e) && (e.is('UNAUTHENTICATED') || e.is('SESSION_EXPIRED'))) {
           // Drop only the token that was checked (another tab may have stored a new one meanwhile).
@@ -106,9 +110,12 @@ export async function teardownSession(queryClient: QueryClient, reason: Teardown
   if (reason !== 'external' && (!token || getToken() === token)) clearStoredSession()
   queryClient.setQueryData(sessionQueryOptions().queryKey, null)
 
+  // Kept drafts belong to the user being torn down only. Without a known user (no session in cache)
+  // nothing is removed here: the next owner is resolved by GET /session or establishSession, which
+  // drop the drafts of anyone else.
   const keepDrafts = reason === 'expired' || reason === 'unauthenticated' || (reason === 'external' && getToken() !== null)
-  if (keepDrafts && userId) clearUserDrafts(userId)
-  else clearUserDrafts()
+  if (!keepDrafts) clearUserDrafts()
+  else if (userId) clearUserDrafts(userId)
   sessionEndedByExpiry = reason === 'expired'
 
   if (reason === 'logout' && token) {
@@ -161,8 +168,11 @@ export function syncSessionWithStorage(queryClient: QueryClient): Promise<Sessio
     if (cached) await teardownSession(queryClient, 'external')
     if (!stored) return null
     const next = await queryClient.fetchQuery({ ...sessionQueryOptions(), staleTime: 0 }).catch(() => null)
-    // Drafts kept by the external teardown belong to the previous user: drop them unless it is the same one.
-    if (cached) clearUserDrafts(next?.user.id)
+    // Drafts left in this tab (kept by the external teardown, or by an earlier `expired` teardown when
+    // `cached` is already null) belong to the previous user: drop them unless it is the same one.
+    // With no resolved owner, drop them only if they were kept by the teardown just above.
+    if (next) clearUserDrafts(next.user.id)
+    else if (cached) clearUserDrafts()
     return next
   }
   const next = syncChain.then(run, run)
