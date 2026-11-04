@@ -55,3 +55,24 @@ Formato: id · severidade · slice · passos · esperado · obtido · evidência
 ## BUG-QA-010 · baixa · reteste final · Sheet do menu mobile não tem "Lista de interesse"
 - Passos: 390 px, logado, "Abrir menu". Esperado: link para `/favorites` como no dropdown desktop. Obtido: só Perfil/Carteiras; a página é alcançável pela aba "Favoritos" da barra inferior e pelo rodapé.
 - Status: aberto (baixa, opcional). O coração do card no catálogo é `md:hidden` por desenho (desktop favorita no detalhe).
+
+## BUG-QA-011 · média · a11y · Revisão do pagamento não devolve o foco a "Confirmar compra" ao fechar
+- Passos: logado com item no carrinho, `/checkout`, conectar carteira, focar "Confirmar compra" e pressionar Enter (abre "Revisar pedido"), pressionar Esc. Idêntico em desktop e mobile 390.
+- Esperado (WCAG 2.4.3 / padrão de diálogo): diálogo fecha e o foco volta ao botão que o abriu.
+- Obtido: diálogo fecha e `document.activeElement` é `<body>` (o botão continua conectado e habilitado; registro de focusin/focusout mostra só `focusout` de "Voltar e editar", sem nenhum `focusin`). Hipótese: o Radix guardou `body` como elemento anterior porque o botão perdeu o foco na abertura (o `Button` usa `disabled` ligado a `quote`; reabertura dispara `quote.refetch()`), ou o `CheckoutForm` não fornece `onCloseAutoFocus` apontando para o botão. Correção sugerida: `onCloseAutoFocus` do `ReviewDialog` focando o botão de submit via ref.
+- Evidência: `tests/e2e/15-foco-dialogos.spec.ts` (`test.fixme`, BUG-QA-011); armadilha de foco, Tab/Shift+Tab e Esc passam no teste irmão.
+- Status: aberto.
+
+## BUG-QA-012 · média · a11y · Reflow a 320 CSS px: o rodapé gera rolagem horizontal em todas as telas (WCAG 1.4.10)
+- Passos: viewport 320x568; abrir `/`, `/nft/nft_001`, `/login`, `/cart`, `/checkout`, `/profile`, `/favorites`.
+- Esperado: `document.documentElement.scrollWidth <= clientWidth` (sem rolagem horizontal).
+- Obtido: `scrollWidth` = 360 em todas. Causa comum: `<section class="grid grid-cols-[3rem_1fr] gap-x-4 md:block lg:pr-4">` do rodapé (`SiteFooter`) mede 312 px a partir de x=48 (direita em 360); o texto interno (h2/p com 248 px) não encolhe. Em emulação mobile o viewport de layout cresce para 360 e a barra inferior fixa passa a ser mais larga que 320 (efeito derivado). Em 640 px (zoom 200% de 1280) não há overflow; o conteúdo principal (fora do rodapé) cabe em 320 e os botões de ação ficam visíveis e clicáveis no desktop.
+- Correção sugerida: `min-w-0` nas colunas `1fr` e quebra de linha nos textos do rodapé (ou `grid-cols-[3rem_minmax(0,1fr)]`).
+- Evidência: `tests/e2e/16-zoom-reflow.spec.ts` (`test.fixme`, BUG-QA-012); sondagem por elemento descrita acima.
+- Status: aberto.
+
+## BUG-QA-013 · baixa · realtime · Sem como medir listeners do socket e conexões do servidor simulado
+- Esperado (RT-7): poder afirmar que, após logout/troca/navegação, os listeners do socket e as conexões abertas voltam ao baseline.
+- Obtido: o app expõe só `data-connections` (connects do socket atual, zera no stop), `data-status`, `data-user` e `data-applied`; `window.__mock` não expõe a contagem de conexões abertas nem `socket.listeners`. O spec `17-liberacao-listeners.spec.ts` mede o que existe (assinantes do QueryCache, que incluem a assinatura do reconciler; observers; um único evento aplicado exatamente uma vez; evento do usuário anterior não aplicado), mas sockets zumbis só seriam detectados indiretamente.
+- Faltaria expor: `window.__mock.connectionCount()` (conexões abertas no `Set` de `src/mocks/realtime.ts`) e, no `realtime-probe`, `data-listeners` (soma de `socket.listeners` dos eventos de `EVENT_TYPES`) e `data-event-subscribers` (`eventListeners.size`).
+- Status: aberto (baixa, opcional).
