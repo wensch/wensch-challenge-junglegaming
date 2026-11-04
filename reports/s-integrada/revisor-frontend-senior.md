@@ -28,3 +28,56 @@ Pontos verificados e OK: nenhum `any`, `@ts-*` ou `eslint-disable` no diff. Os c
 4. #4 implementador-conta e implementador-checkout: lançar `ApiError` em vez de `Error`.
 5. #5 implementador-checkout (com implementador-conta): deduplicar `useWallets`, os hooks de credencial, `Field`, o mapeador de erros e as mensagens de issue.
 6. #6 a #12: quando houver uma volta.
+
+---
+
+# revisor-frontend-senior — s-integrada — reteste final — 2026-11-04
+Veredito: APPROVED
+
+Escopo: `git diff c268276..HEAD -- src tests vite.config.ts vercel.json public` (HEAD = main). Sem build, preview ou verify, como pedido; usei o preview já de pé em `http://localhost:4173`.
+
+Verificações executadas:
+- `npm run typecheck` e `npm run lint`: ambos limpos, sem erro nem aviso. O aviso `react-hooks/incompatible-library` (#7) sumiu.
+- `BASE_URL=http://localhost:4173 npx playwright test tests/e2e/{04-favorites,04b-favorites-page,07-pagamento-falhas,10-pedido-pendente,12-skeletons,20-session-tabs}.spec.ts --project=desktop --project=mobile --workers=1 --retries=0`: **72 passed (6.0m)**.
+- As mesmas specs com os workers padrão deram 1 falha e 8 flaky; com `--workers=2`, 3 falhas e 2 flaky (07:69, 10:33, 10:51). Todas passam em série e no CI. Atribuo isso à carga desta máquina, compartilhada com outros agentes, e não a regressão (ver R5).
+- Grafo do bundle (`dist/assets`): o chunk `browser-*.js` importa estaticamente só `contracts`, `esm`, `fees`, `money` e `preload-helper`. `engine.io` fica em `createLucideIcon-*.js`, que só está no grafo de `bootstrap`. `seed-*.js` é `import()` dinâmico a partir de `browser`.
+
+## Achados da rodada 1
+| # r1 | Status | Evidência |
+|---|---|---|
+| 1 | corrigido | `src/features/order/OrderPage.tsx:53` `if (readAttempt(user.userId)?.orderId === orderId) clearAttempt(...)`. Além disso, `CheckoutForm.tsx:220` grava `recordAttemptOrder` também em `IDEMPOTENCY_CONFLICT`. A spec `07-pagamento-falhas.spec.ts:111` prova o caso: abre um pedido terminal antigo, a tentativa sobrevive e o replay com a mesma chave devolve o mesmo pedido, sem criar um segundo. Ela falharia com o código antigo. |
+| 2 | corrigido | `Receipt.tsx:57,63` (`headingRef` no `h1#receipt-title`); `OrderPage.tsx:94` repassa o ref; `usePageHeadingFocus(order.data?.status)` (l.45) refoca quando o status muda. Spec `10-pedido-pendente.spec.ts:51` (`toBeFocused`). |
+| 3 | corrigido (o teste é fraco, ver R1) | `src/queries/favorites.ts:94` `scope: { id: 'favorite:' + scopeId }`; `FavoriteButton.tsx:23` e `FavoritesPage.tsx` usam o mesmo `userId:nftId`. |
+| 4 | corrigido | `ownerChangedError()` em `queries/account.ts:101`, `queries/cart-mutations.ts:27` e `features/checkout/wallets.ts:39,50`; `grep -rn "throw new Error" src/queries src/features` → vazio. |
+| 5 | adiado (de propósito) | — |
+| 6, 7 | corrigido | `CheckoutForm.tsx`: `useWatch` e `form.subscribe(...)` com `credentialRef`; deps `[form]`. |
+| 8 | corrigido | `queryKeys.user(id).orders()` no ramo TRANSIENT. |
+| 9 | corrigido | `src/queries/session.ts:217` e `:223`: `getToken() !== session.token` depois do `mergeCart` e depois do `cancelQueries`, antes do `setQueryData`. |
+| 10 | corrigido | `CheckoutPage.tsx` `announce` alterna um NBSP no fim para a região viva repetir mensagens iguais. |
+| 11 | aberto (baixa) | Fora do delta. |
+| 12 | corrigido | `FavoriteButton.tsx:59` rótulo fixo "Favoritar" com `aria-pressed` (l.36). |
+
+## Achados novos
+| # | Severidade | Descrição | Evidência | Correção sugerida |
+|---|---|---|---|---|
+| R1 | média (teste) | "Cliques rápidos chegam em ordem e o estado final é o do último clique" não prova a serialização: o teste passaria também SEM o `scope`. O evento `request` registra a ordem de **disparo**, que já é a ordem dos cliques, e `latency.slow` é fixo (`Math.max(DEFAULT, SLOW)`, e a latência variável é ignorada quando `slow` está ativo), então não existe latência que reordene as respostas. `done.length === 3` também não discrimina. | `tests/e2e/04-favorites.spec.ts:65-91`; `src/mocks/latency.ts:36-42` | Gravar uma sequência intercalada (`req:PUT`, `res:PUT`, `req:DELETE`, …) e exigir que cada request comece depois da resposta anterior, ou usar `latency.variable` (latência por request) e conferir o estado final no servidor. O código está certo; falta só a guarda contra regressão. |
+| R2 | baixa | `20-session-tabs` "token vencido": `sair.click(...).catch(() => undefined)` engole qualquer falha do clique. Quando o GET de fundo ganha a corrida, a página já está em `/` e o resultado vale de forma trivial, então o caminho `POST /auth/logout` → 401 → logout silencioso só é exercitado em cerca de 50% das execuções. Não esconde uma regressão de vez (um redirecionamento para `?reason=expired` no clique continua sendo pego quando o clique ganha), mas reduz a cobertura desse caminho à metade. É a única spec que fixa "Sair com token vencido vai para o início". | `tests/e2e/20-session-tabs.spec.ts:119-128`; `grep -rn "auth/logout" tests/e2e` (só chamadas diretas em `mocks.spec.ts`) | Limitar o `catch` aos erros de elemento destacado ou oculto e, quando houver `POST /auth/logout` (`page.waitForRequest`), conferir a resposta 401 e o resultado. Ou tornar o caminho determinístico: pôr o cenário só no endpoint de logout, ou suspender os refetches de fundo antes do clique. (O `waitForTimeout(800)` é antigo.) |
+| R3 | baixa | Spec nova com `waitForTimeout(300)` para esvaziar as entradas de `layout-shift`. | `tests/e2e/12-skeletons.spec.ts:72` | Esperar dois `requestAnimationFrame` via `page.evaluate`, ou `expect.poll` até `__cls` estabilizar. |
+| R4 | baixa | `FavoritesPage`: se um refetch de fundo falha com dados em cache, a lista continua na tela, mas a contagem (`role="status"`) some (`data && !isError ? count : ''`) e nenhum aviso aparece. | `src/features/nft/FavoritesPage.tsx` (parágrafo `favorites-count`) | Mostrar a contagem sempre que houver `data` e exibir um aviso discreto com "Tentar novamente" quando `isError && data`. |
+| R5 | baixa (ambiente) | As specs com `latency.slow`/`payment.hold` falham ou ficam flaky com workers em paralelo nesta máquina, por timeouts sob carga (07:69 já pediu `setTimeout(75_000)`). Em série e no CI ficam verdes. | Execuções acima (padrão: 1 falha e 8 flaky; `--workers=2`: 3 falhas; `--workers=1`: 72/72) | Acompanhar no CI. Se aparecer lá, reduzir a latência lenta nos testes ou usar `page.clock`. |
+
+## Código novo revisado sem achado
+- **Lista de interesse** (`routes/_authed/favorites.tsx`, `features/nft/FavoritesPage.tsx`):
+  - É protegida por `_authed` (spec do visitante → `/login?`) e tem chunk próprio (`favorites-*.js`).
+  - A chave `['u', userId, 'favorites']` vem de `queryKeys.user(...).favorites()`. Sem dono, a query fica numa chave não privada com `skipToken`. O `signal` é repassado via `ownedQueryFn`.
+  - Remoção otimista: `onMutate` cancela, tira o snapshot e escreve só se `isCurrentOwner`. O rollback roda mesmo com o item desmontado, porque os callbacks estão nas opções do `useMutation` e não no `mutate`. Com várias remoções em voo, o rollback reverte só aquele NFT e só a última remoção reinvalida.
+  - Foco: vai para o `h1` depois da remoção.
+  - Estados: skeleton com a geometria do card, vazio com chamada ao catálogo, erro com retry e `aria-busy` no refetch.
+  - `nft.updated`: `reconcile.ts` `patchFavorites` por predicado `['u', *, 'favorites']`, com guarda de `version`. A spec emite pelo `mock.emit` (socket), sem tocar o cache.
+- **modulepreload** (`vite.config.ts`): `modulepreload` só baixa e compila, nunca avalia. A ordem de execução continua definida pelos `await import()` de `main.tsx` (MSW → `startMocks()` → `bootstrap`). O grafo estático de `browser` não contém `engine.io`. A regra do spike continua valendo.
+- **seed preguiçoso** (`mocks/browser.ts`):
+  - `setDb(db)` acontece depois de `Promise.all([seeding, worker.start()])` e antes de `resumePendingOrders`, `ensureControlled` (o ping não usa o DB) e do retorno de `startMocks`. O app só é importado depois disso, então nenhum request da aplicação chega antes do DB.
+  - Persistência: `loadPersisted()` tem prioridade. Determinismo: `buildSeed` não mudou. `NETWORK_FEES` foi movido para `fees.ts` para o seed poder ficar em chunk preguiçoso. `control.reset` também usa `import('./seed')`.
+- **`ensureControlled`** (não mudou neste delta): sonda até 3 s, remove os listeners e o timer, recarrega uma única vez com flag em `sessionStorage` (sem loop) e segue sem controle se o storage estiver indisponível.
+- **Skeleton do Detalhe**: reserva espaço para as abas e para "Mais desta coleção"; spec com CLS < 0,05 e rodapé estável (< 40 px).
+- **`favicon.ico`/`robots.txt`**: arquivos em `public/`. `vercel.json` não mudou neste delta; na Vercel, o filesystem é servido antes dos `rewrites`, então os estáticos não caem no SPA. Spec 04b:73 verifica o `content-type` e o conteúdo.

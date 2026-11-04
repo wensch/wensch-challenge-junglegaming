@@ -68,22 +68,24 @@ test.describe('favoritos', () => {
     await page.goto('/nft/nft_003')
     const button = page.getByRole('button', { name: /^Favorit/ }).first()
     await expect(button).toBeEnabled()
-    const methods: string[] = []
-    const done: string[] = []
+    // One timeline of requests (">") and responses ("<"): serial mutations never overlap, so each request
+    // leaves only after the previous response arrived. Without the mutation `scope` all three requests
+    // leave before the first response (">PUT", ">DELETE", ">PUT", ...) and this assertion fails.
+    const timeline: string[] = []
+    const isWrite = (m: string, url: string) => /\/api\/favorites\//.test(url) && m !== 'GET'
     page.on('request', (r) => {
-      if (/\/api\/favorites\//.test(r.url()) && r.method() !== 'GET') methods.push(r.method())
+      if (isWrite(r.method(), r.url())) timeline.push(`>${r.method()}`)
     })
     page.on('response', (r) => {
-      if (/\/api\/favorites\//.test(r.url()) && r.request().method() !== 'GET') done.push(r.request().method())
+      if (isWrite(r.request().method(), r.url())) timeline.push(`<${r.request().method()}`)
     })
     await mock.setScenarios(['latency.slow'])
-    // nft_003 starts unfavorited: add -> remove -> add. Serial mutations keep this exact order.
+    // nft_003 starts unfavorited: add -> remove -> add.
     await button.dispatchEvent('click')
     await button.dispatchEvent('click')
     await button.dispatchEvent('click')
     await expect(button).toHaveAttribute('aria-pressed', 'true')
-    await expect.poll(() => methods, { timeout: 20_000 }).toEqual(['PUT', 'DELETE', 'PUT'])
-    await expect.poll(() => done.length, { timeout: 20_000 }).toBe(3)
+    await expect.poll(() => timeline, { timeout: 20_000 }).toEqual(['>PUT', '<PUT', '>DELETE', '<DELETE', '>PUT', '<PUT'])
     await mock.setScenarios(['default'])
     await page.reload()
     await expect(page.getByRole('button', { name: /^Favorit/ }).first()).toBeEnabled()
