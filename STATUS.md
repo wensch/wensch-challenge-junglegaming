@@ -68,12 +68,16 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 ## Fase 2 — slices
 | Slice | Agente | Porta | Status |
 |---|---|---|---|
-| S1 catálogo | implementador-catalogo | PW_PORT 4181 | volta 1 em andamento |
-| S2 conta | implementador-conta | PW_PORT 4182 | volta 1 em andamento |
-| S3 checkout | implementador-checkout | PW_PORT 4183 | volta 1 em andamento |
+| S1 catálogo | implementador-catalogo | PW_PORT 4181 | volta 1 retomada após limite (14:05) |
+| S2 conta | implementador-conta | PW_PORT 4182 | volta 1 retomada após limite (14:05) |
+| S3 checkout | implementador-checkout | PW_PORT 4183 | **em espera** (limite de 2 agentes em paralelo); worktree com 1 commit; retomar quando S1 ou S2 entregar |
+
+## Orçamento de uso
+Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
+CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 
 ## Próximo passo
-Integrar cada slice ao entregar (verify verde), rodar gates por slice.
+Integrar cada slice ao entregar (verify verde) e rodar o ciclo enxuto.
 
 Antes de abrir as slices (revisor): favorites.ts fica com a S1, cart-mutations.ts/useAddToCart com a S3 (cart.ts congelado), SiteHeader por bloco (S1 busca, S3 badge, S2 AccountDropdown), routeTree.gen.ts regenerado no merge.
 
