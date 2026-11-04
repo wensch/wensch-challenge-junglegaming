@@ -59,7 +59,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](reports/fundacao/seguranca.md) |
 | Endurecimento pré-slices (F1 boot MSW sem controller) | plataforma-mocks | em andamento |
 | Endurecimento pré-slices (F1 teste, F2 sessão fantasma, #13, F3, F7) | arquiteto-contratos | em andamento |
-| Matriz de requisitos | auditor-requisitos | em andamento |
+| Matriz de requisitos | auditor-requisitos | **OK** — 39 OK · 75 parcial · 33 pendente; nenhum eliminatório violado · [relatório](reports/fundacao/auditor-requisitos.md) |
 | Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | **OK** — verify GREEN (e2e 199 ✓); merge 998f27c |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
