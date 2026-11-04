@@ -7,6 +7,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, isMobileProject, loginViaApi, test, USERS } from '../fixtures'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
 
 const PAST_TTL = '08:05:00'
 
@@ -116,5 +117,25 @@ test.describe('expiração natural da sessão (relógio local)', () => {
       .toEqual({ auth: `Bearer ${session.token}`, status: 401, code: 'SESSION_EXPIRED' })
 
     await expectSilentExpiry(page, session.user.displayName, draftKey, isMobileProject(info.project.name))
+  })
+
+  test('F5: POST /orders com a sessão vencida no servidor (session.expire-on-checkout) cria nenhum pedido e retoma o checkout', async ({ page, boot }) => {
+    await boot('/', ['session.expire-on-checkout'])
+    const [a] = await pickEditions(page, 1)
+    const session = await loginWithCart(page, [{ item: a!, quantity: 1 }])
+    await page.goto('/checkout')
+    await connectWallet(page)
+    const posts: number[] = []
+    page.on('response', (r) => {
+      if (new URL(r.url()).pathname === '/api/orders' && r.request().method() === 'POST') posts.push(r.status())
+    })
+    await sendOrder(page)
+    await page.waitForURL(/\/login\?/)
+    const url = new URL(page.url())
+    expect(url.searchParams.get('reason')).toBe('expired')
+    expect(url.searchParams.get('redirect')).toBe('/checkout')
+    expect(posts).toEqual([401])
+    expect(await page.evaluate(() => localStorage.getItem('kurio.session'))).toBeNull()
+    expect(await page.evaluate((id) => sessionStorage.getItem(`kurio.u.${id}.checkout`), session.user.id)).not.toBeNull()
   })
 })

@@ -53,7 +53,7 @@ test.describe('pedido pendente', () => {
     const { orderId } = await pendingOrder(page, boot)
     const probe = page.getByTestId('realtime-probe')
     await expect(probe).toHaveAttribute('data-status', 'connected')
-    const connections = Number(await probe.getAttribute('data-connections'))
+    const connections = parseInt((await probe.getAttribute('data-connections')) ?? '0', 10)
 
     // The simulation confirms WHILE the socket is down: the event is lost; REST has the truth.
     await mock.drop()
