@@ -42,8 +42,7 @@ test.describe('foco em diálogos', () => {
     await expect(dialog).toBeHidden()
   })
 
-  // BUG-QA-011: ao fechar a revisão o foco vai para <body> em vez de voltar a "Confirmar compra".
-  test.fixme('revisão do pagamento: Esc devolve o foco a "Confirmar compra" (BUG-QA-011)', async ({ page, boot }) => {
+  test('revisão do pagamento: Esc devolve o foco a "Confirmar compra" (BUG-QA-011)', async ({ page, boot }) => {
     const { trigger, dialog } = await openReview(page, boot)
     await page.keyboard.press('Escape')
     await expect(dialog).toBeHidden()

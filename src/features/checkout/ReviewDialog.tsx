@@ -3,6 +3,7 @@
  * "Enviar pedido" is the only action that creates the order. While the quote changed (event or
  * `409 QUOTE_STALE`) the diff is shown and sending stays disabled until the user accepts the new values.
  */
+import type { RefObject } from 'react'
 import type { CartLine, Quote, QuoteChange, Wallet } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -15,6 +16,8 @@ import { StaleChanges } from './StaleChanges'
 
 export interface ReviewDialogProps {
   open: boolean
+  /** Button that opened the dialog; receives focus on close while it is still mounted and enabled. */
+  returnFocusRef?: RefObject<HTMLElement | null>
   onOpenChange: (open: boolean) => void
   values: CheckoutFormValues | null
   wallet: Wallet | undefined
@@ -32,13 +35,20 @@ export interface ReviewDialogProps {
   blockedReasons: string[]
 }
 
-export function ReviewDialog({ open, onOpenChange, values, wallet, quote, refreshing, cartLines, changes, needsReconfirm, onAccept, onSubmit, submitting, error, blockedReasons }: ReviewDialogProps) {
+export function ReviewDialog({ open, returnFocusRef, onOpenChange, values, wallet, quote, refreshing, cartLines, changes, needsReconfirm, onAccept, onSubmit, submitting, error, blockedReasons }: ReviewDialogProps) {
   const canSend = !!quote && quote.orderable && !needsReconfirm && !refreshing && !submitting
   return (
     <Dialog open={open} onOpenChange={(next) => (submitting ? undefined : onOpenChange(next))}>
       <DialogContent
         className="max-h-[calc(100dvh-2rem)] gap-5 overflow-y-auto border border-line-soft bg-surface-card p-6 sm:max-w-[560px]"
         onInteractOutside={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => {
+          const el = returnFocusRef?.current
+          if (el && el.isConnected && !(el as HTMLButtonElement).disabled) {
+            e.preventDefault()
+            el.focus()
+          }
+        }}
         data-testid="review-dialog"
       >
         <DialogHeader>

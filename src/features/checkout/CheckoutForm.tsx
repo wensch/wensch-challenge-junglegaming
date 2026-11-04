@@ -133,6 +133,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
   const changes = !quote.data || !accepted ? [] : (staleChanges ?? diffQuotes(accepted, quote.data))
 
   const [reviewOpen, setReviewOpen] = useState(false)
+  const confirmRef = useRef<HTMLButtonElement>(null)
   const [reviewValues, setReviewValues] = useState<CheckoutFormValues | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const blocked = issueTexts(quote.data)
@@ -346,13 +347,14 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
           onMessage={onAnnounce}
         />
 
-        <Button type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold">
+        <Button ref={confirmRef} type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold">
           Confirmar compra
         </Button>
       </div>
 
       <ReviewDialog
         open={reviewOpen}
+        returnFocusRef={confirmRef}
         onOpenChange={setReviewOpen}
         values={reviewValues}
         wallet={wallets.find((w) => w.id === reviewValues?.walletId)}
