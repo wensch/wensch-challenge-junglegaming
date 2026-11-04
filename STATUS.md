@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 2 — slices S1 catálogo ‖ S2 conta ‖ S3 checkout em paralelo. Fase 1 (`fundacao`) **CONCLUÍDA**.
+**Fase atual:** Fase 4/5 — Lighthouse medido, README pronto, checkout limpo em execução. Fases 1 e 2 **CONCLUÍDAS**; slices S1/S2/S3 integradas.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -78,7 +78,11 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Push + CI | orquestrador | main em fd8f5b5 no GitHub; produção serve fd8f5b5 (READY); baselines Linux: 22 (a1e3bbf, local) |
 | Matriz de requisitos | auditor-requisitos | 121 OK · 18 parcial · 8 pendente ([rel](reports/s-integrada/auditor-requisitos.md)) |
 | README + ARCHITECTURE final | release | **OK** — 63fe476 (README com declaração de IA) |
-| Lighthouse | a11y-performance | em andamento (checkout principal; evitar CPU pesada durante a medição) |
+| Lighthouse | a11y-performance + orquestrador | **medido** (3×, mediana): A11y 100, BP 100, SEO 100, CLS 0 em todas; Perf desktop 97/98; **Perf mobile 70/68 (meta 90) — justificada** (528 KB gz de JS, 1/3 = mocks exigidos; LCP observado 0,65 s, simulado 5,8 s) · [lighthouse/](lighthouse/README.md) |
+| Correções de UI/perf (CLS Detalhe, favicon/robots, ícones, boot preload) + página Lista de interesse | implementador-catalogo, plataforma-mocks | **OK** — merges 9b18084 e d121337 |
+| Teste instável corrigido | orquestrador | `20-session-tabs` "token vencido" falhava 24/50 (corrida entre dois caminhos corretos); agora fixa o resultado: 50/50 |
+| Push | orquestrador | origin/main = 9b0f011 |
+| Checkout limpo (clone do GitHub → npm ci → verify) | orquestrador | em execução |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
@@ -94,7 +98,7 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
 ## Próximo passo
-1. Lighthouse: tabela de medianas; correções de performance em src/vite.config/vercel.json por implementador.
-2. Página `/favorites` (hoje "Em construção").
-3. Teste de checkout limpo (`git clone` → `npm ci` → `verify`), push final, deploy == HEAD, smoke em produção, matriz fechada.
-4. Pendências baixas (se sobrar orçamento): dedupe entre slices, BUG-QA-009, baixas de segurança.
+1. Resultado do checkout limpo; CI do push; deploy == HEAD (Vercel) e smoke em produção.
+2. Revisão final do delta (revisor sênior + QA) sobre Lista de interesse e perf.
+3. Auditor fecha a matriz (Lighthouse, README, baselines Linux, DEL-2/7).
+4. Se sobrar orçamento: dedupe entre slices, BUG-QA-009, baixas de segurança.
