@@ -23,6 +23,7 @@ import {
   realtimeEventSchema,
   resourceKey,
   type Cart,
+  type FavoritesResponse,
   type FeaturedResponse,
   type NftDetail,
   type NftListResponse,
@@ -111,12 +112,18 @@ function patchFeatured(f: FeaturedResponse, e: NftUpdatedEvent): FeaturedRespons
   return hero.every((h, i) => h === f.hero[i]) && spotlight === f.spotlight ? f : { hero, spotlight }
 }
 
+function patchFavorites(fav: FavoritesResponse, e: NftUpdatedEvent): FavoritesResponse {
+  if (!fav.items.some((i) => i.id === e.data.nftId && i.version < e.version)) return fav
+  return { ...fav, items: fav.items.map((i) => patchSummary(i, e)) }
+}
+
 function patchOrder(order: Order, e: OrderUpdatedEvent): Order {
   if (order.id !== e.data.orderId || isTerminalOrderStatus(order.status) || order.version >= e.version) return order
   return { ...order, status: e.data.status, transaction: e.data.transaction, declineReason: e.data.declineReason, updatedAt: e.data.updatedAt, version: e.version }
 }
 
 const isNftKey = (key: readonly unknown[], part: 'detail' | 'list' | 'featured') => key[0] === 'nfts' && key[1] === part
+const isFavoritesKey = (key: readonly unknown[]) => key[0] === PRIVATE_PREFIX && key[2] === 'favorites'
 const isOrderDetailKey = (key: readonly unknown[]) => key[0] === PRIVATE_PREFIX && key[2] === 'orders' && key[3] === 'detail'
 
 export function createReconciler({ queryClient, getUserId, maxSeen = 500, log = () => {} }: ReconcilerOptions): Reconciler {
@@ -145,6 +152,8 @@ export function createReconciler({ queryClient, getUserId, maxSeen = 500, log = 
     queryClient.setQueryData(queryKeys.nfts.detail(e.data.nftId), (old) => (old ? patchDetail(old, e) : old))
     queryClient.setQueriesData<NftListResponse>({ queryKey: queryKeys.nfts.lists() }, (old) => (old ? patchList(old, e) : old))
     queryClient.setQueryData(queryKeys.nfts.featured(), (old) => (old ? patchFeatured(old, e) : old))
+    // The favorites list stores summaries too (`['u', userId, 'favorites']`): price/stock change there as well.
+    queryClient.setQueriesData<FavoritesResponse>({ predicate: (q) => isFavoritesKey(q.queryKey) }, (old) => (old ? patchFavorites(old, e) : old))
     // Cart lines and quotes are server-computed: refetch them if this NFT is in a cached cart.
     for (const [key, cart] of queryClient.getQueriesData<Cart>({ predicate: (q) => isCartKey(q.queryKey) })) {
       if (!cart?.lines.some((l) => l.nftId === e.data.nftId)) continue
