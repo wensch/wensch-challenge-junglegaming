@@ -31,6 +31,9 @@ export function useAddToCart() {
       if (!isCurrentOwner(owner)) return
       const keys = queryKeys.owner(ownerKey(owner))
       queryClient.setQueryData(keys.cart(), cart)
+      // A first-ever visitor cart is fetched in parallel (the guest id appears before the POST); a late
+      // empty GET must not win, so the cart is re-read once the item is on the server.
+      void queryClient.invalidateQueries({ queryKey: keys.cart() })
       void queryClient.invalidateQueries({ queryKey: keys.quotes() })
     },
   })
