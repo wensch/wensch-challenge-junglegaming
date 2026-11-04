@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "@hookform/resolvers": "^7.0.2",
     "@mswjs/socket.io-binding": "^0.2.0",
     "@tanstack/react-query": "^5.105.3",
     "@tanstack/react-router": "^1.170.46",
@@ -36,6 +37,7 @@
     "radix-ui": "^1.8.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "react-hook-form": "^7.91.0",
     "socket.io-client": "^4.8.4",
     "sonner": "^2.0.8",
     "tailwind-merge": "^3.7.0",
