@@ -64,30 +64,39 @@ export function ConfirmedReceipt({ order, headingRef }: { order: Order; headingR
           Seus NFTs agora estão na sua carteira
         </h1>
       </header>
-      <dl className="grid grid-cols-2 gap-4 border-b border-line-soft px-6 py-4 text-caption sm:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-3 border-b border-line-soft px-9 py-4 text-caption sm:flex sm:h-[65px] sm:items-center sm:justify-between sm:gap-0 sm:py-0 sm:[&>div+div]:relative sm:[&>div+div]:before:absolute sm:[&>div+div]:before:-left-[9px] sm:[&>div+div]:before:top-[3px] sm:[&>div+div]:before:h-[31px] sm:[&>div+div]:before:w-px sm:[&>div+div]:before:bg-brand sm:[&>div+div]:before:content-['']">
         <div>
-          <dt className="font-bold text-brand-secondary">ID da transação</dt>
-          <dd data-testid="receipt-hash" title={tx?.hash} className="text-text-secondary">
+          <dt className="leading-4 font-bold text-brand-secondary">ID da transação</dt>
+          <dd data-testid="receipt-hash" title={tx?.hash} className="leading-5 text-text-secondary">
             {tx ? shortHash(tx.hash) : '—'}
           </dd>
         </div>
         <div>
-          <dt className="text-brand-secondary">Data</dt>
-          <dd className="text-text-secondary">{tx ? formatReceiptDate(tx.confirmedAt) : '—'}</dd>
+          <dt className="leading-4 text-brand-secondary">Data</dt>
+          <dd className="leading-5 text-text-secondary">{tx ? formatReceiptDate(tx.confirmedAt) : '—'}</dd>
         </div>
         <div>
-          <dt className="text-brand-secondary">Total</dt>
-          <dd className="text-text-secondary">{formatEth(receipt.total)}</dd>
+          <dt className="leading-4 text-brand-secondary">Total</dt>
+          <dd className="leading-5 text-text-secondary">{formatEth(receipt.total)}</dd>
         </div>
         <div>
-          <dt className="font-bold text-brand-secondary">Carteira</dt>
-          <dd className="text-text-secondary">{WALLET_TYPE_LABELS[receipt.wallet.type]}</dd>
+          <dt className="leading-4 font-bold text-brand-secondary">Carteira</dt>
+          <dd className="leading-5 text-text-secondary">{WALLET_TYPE_LABELS[receipt.wallet.type]}</dd>
         </div>
       </dl>
-      <div className="px-6 py-6">
-        <h2 className="mb-4 text-body-sm font-bold text-text-primary">Detalhes da transação</h2>
+      <div className="px-11 py-5">
+        <h2 className="mb-3 text-body-sm leading-4 font-bold text-text-primary">Detalhes da transação</h2>
+        <div aria-hidden="true" className="mb-3 flex items-center justify-between border-b border-line-soft pb-3 text-body-sm leading-4 font-bold text-text-primary">
+          <span>NFTs</span>
+          <span className="flex w-[193px] justify-between">
+            <span>Edições</span>
+            <span>Subtotal</span>
+          </span>
+        </div>
         <ReceiptLines receipt={receipt} />
-        <ReceiptTotals receipt={receipt} />
+        <div className="mt-4">
+          <ReceiptTotals receipt={receipt} />
+        </div>
         <p className="mt-5 text-center text-caption text-text-secondary">
           Transação confirmada na {NETWORK_LABELS[receipt.network]}. A propriedade foi transferida para sua carteira conectada e registrada na rede.
         </p>
