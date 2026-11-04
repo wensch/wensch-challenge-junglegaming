@@ -130,7 +130,6 @@ export function WalletForm({
     resolver: zodResolver(walletFormSchema),
     values: wallet ? walletToValues(wallet) : initial,
     resetOptions: { keepDirtyValues: true },
-    mode: 'onTouched',
   })
   const { errors } = form.formState
 

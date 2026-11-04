@@ -85,7 +85,6 @@ function ProfileDataForm({ profile }: { profile: Profile }) {
     values: toFormValues(profile),
     // A background refetch refreshes untouched fields but never overwrites what the user is typing.
     resetOptions: { keepDirtyValues: true },
-    mode: 'onTouched',
   })
   const { errors } = form.formState
 
@@ -249,7 +248,6 @@ function PasswordForm() {
   const form = useForm<ChangePasswordRequest>({
     resolver: zodResolver(changePasswordRequestSchema),
     defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
-    mode: 'onTouched',
   })
   const { errors } = form.formState
   const fields = ['currentPassword', 'newPassword', 'confirmPassword'] as const

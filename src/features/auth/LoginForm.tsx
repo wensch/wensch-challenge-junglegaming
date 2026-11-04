@@ -16,7 +16,7 @@ const FIELDS = ['email', 'password'] as const
 
 export function LoginForm({ search }: { search: AuthSearch }) {
   const { finish, isPending: finishing } = useFinishAuth(search.redirect)
-  const form = useForm<LoginRequest>({ resolver: zodResolver(loginRequestSchema), defaultValues: { email: '', password: '' }, mode: 'onTouched' })
+  const form = useForm<LoginRequest>({ resolver: zodResolver(loginRequestSchema), defaultValues: { email: '', password: '' } })
   const { errors } = form.formState
   const login = useMutation<Session, ApiError, LoginRequest>({ mutationFn: (body) => authApi.login(body) })
 

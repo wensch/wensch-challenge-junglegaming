@@ -35,7 +35,7 @@ export function AccountLayout({ title, children }: { title: string; children: Re
     <div className="mx-auto grid w-full max-w-page gap-6 px-gutter pt-6 pb-16 md:grid-cols-[minmax(0,310px)_minmax(0,1fr)] md:gap-7 md:pt-8 xl:px-0">
       <nav aria-label="Minha conta" className="self-start bg-surface-card pb-0 md:pb-1">
         <p className="px-[10px] py-3 text-body-lg font-bold text-text-primary max-md:hidden">Meu perfil</p>
-        <ul className="flex md:flex-col max-md:overflow-x-auto">
+        <ul className="flex flex-wrap md:flex-col">
           {ITEMS.map(({ label, icon: Icon, link }) => (
             <li key={label} className="max-md:shrink-0">
               <Link {...link} className={item} activeOptions={{ exact: true }}>
@@ -49,7 +49,7 @@ export function AccountLayout({ title, children }: { title: string; children: Re
               type="button"
               disabled={isPending}
               onClick={() => void logout()}
-              className={cn(item, 'w-full cursor-pointer font-bold disabled:opacity-60')}
+              className={cn(item, 'cursor-pointer font-bold disabled:opacity-60 md:w-full')}
             >
               <LogOut aria-hidden="true" className="size-4 shrink-0" />
               Sair

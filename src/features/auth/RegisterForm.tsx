@@ -18,7 +18,6 @@ export function RegisterForm({ search }: { search: AuthSearch }) {
   const form = useForm<RegisterRequest>({
     resolver: zodResolver(registerRequestSchema),
     defaultValues: { username: '', email: '', password: '', confirmPassword: '' },
-    mode: 'onTouched',
   })
   const { errors } = form.formState
   const register = useMutation<Session, ApiError, RegisterRequest>({ mutationFn: (body) => authApi.register(body) })
