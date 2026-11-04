@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 4/5 — Lighthouse medido, README pronto, checkout limpo em execução. Fases 1 e 2 **CONCLUÍDAS**; slices S1/S2/S3 integradas.
+**Fase atual:** Fase 5 — entrega. Todas as fases de construção concluídas; fechando lacunas de teste (a11y/listeners) e o push final.
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -82,7 +82,12 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Correções de UI/perf (CLS Detalhe, favicon/robots, ícones, boot preload) + página Lista de interesse | implementador-catalogo, plataforma-mocks | **OK** — merges 9b18084 e d121337 |
 | Teste instável corrigido | orquestrador | `20-session-tabs` "token vencido" falhava 24/50 (corrida entre dois caminhos corretos); agora fixa o resultado: 50/50 |
 | Push | orquestrador | origin/main = 9b0f011 |
-| Checkout limpo (clone do GitHub → npm ci → verify) | orquestrador | em execução |
+| Checkout limpo (clone do GitHub → npm ci → verify) | orquestrador | **GREEN** no commit 9b0f011: 408 e2e, 22 visuais, 28 a11y |
+| CI GitHub Actions (Ubuntu, com 22 baselines Linux) | orquestrador | **success** em 16 min (push 9b0f011) |
+| Produção (Vercel) | orquestrador | serve **9b0f011** (READY); suíte completa contra a produção: **458 passed, 22 skipped, 0 failed** |
+| Reteste final do delta | revisor sênior + QA | **APPROVED** ×2 ([revisor](reports/s-integrada/revisor-frontend-senior.md), [QA](reports/s-integrada/qa-features.md)); achado médio de teste (cliques rápidos) corrigido com teste de mutação |
+| Matriz de requisitos | auditor-requisitos | **fechada: 137 OK · 10 parcial · 0 pendente**; nenhuma pendência bloqueia a entrega; 6 eliminatórios OK ([rel](reports/s-integrada/auditor-requisitos.md)) |
+| Lacunas de teste (A11Y-2/E2E-11 foco em diálogos, A11Y-7 zoom 200%, RT-7 listeners) | qa-features | em andamento |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
@@ -97,8 +102,9 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - Deduplicação entre slices (dois `Field`, duas `useWallets`, três hooks de credencial, dois mapeadores de erro, mensagens de `QuoteIssue`): refatoração depois da integração, sem mudança de comportamento (revisor item 5).
 - BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
+## Abertas de propósito (não bloqueiam)
+Deduplicação entre slices; BUG-QA-009 (6 `waitForTimeout`); BUG-QA-010 (link "Lista de interesse" no menu do sheet mobile); baixas de segurança 1–5; R2–R5 do revisor; Perf mobile do Lighthouse (70/68 contra 90, justificada em `lighthouse/README.md`); parciais: UI-1/UI-2/TEL-10 (imagem do Detalhe 404 px × 444 px no Figma), TEL-11/12.
+
 ## Próximo passo
-1. Resultado do checkout limpo; CI do push; deploy == HEAD (Vercel) e smoke em produção.
-2. Revisão final do delta (revisor sênior + QA) sobre Lista de interesse e perf.
-3. Auditor fecha a matriz (Lighthouse, README, baselines Linux, DEL-2/7).
-4. Se sobrar orçamento: dedupe entre slices, BUG-QA-009, baixas de segurança.
+1. Integrar os testes das lacunas, `verify` em main, push final, CI verde e deploy == HEAD.
+2. Se o app mudar, refazer o smoke em produção.
