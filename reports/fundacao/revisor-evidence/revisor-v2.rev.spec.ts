@@ -15,8 +15,10 @@ test('V1: expiracao natural (relogio passa do expiresAt) durante a navegacao', a
 
   // O usuario deixa a aba aberta alem do TTL (8 h) e depois navega para uma rota privada.
   await page.clock.fastForward('08:05:00')
-  await page.getByRole('button', { name: /Alice/ }).click()
-  await page.getByRole('menuitem', { name: 'Carteiras' }).click()
+  // Endurecimento pos-fundacao (F2/#14): na pagina publica o timer ja faz o teardown silencioso (o menu
+  // da conta some e aparece o aviso). A navegacao privada seguinte sai pelo link do rodape.
+  await expect(page.getByTestId('session-expired-toast')).toBeVisible()
+  await page.getByRole('contentinfo').getByRole('link', { name: 'Meu perfil' }).click()
   await page.waitForURL(/\/login/)
   const url = new URL(page.url())
   const draft = await page.evaluate((k) => sessionStorage.getItem(k), draftKey)

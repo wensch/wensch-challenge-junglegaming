@@ -30,27 +30,52 @@ async function expectExpiredLogin(page: Page, redirect: string, draftKey: string
   await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
 }
 
-async function openWallets(page: Page, displayName: string, mobile: boolean) {
-  if (mobile) {
-    await page.getByRole('button', { name: 'Abrir menu' }).click()
-    await page.getByRole('dialog', { name: 'KURIO' }).getByRole('link', { name: 'Carteiras' }).click()
-    return
-  }
-  await page.getByRole('button', { name: new RegExp(displayName) }).click()
-  await page.getByRole('menuitem', { name: 'Carteiras' }).click()
+/**
+ * Silent `expired` teardown on a PUBLIC page: no redirect, header back to the visitor's, token gone,
+ * socket reconnected as a visitor, the same user's draft kept, and a non-modal toast (inside the
+ * `aria-live` notifications region) whose "Entrar" link resumes the current route.
+ */
+async function expectSilentExpiry(page: Page, displayName: string, draftKey: string, mobile: boolean) {
+  const toast = page.getByTestId('session-expired-toast')
+  await expect(toast).toBeVisible()
+  await expect(toast).toContainText('Sua sessão expirou')
+  await expect(page.locator('section[aria-live="polite"]').getByTestId('session-expired-toast')).toHaveCount(1)
+  expect(new URL(page.url()).pathname).toBe('/')
+  await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
+  expect(await page.evaluate(() => localStorage.getItem('kurio.session'))).toBeNull()
+  expect(await page.evaluate((k) => sessionStorage.getItem(k), draftKey)).toBe('{"step":"review"}')
+  if (!mobile) await expect(page.getByRole('banner').getByRole('link', { name: 'Entrar' })).toBeVisible()
+  await expect(page.getByRole('button', { name: new RegExp(displayName) })).toHaveCount(0)
 }
 
 test.describe('expiração natural da sessão (relógio local)', () => {
-  test('navegação: aba aberta além do TTL e clique numa rota privada → reason=expired, redirect e rascunho preservados', async ({ page, boot }, info) => {
+  test('página pública: o timer faz o teardown silencioso, mostra o aviso e "Entrar" retoma a rota atual', async ({ page, boot }, info) => {
+    const mobile = isMobileProject(info.project.name)
     await page.clock.install()
     await boot('/')
     const { session, draftKey } = await loginWithDraft(page)
 
     await page.clock.fastForward(PAST_TTL)
-    // Public page: browsing is not interrupted; the next action that needs the session runs the flow.
-    expect(new URL(page.url()).pathname).toBe('/')
-    await openWallets(page, session.user.displayName, isMobileProject(info.project.name))
-    await expectExpiredLogin(page, '/wallets', draftKey)
+    await expectSilentExpiry(page, session.user.displayName, draftKey, mobile)
+
+    await page.getByTestId('session-expired-toast').getByRole('link', { name: 'Entrar' }).click()
+    await page.waitForURL(/\/login\?/)
+    const url = new URL(page.url())
+    expect(url.searchParams.get('reason')).toBe('expired')
+    expect(url.searchParams.get('redirect')).toBe('/')
+    expect(await page.evaluate((k) => sessionStorage.getItem(k), draftKey)).toBe('{"step":"review"}')
+    await expect(page.getByTestId('session-expired-toast')).toHaveCount(0)
+  })
+
+  test('depois do teardown silencioso, a próxima rota privada responde reason=expired com redirect', async ({ page, boot }, info) => {
+    await page.clock.install()
+    await boot('/')
+    const { session, draftKey } = await loginWithDraft(page)
+    await page.clock.fastForward(PAST_TTL)
+    await expectSilentExpiry(page, session.user.displayName, draftKey, isMobileProject(info.project.name))
+    // Client-side navigation (footer link, present for visitors on every viewport).
+    await page.getByRole('contentinfo').getByRole('link', { name: 'Meu perfil' }).click()
+    await expectExpiredLogin(page, '/profile', draftKey)
   })
 
   test('checkout aberto: o timer de expiresAt dispara o fluxo antes da próxima requisição', async ({ page, boot }) => {
@@ -69,7 +94,7 @@ test.describe('expiração natural da sessão (relógio local)', () => {
     expect(ordersAfterExpiry).toEqual([])
   })
 
-  test('requisição privada depois do vencimento leva o token armazenado e o servidor responde SESSION_EXPIRED', async ({ page, boot }, info) => {
+  test('GET privado de fundo com o token vencido: o servidor responde SESSION_EXPIRED e a página pública faz o teardown silencioso', async ({ page, boot }, info) => {
     await page.clock.install()
     await boot('/')
     const { session, draftKey } = await loginWithDraft(page)
@@ -80,16 +105,16 @@ test.describe('expiração natural da sessão (relógio local)', () => {
       const body = (await r.json().catch(() => null)) as { error?: { code?: string } } | null
       expiredCalls.push({ auth: r.request().headers()['authorization'] ?? null, status: r.status(), code: body?.error?.code })
     })
-    await page.clock.fastForward(PAST_TTL)
-    // The user comes back to the tab: refetch-on-focus of the header cart (a private GET).
-    await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange', { bubbles: true })))
+    // Only the wall clock jumps (machine asleep): no timer fires, so the first thing that notices the
+    // expiry is the request itself.
+    await page.clock.setSystemTime(Date.parse(session.expiresAt) + 5 * 60_000)
+    // Refetch-on-focus of the header cart (a private GET). Dispatched on `window` (TanStack Query's
+    // focus listener) and not on `document`, so the app's expiry-timer re-arm does not run first.
+    await page.evaluate(() => window.dispatchEvent(new Event('visibilitychange')))
     await expect
       .poll(() => expiredCalls.find((c) => c.status === 401))
       .toEqual({ auth: `Bearer ${session.token}`, status: 401, code: 'SESSION_EXPIRED' })
 
-    // A background read on a public page does not bounce the user; the next private action does.
-    expect(new URL(page.url()).pathname).toBe('/')
-    await openWallets(page, session.user.displayName, isMobileProject(info.project.name))
-    await expectExpiredLogin(page, '/wallets', draftKey)
+    await expectSilentExpiry(page, session.user.displayName, draftKey, isMobileProject(info.project.name))
   })
 })

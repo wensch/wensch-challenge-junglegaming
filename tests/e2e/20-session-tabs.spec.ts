@@ -126,3 +126,50 @@ test.describe('logout explícito', () => {
     expect(await page.evaluate(() => localStorage.getItem('kurio.session'))).toBeNull()
   })
 })
+
+test.describe('rascunhos por usuário depois da expiração (segurança #13)', () => {
+  const ALICE_DRAFT = '{"secret":"rascunho-de-alice"}'
+
+  async function aliceExpiredWithDraft(page: Page, boot: (url?: string) => Promise<void>) {
+    await page.clock.install()
+    await boot('/')
+    const alice = await loginViaApi(page, USERS.alice)
+    await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', alice.user.id)
+    const draftKey = `kurio.u.${alice.user.id}.checkout`
+    await page.evaluate(([k, v]) => sessionStorage.setItem(k, v), [draftKey, ALICE_DRAFT] as const)
+    // Natural expiry on a public page: silent teardown, alice's draft kept for her re-login.
+    await page.clock.fastForward('08:05:00')
+    await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
+    expect(await page.evaluate((k) => sessionStorage.getItem(k), draftKey)).toBe(ALICE_DRAFT)
+    return { alice, draftKey }
+  }
+
+  const draftKeys = (page: Page) => page.evaluate(() => Object.keys(sessionStorage).filter((k) => k.startsWith('kurio.u.')))
+
+  test('sem sessão em cache, bob entra por outra aba: o rascunho de alice sai desta aba', async ({ page, boot }) => {
+    const { alice } = await aliceExpiredWithDraft(page, boot)
+    const tabB = await openTabB(page)
+    const bob = await loginViaApi(tabB, USERS.bob)
+    await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', bob.user.id)
+    await expect.poll(() => draftKeys(page)).toEqual([])
+    expect((await cacheDump(page)).blob).not.toContain(alice.user.id)
+    await tabB.close()
+  })
+
+  test('alice volta pela outra aba: o rascunho dela continua nesta aba', async ({ page, boot }) => {
+    const { alice, draftKey } = await aliceExpiredWithDraft(page, boot)
+    const tabB = await openTabB(page)
+    await loginViaApi(tabB, USERS.alice)
+    await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', alice.user.id)
+    expect(await draftKeys(page)).toEqual([draftKey])
+    await tabB.close()
+  })
+
+  test('boot com outro usuário no storage: o primeiro GET /session apaga o rascunho de alice', async ({ page, boot }) => {
+    await aliceExpiredWithDraft(page, boot)
+    // Bob's session is stored in this tab, then the tab reloads (sessionStorage survives the reload).
+    const bob = await loginViaApi(page, USERS.bob)
+    await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', bob.user.id)
+    await expect.poll(() => draftKeys(page)).toEqual([])
+  })
+})

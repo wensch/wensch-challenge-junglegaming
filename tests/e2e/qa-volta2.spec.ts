@@ -160,35 +160,40 @@ test('contrato x mock: avatar/explorer https-only; seeds sem http: nem SVG', asy
   }
 })
 
-test('CSP: sem violacao nem erro de console em todas as rotas (visitante e logado)', async ({ page, boot }) => {
-  const bad: string[] = []
-  page.on('console', (m) => {
-    if (m.type() === 'error' || /Content Security Policy|Refused/i.test(m.text())) bad.push(`${m.type()}: ${m.text()}`)
-  })
-  page.on('pageerror', (e) => bad.push(`pageerror: ${e.message}`))
-  await page.addInitScript(() => {
-    const w = window as unknown as { __csp: string[] }
-    w.__csp = []
-    document.addEventListener('securitypolicyviolation', (e) => w.__csp.push(`${e.violatedDirective} ${e.blockedURI}`))
-  })
-  const all = ['/', '/cart', '/login', '/register', '/nft/nft_004', '/em-breve', '/checkout', '/favorites', '/profile', '/wallets', '/orders/ord_0001', '/rota-inexistente']
-  const viol: string[] = []
-  for (const logged of [false, true]) {
+const CSP_ROUTES = ['/', '/cart', '/login', '/register', '/nft/nft_004', '/em-breve', '/checkout', '/favorites', '/profile', '/wallets', '/orders/ord_0001', '/rota-inexistente']
+
+// One test per audience: each one boots once and loads 12 full documents (8 workers on Windows push a
+// single combined test past 30 s). `test.slow()` keeps headroom under load.
+for (const logged of [false, true]) {
+  const audience = logged ? 'logado' : 'visitante'
+  test(`CSP: sem violacao nem erro de console em todas as rotas (${audience})`, async ({ page, boot }) => {
+    test.slow()
+    const bad: string[] = []
+    page.on('console', (m) => {
+      if (m.type() === 'error' || /Content Security Policy|Refused/i.test(m.text())) bad.push(`${m.type()}: ${m.text()}`)
+    })
+    page.on('pageerror', (e) => bad.push(`pageerror: ${e.message}`))
+    await page.addInitScript(() => {
+      const w = window as unknown as { __csp: string[] }
+      w.__csp = []
+      document.addEventListener('securitypolicyviolation', (e) => w.__csp.push(`${e.violatedDirective} ${e.blockedURI}`))
+    })
+    const viol: string[] = []
     await boot('/')
     const user = logged ? (await loginViaApi(page, USERS.alice)).user.id : 'guest'
-    for (const p of all) {
+    for (const p of CSP_ROUTES) {
       await page.goto(p)
       await page.waitForFunction(() => !!window.__mock)
       await expect(page.getByRole('heading').first()).toBeVisible()
       // Wait for the session to settle before leaving the page: a GET /session still in flight when
       // the document unloads loses its MSW client and falls through to the preview server (404).
       await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', user)
-      viol.push(...(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).map((v) => `${logged ? 'logado' : 'visitante'} ${p}: ${v}`))
+      viol.push(...(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).map((v) => `${audience} ${p}: ${v}`))
     }
-  }
-  expect(viol).toEqual([])
-  expect(bad).toEqual([])
-})
+    expect(viol).toEqual([])
+    expect(bad).toEqual([])
+  })
+}
 
 test('lazy: AccountDropdown / Sheet so carregam sob demanda, sem perder o foco', async ({ page, boot }, info) => {
   const mobile = isMobileProject(info.project.name)

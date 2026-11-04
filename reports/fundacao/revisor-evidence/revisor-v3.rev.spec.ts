@@ -32,6 +32,15 @@ test('V4: sessao vencida pelo relogio numa pagina publica (estado "fantasma")', 
     probeConnections: await probe.getAttribute('data-connections'),
     responses401: cart401,
   }
-  console.log('V4', JSON.stringify(out))
+  const toast = page.getByTestId('session-expired-toast')
+  const out2 = { ...out, toastVisible: await toast.isVisible(), toastInLiveRegion: await page.locator('section[aria-live="polite"]').getByTestId('session-expired-toast').count() }
+  console.log('V4', JSON.stringify(out2))
+  // Depois do endurecimento (F2/#14): teardown `expired` silencioso, sem redirecionar.
   expect(out.path).toBe('/')
+  expect(out.headerShowsUser).toBe(false)
+  expect(out.storedToken).toBe(false)
+  expect(out.probeUser).toBe('guest')
+  expect(out2.toastVisible).toBe(true)
+  expect(out2.toastInLiveRegion).toBe(1)
+  await expect(toast.getByRole('link', { name: 'Entrar' })).toHaveAttribute('href', '/login?reason=expired&redirect=%2F')
 })

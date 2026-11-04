@@ -88,7 +88,8 @@ export const USERS = {
 
 /**
  * Logs in through the real REST endpoint (MSW) and stores the session the same way the app does
- * (`kurio.session`), then reloads. Used until the login screen exists (slice S2).
+ * (`kurio.session`), then reloads and waits for the mock worker of the new document to be ready.
+ * Used until the login screen exists (slice S2).
  */
 export async function loginViaApi(page: Page, user: { email: string; password: string }) {
   const session = await page.evaluate(async (creds) => {
@@ -99,6 +100,10 @@ export async function loginViaApi(page: Page, user: { email: string; password: s
     return s
   }, user)
   await page.reload()
+  // `reload()` resolves on `load`, before this document's MSW worker finished starting. Navigating
+  // again inside that window yields a document the service worker does not control (its `/api` calls
+  // reach the network). Wait for the mock control, published only once the worker is up.
+  await page.waitForFunction(() => !!window.__mock)
   return session
 }
 
