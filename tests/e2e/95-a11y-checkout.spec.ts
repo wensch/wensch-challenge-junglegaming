@@ -3,8 +3,10 @@ import AxeBuilder from '@axe-core/playwright'
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
 import { connectWallet, loginWithCart, pickEditions, sendOrder, setGuestId, addToCart } from '../s3-helpers'
+import { settleAnimations } from '../settle-animations'
 
 async function seriousViolations(page: Page) {
+  await settleAnimations(page)
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
   return results.violations
     .filter((v) => v.impact === 'critical' || v.impact === 'serious')
@@ -43,6 +45,9 @@ test.describe('@a11y checkout', () => {
     await connectWallet(page)
     await page.getByRole('button', { name: 'Confirmar compra' }).click()
     await expect(page.getByRole('dialog', { name: 'Revisar pedido' })).toBeVisible()
+    // The send button starts disabled while the quote is revalidated and fades to full opacity when it
+    // enables (transition-all). Wait for the STATE first, so axe never measures that 0.5 -> 1 transition.
+    await expect(page.getByTestId('send-order')).toBeEnabled()
     expect(await seriousViolations(page)).toEqual([])
   })
 
