@@ -46,22 +46,22 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | F1b mocks (DB, cenários, handlers, realtime, __mock) | plataforma-mocks | **OK** — 60 NFTs, 31 rotas, 24 cenários, 70 testes verdes; merge c6b7d16 |
 | F1c shell (Axios, QueryClient, router/_authed, layout, 404, tokens, shadcn, CI) + contratos v1.1.0 | arquiteto-contratos | **OK** — merge 6a48902 |
 | verify em main (6a48902) | orquestrador | **GREEN** — typecheck, lint, build, e2e, visual 4/4, a11y 9/9 (+1 skip intencional) |
-| Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | **CHANGES_REQUESTED** ×3 — [fidelidade](reports/fundacao/fidelidade-visual.md) · [qa](reports/fundacao/qa-features.md) · [segurança](reports/fundacao/seguranca.md) · [BUGS](BUGS.md) |
-| Revisor sênior volta 1 | revisor-frontend-senior | **CHANGES_REQUESTED** — 25 achados (5 altos) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
+| Gates volta 1: fidelidade ‖ qa ‖ segurança | 3 agentes | **CHANGES_REQUESTED** ×3 — [fidelidade](../../reports/fundacao/fidelidade-visual.md) · [qa](../../reports/fundacao/qa-features.md) · [segurança](../../reports/fundacao/seguranca.md) · [BUGS](../../BUGS.md) |
+| Revisor sênior volta 1 | revisor-frontend-senior | **CHANGES_REQUESTED** — 25 achados (5 altos) · [relatório](../../reports/fundacao/revisor-frontend-senior.md) |
 | Volta 2: mocks (DB entre abas, pós-compra, CONFLICT_VERSION, restos do spike) | plataforma-mocks | **OK** — verify GREEN, R2 passa; merge 3d52cf7. Obs.: `latency.variable` falhou 1× com 6 workers (175 ms vs limite 150 ms), possível flake |
 | Volta 2: sessão entre abas, reconcile sem regressão, redirect, header, CSP, baselines CI, contratos v1.2.0 | arquiteto-contratos | **OK** — merge 0c27e52 |
 | verify em main (0c27e52) | orquestrador | **GREEN** — e2e 169 ✓ (11 skip), visual 6 ✓, a11y 9 ✓ |
 | Gates volta 2 | fidelidade ‖ qa ‖ segurança | **APPROVED** ×3 |
-| Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](reports/fundacao/revisor-frontend-senior.md) |
+| Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](../../reports/fundacao/revisor-frontend-senior.md) |
 | Volta 3: N1 + R3 | arquiteto-contratos | **OK** — V1 do revisor passa (reason=expired, redirect=/wallets, draftKept=true); merge aab300a |
 | verify em main (aab300a) | orquestrador | 1ª execução RED (1 falha: qa-volta2 "CSP sem violação", desktop); 2ª **GREEN** (e2e 205 ✓, visual 6 ✓, a11y 9 ✓). Isolado: 12/12. **Flake intermitente sob carga, em aberto** |
-| Revisor sênior volta 3 | revisor-frontend-senior | **APPROVED** — sem alto/crítico · [relatório](reports/fundacao/revisor-frontend-senior.md) |
-| Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](reports/fundacao/seguranca.md) |
+| Revisor sênior volta 3 | revisor-frontend-senior | **APPROVED** — sem alto/crítico · [relatório](../../reports/fundacao/revisor-frontend-senior.md) |
+| Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](../../reports/fundacao/seguranca.md) |
 | Endurecimento pré-slices (F1 boot MSW sem controller, F6) | plataforma-mocks | **OK** — merge c2dde91 |
 | Endurecimento pré-slices (F1 teste, F2 sessão fantasma, #13, F3, F7) | arquiteto-contratos | **OK** — CSP stress 80/80; merge b9cec4e |
 | `Number()` proibido em todo src/tests fora de mocks (auditor #1, #5) | orquestrador | **OK** |
 | **verify final em main** | orquestrador | **GREEN 3× seguidas** (e2e 215 ✓, visual 6 ✓, a11y 9 ✓) |
-| Matriz de requisitos | auditor-requisitos | **OK** — 39 OK · 75 parcial · 33 pendente; nenhum eliminatório violado · [relatório](reports/fundacao/auditor-requisitos.md) |
+| Matriz de requisitos | auditor-requisitos | **OK** — 39 OK · 75 parcial · 33 pendente; nenhum eliminatório violado · [relatório](../../reports/fundacao/auditor-requisitos.md) |
 | Volta 3: R1/R2 mocks + flake QA-007 | plataforma-mocks | **OK** — verify GREEN (e2e 199 ✓); merge 998f27c |
 | **Ação do usuário** | — | rodar o workflow `visual-baselines` (workflow_dispatch) no GitHub e commitar `tests/__screenshots__/linux/`; até lá o passo visual do CI falha de propósito |
 
@@ -72,21 +72,21 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | S2 conta | implementador-conta | — | **entregue** — merge 2962718 |
 | S3 checkout | implementador-checkout | — | **entregue** — merge dbf2418 |
 | **verify em main com S1+S2+S3** | orquestrador | **GREEN** — e2e 374 ✓, visual 22 ✓, a11y 28 ✓, 0 flaky |
-| Gates rodada 1 (main integrado) | QA · segurança · revisor sênior · fidelidade | QA **APPROVED** ([rel](reports/s-integrada/qa-features.md)) · Segurança **APPROVED** ([rel](reports/s-integrada/seguranca.md)) · Revisor **APPROVED**, 5 médios/7 baixos ([rel](reports/s-integrada/revisor-frontend-senior.md)) · Fidelidade **CHANGES_REQUESTED**, 2 altos (overflow a 768 px em Detalhe e Perfil) ([rel](reports/s-integrada/fidelidade-visual.md)) |
+| Gates rodada 1 (main integrado) | QA · segurança · revisor sênior · fidelidade | QA **APPROVED** ([rel](../../reports/s-integrada/qa-features.md)) · Segurança **APPROVED** ([rel](../../reports/s-integrada/seguranca.md)) · Revisor **APPROVED**, 5 médios/7 baixos ([rel](../../reports/s-integrada/revisor-frontend-senior.md)) · Fidelidade **CHANGES_REQUESTED**, 2 altos (overflow a 768 px em Detalhe e Perfil) ([rel](../../reports/s-integrada/fidelidade-visual.md)) |
 | Volta 2: S3 checkout | implementador-checkout | **OK** — merge dcf43a4 |
 | Volta 2: S1+S2 (overflow 768 px, favoritos seriais, owner checks) | implementador-conta | **OK** — merge 0d52b21; verify em main GREEN (390 e2e, 22 visuais, 28 a11y) |
 | Push + CI | orquestrador | main em fd8f5b5 no GitHub; produção serve fd8f5b5 (READY); baselines Linux: 22 (a1e3bbf, local) |
-| Matriz de requisitos | auditor-requisitos | 121 OK · 18 parcial · 8 pendente ([rel](reports/s-integrada/auditor-requisitos.md)) |
+| Matriz de requisitos | auditor-requisitos | 121 OK · 18 parcial · 8 pendente ([rel](../../reports/s-integrada/auditor-requisitos.md)) |
 | README + ARCHITECTURE final | release | **OK** — 63fe476 (README com declaração de IA) |
-| Lighthouse | a11y-performance + orquestrador | **medido** (3×, mediana): A11y 100, BP 100, SEO 100, CLS 0 em todas; Perf desktop 97/98; **Perf mobile 70/68 (meta 90) — justificada** (528 KB gz de JS, 1/3 = mocks exigidos; LCP observado 0,65 s, simulado 5,8 s) · [lighthouse/](lighthouse/README.md) |
+| Lighthouse | a11y-performance + orquestrador | **medido** (3×, mediana): A11y 100, BP 100, SEO 100, CLS 0 em todas; Perf desktop 97/98; **Perf mobile 70/68 (meta 90) — justificada** (528 KB gz de JS, 1/3 = mocks exigidos; LCP observado 0,65 s, simulado 5,8 s) · [lighthouse/](../../lighthouse/README.md) |
 | Correções de UI/perf (CLS Detalhe, favicon/robots, ícones, boot preload) + página Lista de interesse | implementador-catalogo, plataforma-mocks | **OK** — merges 9b18084 e d121337 |
 | Teste instável corrigido | orquestrador | `20-session-tabs` "token vencido" falhava 24/50 (corrida entre dois caminhos corretos); agora fixa o resultado: 50/50 |
 | Push | orquestrador | origin/main = 9b0f011 |
 | Checkout limpo (clone do GitHub → npm ci → verify) | orquestrador | **GREEN** no commit 9b0f011: 408 e2e, 22 visuais, 28 a11y |
 | CI GitHub Actions (Ubuntu, com 22 baselines Linux) | orquestrador | **success** em 16 min (push 9b0f011) |
 | Produção (Vercel) | orquestrador | serve **9b0f011** (READY); suíte completa contra a produção: **458 passed, 22 skipped, 0 failed** |
-| Reteste final do delta | revisor sênior + QA | **APPROVED** ×2 ([revisor](reports/s-integrada/revisor-frontend-senior.md), [QA](reports/s-integrada/qa-features.md)); achado médio de teste (cliques rápidos) corrigido com teste de mutação |
-| Matriz de requisitos | auditor-requisitos | **fechada: 137 OK · 10 parcial · 0 pendente**; nenhuma pendência bloqueia a entrega; 6 eliminatórios OK ([rel](reports/s-integrada/auditor-requisitos.md)) |
+| Reteste final do delta | revisor sênior + QA | **APPROVED** ×2 ([revisor](../../reports/s-integrada/revisor-frontend-senior.md), [QA](../../reports/s-integrada/qa-features.md)); achado médio de teste (cliques rápidos) corrigido com teste de mutação |
+| Matriz de requisitos | auditor-requisitos | **fechada: 137 OK · 10 parcial · 0 pendente**; nenhuma pendência bloqueia a entrega; 6 eliminatórios OK ([rel](../../reports/s-integrada/auditor-requisitos.md)) |
 | Lacunas de teste (A11Y-2/E2E-11 foco em diálogos, A11Y-7 zoom 200%, RT-7 listeners) | qa-features | **OK** — specs 15/16/17; 2 defeitos reais corrigidos: BUG-QA-011 (foco volta a "Confirmar compra" ao fechar a revisão) e BUG-QA-012 (reflow do rodapé a 320 px); BUG-QA-013 (contadores de listeners) fica como limitação |
 | Estado final | orquestrador | **verify local GREEN** (456 e2e, 22 visuais, 27 a11y; 2 flaky só no retry) · **CI Ubuntu success** no push e7f39d6 (14m34s) · **produção serve e7f39d6** (READY) · suíte contra a produção em 1a976f9: 502 passed, 0 failed, 5 flaky só no retry |
 | Incidentes do CI na reta final (resolvidos) | orquestrador | (1) baselines Linux do rodapé mobile desatualizadas após BUG-QA-012 → regeneradas pelo workflow `visual-baselines` (só 3 de 22 mudaram; rodapé antigo vazava da coluna a 390 px); (2) `95-a11y-checkout` falhava por contraste falso: o botão "Enviar pedido" nasce desabilitado e anima opacidade 0,5→1 ao habilitar; axe medindo no meio da transição → teste agora espera o botão habilitado e as animações finitas (84/84 sem retry) |

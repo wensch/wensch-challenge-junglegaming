@@ -3,7 +3,7 @@
 - Original: https://www.figma.com/design/Ff0SksUi7UFtPWUO8kyNtw/Frontend-Challenge (sem acesso via MCP: exige edição)
 - Cópia do candidato (usada): https://www.figma.com/design/ua5xsyQarfBRq7v7ZxWXPr/Frontend-Challenge--Copy- — página `0:1` "Marketplace de NFTs GreenMint"
 - Marca exibida no layout: **KURIO**
-- Metadados completos (posições/tamanhos de todos os nós): `.spike/figma-meta.xml`
+- Metadados completos (posições/tamanhos de todos os nós): `design/figma-meta.xml`
 
 ## Frames → rotas
 

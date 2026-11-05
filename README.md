@@ -151,9 +151,23 @@ src/
   mocks/           ÚNICO lugar com dados fictícios: MSW, banco em memória, cenários, window.__mock
 tests/e2e/         Playwright (E2E, visual, axe)
 lighthouse/        configuração e relatórios da auditoria
-design/ref/        referências exportadas do Figma
+design/            referências do Figma (ref/ PNGs, assets/ artes, figma-meta.xml com posições e tamanhos)
 public/            fontes, imagens de NFT, mockServiceWorker.js
 ```
+
+### Artefatos do processo de desenvolvimento
+
+O projeto foi conduzido com um fluxo de agentes de IA (veja [Uso de IA](#uso-de-ia)), e os registros desse fluxo ficam versionados, fora do caminho do código do produto:
+
+| Onde | O que é |
+|---|---|
+| `docs/processo/` | `BRIEFING.md` (escopo e regras de condução), `PLANO.md` (decisões de stack, slices e riscos), `STATUS.md` (estado e evidências por etapa), `ESCALATIONS.md` (bloqueios; vazio) e `spike/` (experimentos descartáveis da fase 0) |
+| `reports/` | Relatórios de cada revisão (fidelidade visual, QA, segurança, revisor sênior, auditoria de requisitos) e a análise final em `reports/analise-final/` |
+| `BUGS.md` | Defeitos encontrados pelos testes e sua resolução |
+| `CLAUDE.md`, `.claude/` | Regras do orquestrador, definições dos agentes e skills usadas (necessários para reproduzir o fluxo; o produto não depende deles) |
+| `docs/requirements-matrix.md` | Cada requisito do enunciado ligado à evidência executada |
+
+Nada disso entra no build: o Vite só empacota `src/` e `public/`, e o bundle de produção não contém referência a esses arquivos.
 
 Documentos: [ARCHITECTURE.md](ARCHITECTURE.md) (contratos, sessão, carrinho, cache, reconciliação, UX e desvios do Figma) · [docs/requirements-matrix.md](docs/requirements-matrix.md) (requisito a requisito, com evidência) · [lighthouse/](lighthouse/) (auditoria) · [BUGS.md](BUGS.md) (achados de QA) · [src/mocks/README.md](src/mocks/README.md) · [docs/figma.md](docs/figma.md).
 
@@ -175,9 +189,9 @@ A única meta não atingida é a Performance mobile (70 e 68 contra 90). O LCP o
 - Backend, pagamento e carteiras são simulados; senhas do mock usam SHA-256 com salt (um backend real usaria um KDF lento) e o token de sessão fica em `localStorage` (real: cookie `HttpOnly`). Ver ARCHITECTURE §4.
 - Avatares `https:` são aceitos pelo contrato, mas a CSP só renderiza `data:` e mesma origem (ARCHITECTURE §4, R7).
 - Não há frames de tablet, rodapé mobile, perfil/carteiras mobile nem busca desktop no Figma; o layout nesses casos é derivado. Páginas editoriais, suporte, atividade, ofertas e downloads levam a `/em-breve` e não simulam sucesso.
-- A página `/favorites` (Lista de interesse) ainda mostra "Em construção": os favoritos funcionam no detalhe e nos cards (persistem por usuário, com rollback em falha), mas a lista não foi construída.
+- A página `/favorites` (Lista de interesse) existe e funciona: lista os favoritos do usuário autenticado, remove com atualização otimista e rollback em falha, atualiza preço e disponibilidade em tempo real e mostra estados de carregamento, vazio e erro (D40). Não há quadro dela no Figma.
 - Login e cadastro são rotas (o Figma mostra modais); a confirmação do pedido também é rota. O ícone "thank you" não foi exportado.
-- Tabela completa dos desvios (D1 a D32) em [ARCHITECTURE §13](ARCHITECTURE.md#13-desvios-do-figma).
+- Tabela completa dos desvios (D1 a D22, D30 a D32 e D40) em [ARCHITECTURE §13](ARCHITECTURE.md#13-desvios-do-figma).
 - Pendências e partes ainda não comprovadas por evidência: veja a coluna de status em [docs/requirements-matrix.md](docs/requirements-matrix.md).
 
 ## Uso de IA

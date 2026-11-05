@@ -1,6 +1,6 @@
 # PLANO — Marketplace de NFTs
 
-Fonte de verdade dos requisitos: [docs/challenge.md](docs/challenge.md). Rastreabilidade: [docs/requirements-matrix.md](docs/requirements-matrix.md). Resultados dos spikes: [STATUS.md](STATUS.md).
+Fonte de verdade dos requisitos: [docs/challenge.md](../challenge.md). Rastreabilidade: [docs/requirements-matrix.md](../requirements-matrix.md). Resultados dos spikes: [STATUS.md](../../STATUS.md).
 
 ## 1. Decisões de stack (versões verificadas no npm em 2026-11-03)
 

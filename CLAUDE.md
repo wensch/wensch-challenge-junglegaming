@@ -1,15 +1,15 @@
 # CLAUDE.md — regras do orquestrador
 
-Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/challenge.md` (prevalece sobre tudo). Briefing: `BRIEFING.md`. Plano: `PLANO.md`.
+Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/challenge.md` (prevalece sobre tudo). Briefing: `docs/processo/BRIEFING.md`. Plano: `docs/processo/PLANO.md`.
 
 ## Papel da sessão principal
-- Você é o **orquestrador**: despacha subagentes de `.claude/agents/`, integra, mantém `STATUS.md`. Não implementa feature diretamente (exceto correções triviais de integração).
+- Você é o **orquestrador**: despacha subagentes de `.claude/agents/`, integra, mantém `docs/processo/STATUS.md`. Não implementa feature diretamente (exceto correções triviais de integração).
 - Cada implementador trabalha em git worktree próprio (`isolation: worktree`); merges pequenos e frequentes em `main`.
-- Ciclo por slice (enxuto, orçamento de uso — decisão do usuário em 2026-11-04): implementar → (qa-features ‖ revisor-frontend-senior; **seguranca** só nas slices `conta` e `checkout`; **fidelidade-visual** por script de medição, uma vez no fim da slice) → corrigir. Máximo 3 voltas; depois registrar em `ESCALATIONS.md` e seguir.
+- Ciclo por slice (enxuto, orçamento de uso — decisão do usuário em 2026-11-04): implementar → (qa-features ‖ revisor-frontend-senior; **seguranca** só nas slices `conta` e `checkout`; **fidelidade-visual** por script de medição, uma vez no fim da slice) → corrigir. Máximo 3 voltas; depois registrar em `docs/processo/ESCALATIONS.md` e seguir.
 - Reteste (voltas 2 e 3): cada gate recebe só o diff desde a volta anterior e a lista de achados abertos; não relê tudo nem reescreve o relatório inteiro (acrescenta uma seção "volta n").
 - No máximo 2 agentes em paralelo. Ao bater o limite de uso, esperar a renovação e retomar com SendMessage, sem criar agentes novos.
 - Prompts de agentes apontam arquivos específicos, não "leia todos os relatórios".
-- Reportar somente via `STATUS.md` e `reports/<slice>/<agente>.md`.
+- Reportar somente via `docs/processo/STATUS.md` e `reports/<slice>/<agente>.md`.
 
 ## Git
 - Commits e PRs **sem** trailers `Co-Authored-By` ou "Generated with": tudo no nome do usuário (pedido explícito).
@@ -38,7 +38,7 @@ Projeto: desafio frontend "Marketplace de NFTs". Requisitos oficiais: `docs/chal
 - O binding ignora o payload de CONNECT; o mock lê `auth.token` do frame bruto `40{...}`.
 - Só namespace padrão, eventos de texto, sem acks (limitação do binding) → usar `transports: ['websocket']`.
 - Versões fixadas: `typescript@6.0.3` (typescript-eslint não suporta TS7), `msw@2.15.0` (binding exige MSW 2).
-- Figma: usar a cópia `ua5xsyQarfBRq7v7ZxWXPr`; o MCP tem limite de chamadas (plano Starter). Economize: prefira `.spike/figma-meta.xml` e `design/ref/`.
+- Figma: usar a cópia `ua5xsyQarfBRq7v7ZxWXPr`; o MCP tem limite de chamadas (plano Starter). Economize: prefira `design/figma-meta.xml` e `design/ref/`.
 - No Windows, Playwright usa `npm run build && npm run preview` como webServer na porta 4173.
 
 ## Definition of Done (por slice)

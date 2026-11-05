@@ -40,7 +40,7 @@ const mocksImportBan = {
 }
 
 export default tseslint.config(
-  { ignores: ['dist', 'playwright-report', 'test-results', 'public/mockServiceWorker.js', 'lighthouse/reports', 'src/routeTree.gen.ts', '.spike', 'reports/**', '.claude/worktrees/**', '.claude/skills/**'] },
+  { ignores: ['dist', 'playwright-report', 'test-results', 'public/mockServiceWorker.js', 'lighthouse/reports', 'src/routeTree.gen.ts', 'docs/processo', 'reports/**', '.claude/worktrees/**', '.claude/skills/**'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.strict],

@@ -176,7 +176,7 @@ ${REPORT}`,
 - Checkout limpo: clone em diretório temporário, npm ci, npm run verify; registre a saída em \`reports/release/clean-checkout.md\`.
 - Deploy: confirme que a URL pública serve o commit HEAD, que acesso direto e refresh funcionam em todas as rotas e que o service worker do MSW e o tempo real estão ativos.
 - README: setup, variáveis de ambiente, credenciais fictícias, seleção e reset de cenários, comandos, reprodução de cada fluxo de falha e declaração de uso de IA.
-- Nunca faça push --force nem publique segredos. Publicação externa (push, deploy) só com autorização registrada em STATUS.md.`,
+- Nunca faça push --force nem publique segredos. Publicação externa (push, deploy) só com autorização registrada em docs/processo/STATUS.md.`,
   },
 ]
 
