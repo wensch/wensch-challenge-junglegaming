@@ -50,6 +50,8 @@ const IMAGES = [
   { file: 'artwork-18', width: 310, height: 366 },
 ] as const
 
+const HERO_SRCSET = '/nft/hero-emerald-ape-240.webp 240w, /nft/hero-emerald-ape-480.webp 480w, /nft/hero-emerald-ape-900.webp 900w, /nft/hero-emerald-ape.webp 1350w'
+
 const WORDS_A = ['Aurora', 'Cidade', 'Eco', 'Fragmento', 'Horizonte', 'Jardim', 'Labirinto', 'Maré', 'Névoa', 'Órbita', 'Prisma', 'Quimera', 'Relâmpago', 'Santuário', 'Totem', 'Umbral', 'Vórtice', 'Zênite', 'Brasa', 'Cristal']
 const WORDS_B = ['Neon', 'Submersa', 'Dourado', 'Cósmico', 'Silencioso', 'Elétrico', 'Perdido', 'Líquido', 'Lunar', 'Digital', 'Ancestral', 'Fractal', 'Selvagem', 'Etéreo', 'Sintético', 'Vermelho', 'Boreal', 'Tropical', 'Quântico', 'Onírico']
 const PRICE_TIERS = ['0.016', '0.045', '0.08', '0.12', '0.25', '0.5', '0.89', '1.19', '1.5', '2.35', '4.2', '8.9', '26.846']
@@ -73,8 +75,8 @@ function applyFigmaFirstPage(nfts: NftRec[]): void {
     const n = nfts[i]!
     const img = IMAGES.find((x) => x.file === f.image)!
     const image = i === 0
-      ? { src: '/nft/hero-emerald-ape.webp', alt: `Arte do NFT ${f.name}`, width: 1350, height: 1350 } // 3x art delivered for the Hero
-      : { src: `/nft/${img.file}.png`, alt: `Arte do NFT ${f.name}`, width: img.width, height: img.height }
+      ? { src: '/nft/hero-emerald-ape.webp', alt: `Arte do NFT ${f.name}`, width: 1350, height: 1350, srcset: HERO_SRCSET } // 3x art delivered for the Hero
+      : { src: `/nft/${img.file}.webp`, alt: `Arte do NFT ${f.name}`, width: img.width, height: img.height }
     if (i === 0) n.isTrending = true // Hero slide 1 = Emerald Ape
     n.name = f.name
     n.tokenId = f.tokenId
@@ -137,7 +139,7 @@ function makeGallery(i: number, own: SeedImage, name: string): Image[] {
   const others = IMAGES.filter((x) => x.file !== own.file)
   const picks = [0, 1, 2].map((k) => others[(i + k * 2) % others.length]!)
   return [own, ...picks].map((img, k) => ({
-    src: `/nft/${img.file}.png`,
+    src: `/nft/${img.file}.webp`,
     alt: k === 0 ? `Arte do NFT ${name}` : `Arte do NFT ${name}, imagem ${k + 1} de 4`,
     width: img.width,
     height: img.height,
@@ -206,7 +208,7 @@ function makeNfts(rng: Rng): NftRec[] {
       collection: { id: col.id, name: col.name },
       category,
       network,
-      image: { src: `/nft/${img.file}.png`, alt: `Arte do NFT ${name}`, width: img.width, height: img.height },
+      image: { src: `/nft/${img.file}.webp`, alt: `Arte do NFT ${name}`, width: img.width, height: img.height },
       defaultEditionId: editions[0]!.id,
       listedAt: iso(SEED_BASE_DATE - i * 31 * HOUR - rng.int(0, 20) * HOUR),
       isNew: i < 14,

@@ -74,6 +74,24 @@ export default defineConfig({
     tailwindcss(),
     preloadBootstrapGraph(),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Fewer, larger chunks: the app boots from ~55 tiny scripts otherwise (one round trip each on a slow link).
+        // socket.io-client / engine.io-client are deliberately NOT in `vendor` (nor any shared chunk the mocks import):
+        // engine.io captures `WebSocket` at evaluation, which must happen only after the MSW worker is up (see main.tsx).
+        advancedChunks: {
+          groups: [
+            {
+              name: 'vendor',
+              test: /node_modules[\\/](react|react-dom|scheduler|@tanstack|axios|zod|decimal\.js|radix-ui|@radix-ui|@floating-ui|aria-hidden|react-remove-scroll|react-remove-scroll-bar|react-style-singleton|use-callback-ref|use-sidecar|get-nonce|lucide-react|clsx|tailwind-merge|class-variance-authority|sonner|tiny-invariant|tiny-warning|cookie-es|seroval|seroval-plugins)[\\/]/,
+              priority: 20,
+            },
+          ],
+        },
+      },
+    },
+  },
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   preview: { headers: productionHeaders() },
 })

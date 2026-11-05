@@ -51,6 +51,8 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
         >
           <img
             src={nft.image.src}
+            srcSet={nft.image.srcset}
+            sizes="(min-width: 48rem) 250px, 168px"
             alt={nft.image.alt}
             width={nft.image.width}
             height={nft.image.height}

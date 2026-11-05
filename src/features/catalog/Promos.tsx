@@ -8,14 +8,14 @@ import { Button } from '@/components/ui/button'
 
 const PROMOS = [
   {
-    image: '/nft/artwork-03.png',
+    image: '/nft/artwork-03.webp',
     title: 'Lançamentos gênesis de edição limitada',
     text: 'Colecione edições escassas diretamente dos criadores antes da revelação pública.',
     search: { tab: 'new' as const },
     label: 'Explorar lançamentos gênesis',
   },
   {
-    image: '/nft/artwork-05.png',
+    image: '/nft/artwork-05.webp',
     title: 'Arte digital selecionada e muito mais',
     text: 'Explore novos artistas, coleções verificadas e obras digitais que definem a cultura.',
     search: { categories: ['arte-digital' as const] },
