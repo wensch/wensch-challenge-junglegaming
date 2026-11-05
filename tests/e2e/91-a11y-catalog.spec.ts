@@ -27,13 +27,13 @@ test.describe('@a11y catálogo e detalhe', () => {
 
   test('detalhe', async ({ page, boot }) => {
     await boot('/nft/nft_002')
-    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible()
     await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible()
     expect(await seriousViolations(page)).toEqual([])
   })
 
   test('detalhe esgotado e inexistente', async ({ page, boot }) => {
-    await boot('/nft/nft_005')
+    await boot('/nft/nft_010')
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     expect(await seriousViolations(page)).toEqual([])
     await page.goto('/nft/nft_999')

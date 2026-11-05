@@ -178,7 +178,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 | MSW-3 | Estado consistente entre catálogo, favoritos, carrinho, perfil, carteiras, pedidos | OK | Harness "two tabs share one DB", "confirming an order subtracts…"; `purchase-journey` |
 | MSW-4 | Persistência local + reset para cenário conhecido | OK | Harness "reset restores the seed…", "persist across reload" |
 | MSW-5 | Lentidão, latência variável, timeouts, sem conexão, HTTP de erro, configuráveis e reproduzíveis | OK | Cenários `latency.*`, `network.*`, `http.*` (harness); uso na UI em `12`, `05-cart`, `08` |
-| MSW-6 | Fixtures variadas para filtros/paginação; ≥2 usuários | OK | Harness "seed is deterministic and rich" (60 NFTs); alice e bob |
+| MSW-6 | Fixtures variadas para filtros/paginação; ≥2 usuários | OK | Harness "seed is deterministic and rich" (36 NFTs); alice e bob |
 | MSW-7 | Cenário: sucesso e vazio | OK | `default`, `catalog.empty` (harness; `01-catalog`) |
 | MSW-8 | Cenário: latência variável e fora de ordem | OK | `latency.variable`, `catalog.out-of-order` (harness; `01-catalog`) |
 | MSW-9 | Cenário: falha de conexão e 4xx/5xx | OK | `network.offline`, `network.timeout`, `http.500.once`, `http.503` (harness; `12`) |

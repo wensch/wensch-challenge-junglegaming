@@ -53,7 +53,41 @@ const IMAGES = [
 const WORDS_A = ['Aurora', 'Cidade', 'Eco', 'Fragmento', 'Horizonte', 'Jardim', 'Labirinto', 'Maré', 'Névoa', 'Órbita', 'Prisma', 'Quimera', 'Relâmpago', 'Santuário', 'Totem', 'Umbral', 'Vórtice', 'Zênite', 'Brasa', 'Cristal']
 const WORDS_B = ['Neon', 'Submersa', 'Dourado', 'Cósmico', 'Silencioso', 'Elétrico', 'Perdido', 'Líquido', 'Lunar', 'Digital', 'Ancestral', 'Fractal', 'Selvagem', 'Etéreo', 'Sintético', 'Vermelho', 'Boreal', 'Tropical', 'Quântico', 'Onírico']
 const PRICE_TIERS = ['0.016', '0.045', '0.08', '0.12', '0.25', '0.5', '0.89', '1.19', '1.5', '2.35', '4.2', '8.9', '26.846']
-const SOLD_OUT_INDEXES = new Set([4, 13, 22, 31, 40, 49, 58])
+const SOLD_OUT_INDEXES = new Set([9, 13, 22, 31])
+const NFT_COUNT = 36 // 4 pages of CATALOG_PAGE_SIZE (9), as in the Figma pagination
+/** Figma "Início" grid, page 1 (default sort = listed recently = seed order). Card 8 has no text in the layout: name/price are invented. */
+const FIGMA_FIRST_PAGE: { name: string; tokenId: string; price: string; compareAt: string | null; image: (typeof IMAGES)[number]['file'] }[] = [
+  { name: 'Emerald Ape', tokenId: '#042', price: '1.19', compareAt: null, image: 'artwork-03' },
+  { name: 'Sage Nomad', tokenId: '#009', price: '1.69', compareAt: null, image: 'artwork-04' },
+  { name: 'Neon Vessel', tokenId: '#552', price: '1.99', compareAt: '2.29', image: 'artwork-05' },
+  { name: 'Cosmic Bloom', tokenId: '#118', price: '1.29', compareAt: null, image: 'artwork-06' },
+  { name: 'Violet Nomad', tokenId: '#314', price: '1.39', compareAt: null, image: 'artwork-04' },
+  { name: 'Ivory Baron', tokenId: '#088', price: '1.79', compareAt: null, image: 'artwork-08' },
+  { name: 'Golden Beat', tokenId: '#207', price: '0.99', compareAt: null, image: 'artwork-09' },
+  { name: 'Amber Echo', tokenId: '#233', price: '0.79', compareAt: null, image: 'artwork-10' },
+  { name: 'Golden Signal', tokenId: '#160', price: '0.39', compareAt: null, image: 'artwork-09' },
+]
+
+function applyFigmaFirstPage(nfts: NftRec[]): void {
+  FIGMA_FIRST_PAGE.forEach((f, i) => {
+    const n = nfts[i]!
+    const img = IMAGES.find((x) => x.file === f.image)!
+    const image = i === 0
+      ? { src: '/nft/hero-emerald-ape.webp', alt: `Arte do NFT ${f.name}`, width: 1350, height: 1350 } // 3x art delivered for the Hero
+      : { src: `/nft/${img.file}.png`, alt: `Arte do NFT ${f.name}`, width: img.width, height: img.height }
+    if (i === 0) n.isTrending = true // Hero slide 1 = Emerald Ape
+    const d = n.editions[0]!
+    n.name = f.name
+    n.tokenId = f.tokenId
+    n.image = image
+    n.gallery = [image]
+    d.price = f.price
+    d.compareAtPrice = f.compareAt
+    n.description = `${f.name}, da coleção ${n.collection.name}: uma peça única em edição controlada.`
+    n.longDescription = [`${f.name} nasceu de um estudo sobre luz e memória, combinando camadas geradas à mão e processamento digital.`, n.longDescription[1]!]
+  })
+}
+
 const REVIEWERS = ['Marina C.', 'Rafael T.', 'Luiza P.', 'Gustavo A.', 'Helena M.', 'Diego F.']
 const REVIEW_TEXTS = ['Obra incrível, o detalhe ao vivo é ainda melhor.', 'Entrega rápida e transferência sem problemas.', 'Combina muito com a minha coleção.', 'Vale cada centavo, recomendo.', 'A edição limitada faz toda a diferença.']
 
@@ -146,14 +180,16 @@ function applyFigmaHero(nft: NftRec): NftRec {
 
 function makeNfts(rng: Rng): NftRec[] {
   const used = new Set<string>()
-  const list: NftRec[] = Array.from({ length: 60 }, (_, i): NftRec => {
+  const list: NftRec[] = Array.from({ length: NFT_COUNT }, (_, i): NftRec => {
     const pickName = () => `${rng.pick(WORDS_A)} ${rng.pick(WORDS_B)}`
     let name = pickName()
     while (used.has(name)) name = pickName()
     used.add(name)
     const category = CATEGORIES[i % CATEGORIES.length]!
     const cols = COLLECTIONS.filter((c) => c.category === category)
-    const col = cols[rng.int(0, cols.length - 1)]!
+    // Alternate between the first two collections of the category so every collection has siblings ("Mais desta coleção").
+    rng.int(0, cols.length - 1)
+    const col = cols[Math.floor(i / CATEGORIES.length) % Math.min(2, cols.length)]!
     const network: Network = i % 5 === 3 ? 'solana' : i % 3 === 1 ? 'polygon' : 'ethereum'
     const img = IMAGES[(i * 3 + (i >> 3)) % IMAGES.length]!
     const basePrice = rng.pick(PRICE_TIERS)
@@ -294,6 +330,7 @@ function makeOrder(id: string, user: (typeof SEED_USERS)[number], wallet: Wallet
 export async function buildSeed(): Promise<DbState> {
   const rng = createRng(SEED)
   const nfts = makeNfts(rng)
+  applyFigmaFirstPage(nfts)
   const [alice, bob] = SEED_USERS
   const users = await Promise.all(SEED_USERS.map(makeUser))
   const wAlice = makeWallet('wal_001', alice.id, 'primary', rng, alice)

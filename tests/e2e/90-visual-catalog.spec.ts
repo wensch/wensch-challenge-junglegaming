@@ -40,7 +40,7 @@ test.describe('@visual catálogo', () => {
   test('detalhe', async ({ page, boot }) => {
     await boot('/nft/nft_002')
     await settle(page, async () => {
-      await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible()
+      await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible()
       await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible()
     })
     await expect(page).toHaveScreenshot('detalhe.png', { fullPage: true })

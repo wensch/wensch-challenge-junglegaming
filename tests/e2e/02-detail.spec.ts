@@ -4,15 +4,15 @@
  */
 import { expect, test } from '../fixtures'
 
-// Seed (src/mocks/seed.ts, determinístico): nft_002 "Prisma Boreal" tem 1/10 (ed_002_1) e ABERTA (ed_002_2);
-// nft_012 tem 1/1 e 1/50 com a última esgotada; nft_005 está inteiro esgotado.
+// Seed (src/mocks/seed.ts, determinístico): nft_002 "Sage Nomad" tem 1/10 (ed_002_1) e ABERTA (ed_002_2);
+// nft_012 tem 1/1 e 1/50 com a última esgotada; nft_010 está inteiro esgotado.
 const heading = (page: import('@playwright/test').Page, name: string | RegExp) => page.getByRole('heading', { level: 1, name })
 
 test.describe('detalhe do NFT', () => {
   test('acesso direto mostra galeria, informações e edição; refresh preserva a edição da URL', async ({ page, boot }) => {
     await boot('/nft/nft_002')
-    await expect(heading(page, 'Prisma Boreal')).toBeVisible()
-    await expect(page.getByRole('main').getByRole('img', { name: /Prisma Boreal/ }).first()).toBeVisible()
+    await expect(heading(page, 'Sage Nomad')).toBeVisible()
+    await expect(page.getByRole('main').getByRole('img', { name: /Sage Nomad/ }).first()).toBeVisible()
     await expect(page.getByText('ID do token:')).toBeVisible()
     await expect(page.getByText('Coleção: Lume Fotografia')).toBeVisible()
     const chip = page.getByRole('button', { name: 'ABERTA' })
@@ -50,7 +50,7 @@ test.describe('detalhe do NFT', () => {
   })
 
   test('NFT totalmente esgotado: não há compra', async ({ page, boot }) => {
-    await boot('/nft/nft_005')
+    await boot('/nft/nft_010')
     await expect(page.getByRole('button', { name: 'Adicionar ao carrinho' })).toBeDisabled()
     await expect(page.getByRole('button', { name: 'Aumentar quantidade' })).toBeDisabled()
   })
@@ -93,9 +93,9 @@ test.describe('detalhe do NFT', () => {
 
   test('tempo real: preço e disponibilidade mudam na tela e são anunciados', async ({ page, boot }) => {
     await boot('/nft/nft_002')
-    await expect(heading(page, 'Prisma Boreal')).toBeVisible()
+    await expect(heading(page, 'Sage Nomad')).toBeVisible()
     await page.evaluate(() => window.__mock!.updateNft('nft_002', { price: '3.21', editions: [{ id: 'ed_002_1', available: 1 }] }))
-    await expect(page.getByTestId('nft-live-updates')).toContainText('Prisma Boreal foi atualizado')
+    await expect(page.getByTestId('nft-live-updates')).toContainText('Sage Nomad foi atualizado')
     await expect(page.getByTestId('nft-live-updates')).toContainText('3.21 ETH')
     await expect(page.getByTestId('nft-price').first()).toHaveText('3.21 ETH')
     // Esgotou: a edição passa a indisponível sem recarregar.
