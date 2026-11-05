@@ -54,7 +54,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Gates volta 2 | fidelidade ‖ qa ‖ segurança | **APPROVED** ×3 |
 | Revisor sênior volta 2 | revisor-frontend-senior | **CHANGES_REQUESTED** — 5 altos da volta 1 OK; novo alto N1 (expiração natural da sessão vira "visitante", perde contexto/rascunho) · [relatório](../../reports/fundacao/revisor-frontend-senior.md) |
 | Volta 3: N1 + R3 | arquiteto-contratos | **OK** — V1 do revisor passa (reason=expired, redirect=/wallets, draftKept=true); merge aab300a |
-| verify em main (aab300a) | orquestrador | 1ª execução RED (1 falha: qa-volta2 "CSP sem violação", desktop); 2ª **GREEN** (e2e 205 ✓, visual 6 ✓, a11y 9 ✓). Isolado: 12/12. **Flake intermitente sob carga, em aberto** |
+| verify em main (aab300a) | orquestrador | 1ª execução RED (1 falha: contracts-regressions "CSP sem violação", desktop); 2ª **GREEN** (e2e 205 ✓, visual 6 ✓, a11y 9 ✓). Isolado: 12/12. **Flake intermitente sob carga, em aberto** |
 | Revisor sênior volta 3 | revisor-frontend-senior | **APPROVED** — sem alto/crítico · [relatório](../../reports/fundacao/revisor-frontend-senior.md) |
 | Reteste segurança volta 3 | seguranca | **APPROVED** — 14/14 testes de segurança · [relatório](../../reports/fundacao/seguranca.md) |
 | Endurecimento pré-slices (F1 boot MSW sem controller, F6) | plataforma-mocks | **OK** — merge c2dde91 |
@@ -108,7 +108,7 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - **Lighthouse mobile:** Performance 70/68 contra a meta de 90, justificada com dados em `lighthouse/README.md` (LCP observado 0,65 s, simulado 5,8 s; 528 KB gz de JS, um terço é a camada de mocks exigida no build de demonstração; LH-5 proíbe simplificar para a nota). A11y, BP e SEO em 100; CLS 0; desktop 97/98.
 - **Matriz:** 141 OK · 6 parciais (LH-2; UI-1/UI-2/TEL-10: imagem do Detalhe 404 px, leitura do gate esclarecida em D31, medição formal não refeita; TEL-11/TEL-12).
 - Deduplicação entre slices (dois `Field`, duas `useWallets`, hooks de credencial, mapeadores de erro); BUG-QA-009 (6 `waitForTimeout`); BUG-QA-010 (link "Lista de interesse" fora do menu do sheet mobile); BUG-QA-013; baixas de segurança 1–5; R2–R5 do revisor.
-- Testes que só passam no retry sob carga (aparecem como "flaky", nunca silenciosos): varrimento de CSP logado (`qa-volta2`), `95-a11y-checkout` mobile (já corrigido pela espera de estado), rotas públicas contra a produção por latência de rede.
+- Testes que só passam no retry sob carga (aparecem como "flaky", nunca silenciosos): varrimento de CSP logado (`contracts-regressions`), `95-a11y-checkout` mobile (já corrigido pela espera de estado), rotas públicas contra a produção por latência de rede.
 
 ## Como reproduzir a evidência
 `npm ci && npm run verify` (clone limpo verificado em 9b0f011) · `BASE_URL=https://wensch-challenge-junglegaming.vercel.app npx playwright test` · `npm run lighthouse` · CI: GitHub Actions `verify` · baselines Linux: workflow `visual-baselines`.

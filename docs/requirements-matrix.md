@@ -17,14 +17,14 @@ Os specs não seguem a numeração do §9 (QA #1). Todos rodam no verify, em des
 | 1 | Busca, filtros, ordenação, paginação, histórico | `01-catalog` |
 | 2 | Detalhe direto e inexistente | `02-detail` |
 | 3 | Cadastro, login, expiração, logout, troca de usuário | `03-conta-sessao`, `20-session-tabs`, `21-session-clock-expiry`, `07-pagamento-falhas` (expira no envio) |
-| 4 | Favoritos com falha e recuperação | `04-favorites`, `04b-favorites-page` (página `/favorites`, isolamento alice/bob, rollback, `nft.updated`), `14-reteste-final` |
-| 5 | Carrinho, quantidades, remoção, cupom, persistência | `05-cart`, `qa-integrada` |
-| 6 | Compra completa até o recibo | `06-compra`, `qa-integrada`, `14-reteste-final` (compra duplicada após timeout) |
-| 7 | Falha de pagamento, clique repetido, timeout com o mesmo pedido | `07-pagamento-falhas` (inclui a chave de idempotência que sobrevive a outro pedido terminal), `14-reteste-final` |
+| 4 | Favoritos com falha e recuperação | `04-favorites`, `04b-favorites-page` (página `/favorites`, isolamento alice/bob, rollback, `nft.updated`), `favorites-and-duplicate-order` |
+| 5 | Carrinho, quantidades, remoção, cupom, persistência | `05-cart`, `purchase-journey` |
+| 6 | Compra completa até o recibo | `06-compra`, `purchase-journey`, `favorites-and-duplicate-order` (compra duplicada após timeout) |
+| 7 | Falha de pagamento, clique repetido, timeout com o mesmo pedido | `07-pagamento-falhas` (inclui a chave de idempotência que sobrevive a outro pedido terminal), `favorites-and-duplicate-order` |
 | 8 | Perfil, avatar, senha, carteiras com erros | `08-perfil-carteiras` |
 | 9 | Preço/disponibilidade via Socket.IO no checkout | `09-realtime-checkout`, `05-cart` (nft.updated) |
 | 10 | Duplicados/antigos, desconexão, pedido pendente | `10-pedido-pendente`, `00-smoke` (tempo real) |
-| 11 | Teclado, foco de diálogos, validação | `11-formularios-teclado`, `07-focus`, `qa-fundacao-shell`, `08` (validação) |
+| 11 | Teclado, foco de diálogos, validação | `11-formularios-teclado`, `07-focus`, `shell-routes-guards`, `08` (validação) |
 | 12 | Skeletons em lentidão, falha e retry | `12-skeletons`, `05-cart` (estados, resumo lento), `08` (estados) |
 
 Apoio: `mocks.spec` (harness do mock), `05-unit-cache` e `money-unit` (unidade), `13-overflow` (768 px), `90/94/96-visual-*`, `91/93/95-a11y-*`, `06-csp`.
@@ -45,9 +45,9 @@ Não bloqueia (abertas de propósito):
 | ID | Requisito | Status | Evidência e o que falta |
 |---|---|---|---|
 | ELIM-1 | Uso efetivo de toda a stack obrigatória (§2) | OK | React, TS, Router, Query, Axios (zero `fetch` fora dos mocks), socket.io-client, Tailwind, shadcn, MSW, Playwright e Lighthouse (`npm run lighthouse`, `lighthouse/` (run.mjs, config/, environment.md, reports/2026-11-04/ com HTML/JSON e summary.md)) participam de verdade |
-| ELIM-2 | Fluxos principais funcionais (não apenas visuais) | OK | `qa-integrada` (6/6 pela UI: visitante adiciona, login com merge, cupom, checkout, pendente, confirmado/recusado, logout e troca), `06-compra`, `03`, `05-cart`, `08`; verify 390 e2e |
-| ELIM-3 | Compra confirmada apenas com resposta da simulação | OK | `10-pedido-pendente` "recusado é terminal… confirmação só vem da simulação", `qa-integrada` (pendente: reload mantém pendente, sem recibo; `settleOrder confirmed` → recibo), `06-compra`, SEG passo 1; QA: `OrderPage`/`Receipt` só com `status === 'confirmed'` |
-| ELIM-4 | Sem exposição de dados entre usuários | OK | SEG `s2s3.sec` (alice → bob: DOM, cache, storage, socket sem dados; 403/404 em recurso alheio; 4/4), `03` "troca de usuário pela tela de login", `20-session-tabs`, `qa-integrada`. Toda chave privada sai de `queryKeys` (`['u', userId]`, REV). Baixas SEG #1 a #5 abertas, nenhuma bloqueia |
+| ELIM-2 | Fluxos principais funcionais (não apenas visuais) | OK | `purchase-journey` (6/6 pela UI: visitante adiciona, login com merge, cupom, checkout, pendente, confirmado/recusado, logout e troca), `06-compra`, `03`, `05-cart`, `08`; verify 390 e2e |
+| ELIM-3 | Compra confirmada apenas com resposta da simulação | OK | `10-pedido-pendente` "recusado é terminal… confirmação só vem da simulação", `purchase-journey` (pendente: reload mantém pendente, sem recibo; `settleOrder confirmed` → recibo), `06-compra`, SEG passo 1; QA: `OrderPage`/`Receipt` só com `status === 'confirmed'` |
+| ELIM-4 | Sem exposição de dados entre usuários | OK | SEG `s2s3.sec` (alice → bob: DOM, cache, storage, socket sem dados; 403/404 em recurso alheio; 4/4), `03` "troca de usuário pela tela de login", `20-session-tabs`, `purchase-journey`. Toda chave privada sai de `queryKeys` (`['u', userId]`, REV). Baixas SEG #1 a #5 abertas, nenhuma bloqueia |
 | ELIM-5 | Eventos passam por `socket.io-client` (nunca direto na UI) | OK | `09`, `10`, `05-cart` e `00-smoke` disparam só por `window.__mock` (`emit`/`updateNft`/`settleOrder`) → MSW `ws.link` → socket.io-client → reconciler; único `.handle(` fora dos mocks é o do socket (QA). `05-unit-cache` usa QueryClient isolado, é teste de unidade e não é citado como evidência de §9 |
 | ELIM-6 | Testes E2E executáveis | OK | Checkout limpo (clone GitHub em 9b0f011, `npm ci`, `npm run verify`): GREEN, 408 e2e, 22 visuais, 28 a11y; CI GitHub Actions `verify` (Ubuntu) no push de 9b0f011: success em 16 min, baselines Linux versionadas em `tests/__screenshots__/linux/` (22 imagens); 12 grupos do §9 cobertos (tabela acima); estabilidade: 2 verdes independentes (clone limpo e CI) mais produção |
 
@@ -56,9 +56,9 @@ Não bloqueia (abertas de propósito):
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | STK-1 | React + TypeScript | OK | verify (`tsc -b --noEmit` PASS; REV: zero `any`/`@ts-*`) |
-| STK-2 | TanStack Router em rotas, search params e proteção de fluxos privados (§4) | OK | `src/routes/*` (file-based, `autoCodeSplitting`), `validateSearch`, `_authed.beforeLoad`; `01-catalog` (URL), `03` (redirect), `qa-fundacao-shell` "guard _authed" |
+| STK-2 | TanStack Router em rotas, search params e proteção de fluxos privados (§4) | OK | `src/routes/*` (file-based, `autoCodeSplitting`), `validateSearch`, `_authed.beforeLoad`; `01-catalog` (URL), `03` (redirect), `shell-routes-guards` "guard _authed" |
 | STK-3 | TanStack Query em consultas, mutations e sincronização de cache (§4) | OK | Mutations de carrinho, favoritos, pedido, conta e carteiras (8 arquivos); `05-cart` e `04-favorites` (otimismo e rollback); `realtime/reconcile.ts` (`09`, `10`) |
-| STK-4 | Todas as chamadas REST via Axios (§4) | OK | `src/api/client.ts`; grep `fetch(`/`XMLHttpRequest` fora dos mocks = zero; `qa-volta2` "QA-004/005 runtime" |
+| STK-4 | Todas as chamadas REST via Axios (§4) | OK | `src/api/client.ts`; grep `fetch(`/`XMLHttpRequest` fora dos mocks = zero; `contracts-regressions` "QA-004/005 runtime" |
 | STK-5 | Socket.IO em tempo real | OK | `src/realtime/socket.ts`; `09`, `10`, `05-cart`, `00-smoke` via `window.__mock` |
 | STK-6 | Tailwind CSS + shadcn/ui adaptado à identidade (§8) | OK | `src/index.css` `@theme`, `components.json`, `src/components/ui/*` usados nas telas (Dialog da revisão, Select, Sheet, Dropdown); FID mediu cores e tipografia das 8 telas |
 | STK-7 | MSW para REST e eventos | OK | `src/mocks/browser.ts` + `ws.link`; toda a suíte de app roda sobre ele; harness exercita os 24 cenários |
@@ -70,7 +70,7 @@ Não bloqueia (abertas de propósito):
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | TEL-1 | Início: destaques, catálogo, busca, filtros, ordenação, navegação ao NFT | OK | `01-catalog`; `90-visual-catalog`; FID (hero e seções) |
-| TEL-2 | Detalhe: galeria, informações, edição, quantidade, favoritos, compra | OK | `02-detail`, `04-favorites`, `05-cart` (adicionar), `qa-integrada` (compra a partir do detalhe) |
+| TEL-2 | Detalhe: galeria, informações, edição, quantidade, favoritos, compra | OK | `02-detail`, `04-favorites`, `05-cart` (adicionar), `purchase-journey` (compra a partir do detalhe) |
 | TEL-3 | Carrinho: quantidades, remoção, cupom, resumo de valores | OK | `05-cart`, `96-visual-checkout` carrinho |
 | TEL-4 | Pagamento: dados do colecionador, carteira e rede, revisão, envio | OK | `06-compra`, `07-pagamento-falhas`, `96-visual-checkout` pagamento |
 | TEL-5 | Confirmação: resultado, id da transação, itens, taxas, total | OK | `06-compra` (recibo), `10-pedido-pendente`, `95-a11y-checkout` (pendente, confirmado, recusado). Fidelidade da tela não medida (FID) |
@@ -79,7 +79,7 @@ Não bloqueia (abertas de propósito):
 | TEL-8 | Perfil: dados, avatar, alteração de senha | OK | `08-perfil-carteiras` (dados após refresh, validação, erros da API, `CONFLICT_VERSION`, avatar, senha) |
 | TEL-9 | Carteiras: principal e secundária, cadastro e edição | OK | `08-perfil-carteiras` (principal e secundária, EVM x Solana, duplicado, `CONFLICT_VERSION`) |
 | TEL-10 | Frames desktop e mobile; perfil/carteiras/confirmação funcionais em mobile | parcial | Specs funcionais rodam no projeto mobile 390 (verify); FID mediu as telas em 390/768/1440. **Falta:** medir a Confirmação; imagem principal do Detalhe 404 px contra 444 px (média, FID #3) sem correção registrada |
-| TEL-11 | Fora de escopo (editorial, suporte, atividade, ofertas, downloads) não aparenta sucesso; links externos coerentes | parcial | `qa-fundacao-shell` "nenhum link morto; /em-breve não aparenta sucesso". **Falta:** auditoria das ações auxiliares das telas novas (compartilhar, explorer) além de SEG (`noopener`, https) |
+| TEL-11 | Fora de escopo (editorial, suporte, atividade, ofertas, downloads) não aparenta sucesso; links externos coerentes | parcial | `shell-routes-guards` "nenhum link morto; /em-breve não aparenta sucesso". **Falta:** auditoria das ações auxiliares das telas novas (compartilhar, explorer) além de SEG (`noopener`, https) |
 | TEL-12 | Estados não desenhados seguem o padrão visual | parcial | Estados cobertos funcionalmente (`05-cart`, `08`, `12`, `06` "Pedido indisponível") e `PageStates`. **Falta:** FID não mediu os estados de erro e vazio das telas novas |
 
 ## Catálogo e detalhe (§3)
@@ -101,9 +101,9 @@ Não bloqueia (abertas de propósito):
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | CAR-1 | Adicionar, alterar e remover respeitando disponibilidade por NFT/edição | OK | `05-cart` "quantidade respeita a disponibilidade e remoção atualiza o resumo", `02-detail` |
-| CAR-2 | Persistência após refresh | OK | `05-cart` "visitante: … persistência após refresh", "usuário logado: carrinho próprio persiste"; `qa-integrada` |
-| CAR-3 | Itens do visitante preservados ao autenticar | OK | `05-cart` "itens do visitante preservados ao autenticar", `qa-integrada` (login com merge) |
-| CAR-4 | Aplicar/remover cupom; inválido e expirado tratados | OK | `05-cart` "cupom válido, remoção, inválido e expirado"; `qa-integrada` (cupom persiste após reload) |
+| CAR-2 | Persistência após refresh | OK | `05-cart` "visitante: … persistência após refresh", "usuário logado: carrinho próprio persiste"; `purchase-journey` |
+| CAR-3 | Itens do visitante preservados ao autenticar | OK | `05-cart` "itens do visitante preservados ao autenticar", `purchase-journey` (login com merge) |
+| CAR-4 | Aplicar/remover cupom; inválido e expirado tratados | OK | `05-cart` "cupom válido, remoção, inválido e expirado"; `purchase-journey` (cupom persiste após reload) |
 | CAR-5 | Subtotal, desconto, taxa de rede e total coerentes com a API | OK | `05-cart` "resumo vindo da cotação"; `96-visual-checkout` |
 | CAR-6 | Reflete preço/disponibilidade recebidos com carrinho aberto | OK | `05-cart` "preço e disponibilidade chegam por nft.updated com o carrinho aberto" (`cart-announcer`) |
 | MON-1 | ETH como string decimal com precisão em cálculo e apresentação; quantidades inteiras | OK | `ethSchema` nos contratos; `src/lib/money.ts` (decimal.js) com `money-unit` (float, subtração, arredondamento 18 casas); grep zero `Number(`/`parseFloat` em `src` e em `tests`; lint `noAppNumberCoercion` em todo o app |
@@ -117,9 +117,9 @@ Não bloqueia (abertas de propósito):
 | PAG-2 | Carteiras cadastradas, seleção de rede, simulação de conexão/recusa/desconexão | OK | `07` "carteira recusa a conexão e depois conecta; desconectar bloqueia o envio" |
 | PAG-3 | Revalidar preço, disponibilidade, cupom e taxas antes de confirmar; mudança exige nova confirmação | OK | `07` (QUOTE_STALE), `09` (preço e esgotamento com o checkout aberto, cenário `checkout.price-changed`) |
 | PAG-4 | Sem pedido duplicado em clique repetido ou reenvio após timeout | OK | `07` "clique repetido: um único POST", "timeout após criação: … mesma chave … mesmo pedido", "abrir um pedido terminal antigo não perde a chave"; SEG passo 2 (replay 200, corpo diferente 409) |
-| PAG-5 | Estados pendente/confirmado/recusado com recuperação após refresh ou reconexão | OK | `10` (refresh pendente, queda de conexão, recusado permanece), `qa-integrada` |
+| PAG-5 | Estados pendente/confirmado/recusado com recuperação após refresh ou reconexão | OK | `10` (refresh pendente, queda de conexão, recusado permanece), `purchase-journey` |
 | PAG-6 | Confirmação exibida só para pedido confirmado na simulação | OK | = ELIM-3 |
-| PAG-7 | Itens preservados em falha; após confirmação remove só itens/quantidades comprados | OK | `07` "pagamento recusado: itens preservados", `06` "remoção parcial: só o comprado sai", `qa-integrada` (recusado preserva carrinho) |
+| PAG-7 | Itens preservados em falha; após confirmação remove só itens/quantidades comprados | OK | `07` "pagamento recusado: itens preservados", `06` "remoção parcial: só o comprado sai", `purchase-journey` (recusado preserva carrinho) |
 | PAG-8 | Recibo reproduz snapshot; mudanças no catálogo não alteram; referências/links simulados | OK | `06` "recibo é snapshot … também após refresh"; SEG (`explorerUrl` só https, `rel="noopener noreferrer"`) |
 
 ## Conta e sessão (§3)
@@ -127,8 +127,8 @@ Não bloqueia (abertas de propósito):
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | CON-1 | Cadastro, login, logout e sessão integrados à API simulada | OK | `03` (cadastro, login, logout pela UI), `20-session-tabs`, harness auth |
-| CON-2 | Checkout, perfil, carteiras, favoritos e pedidos exigem autenticação | OK | `qa-fundacao-shell` "guard _authed" (5 rotas), `03` "rota privada sem sessão", `04` (visitante vai ao login) |
-| CON-3 | Sessão recuperável após refresh | OK | `03` (sessão sobrevive ao refresh), `qa-fundacao-shell`, `00-smoke` |
+| CON-2 | Checkout, perfil, carteiras, favoritos e pedidos exigem autenticação | OK | `shell-routes-guards` "guard _authed" (5 rotas), `03` "rota privada sem sessão", `04` (visitante vai ao login) |
+| CON-3 | Sessão recuperável após refresh | OK | `03` (sessão sobrevive ao refresh), `shell-routes-guards`, `00-smoke` |
 | CON-4 | Expiração durante navegação e checkout, preservando contexto para retomada | OK | `03` "sessão expira durante a navegação", `21-session-clock-expiry`, `07` "sessão expira no envio: o checkout é retomado … com o mesmo rascunho" |
 | CON-5 | Logout/troca de usuário limpa cache privado e subscriptions | OK | `03` "troca de usuário pela tela de login", `20-session-tabs`, SEG (cache, DOM, storage e socket de alice vazios para bob) |
 | CON-6 | Validação de cadastro, perfil, senha e carteiras, incluindo erros da API | OK | `03`, `08` (cliente e `forms.server-validation`, `EMAIL_TAKEN`), `11` |
@@ -142,10 +142,10 @@ Não bloqueia (abertas de propósito):
 | INT-1 | Contratos tipados transporte → estado → interface | OK | zod em request e response (`src/api/contracts`), `DataTag` nas keys, verify typecheck PASS, REV (zero `any`) |
 | INT-2 | Estados loading, vazio, erro, sucesso, atualização em segundo plano | OK | `12-skeletons`, `05-cart` "estados", `08` "estados: skeleton, erro com nova tentativa e atualização em segundo plano" |
 | INT-3 | Invalidação coerente após mutations e eventos | OK | `reconcile.ts` (`09`, `10`), `onSettled` das mutations (REV), `05-cart` (rollback) |
-| INT-4 | Cancelamento/descarte de respostas obsoletas | OK | `qa-volta2` "cancelamento…" (`ownedQueryFn`), `01-catalog` fora de ordem, REV (`isCurrentOwner` após cada `await`) |
+| INT-4 | Cancelamento/descarte de respostas obsoletas | OK | `contracts-regressions` "cancelamento…" (`ownedQueryFn`), `01-catalog` fora de ordem, REV (`isCurrentOwner` após cada `await`) |
 | INT-5 | Isolamento por usuário e por parâmetros | OK | `src/queries/keys.ts` (`['u', userId]`, `['guest', id]`), REV (sempre pela factory), SEG, `20-session-tabs` |
 | INT-6 | Recuperação de falhas sem duplicar operações | OK | `07` (timeout com a mesma chave), `12-skeletons` (retry), retry só em TRANSIENT (REV) |
-| INT-7 | Rotas inexistentes e acesso direto a qualquer tela | OK | `00-smoke` 404 e deep link, `qa-fundacao-shell`, `06` "pedido de outro usuário e id inexistente", `vercel.json` rewrite |
+| INT-7 | Rotas inexistentes e acesso direto a qualquer tela | OK | `00-smoke` 404 e deep link, `shell-routes-guards`, `06` "pedido de outro usuário e id inexistente", `vercel.json` rewrite |
 | INT-8 | Atualização otimista com rollback (≥1) | OK | `04-favorites` falha, `05-cart` "atualização otimista: falha da API reverte a quantidade" |
 | INT-9 | Política de cache, retries e sincronização documentada | OK | ARCHITECTURE §7 e §8; `src/queries/client.ts` |
 
@@ -163,7 +163,7 @@ Status sobre contrato + mock (harness executado no verify) e, onde há, consumo 
 | API-6 | Pedidos: criação idempotente; consulta de estado e recibo | OK | Harness "orders are idempotent…"; `06`, `10` |
 | API-7 | Perfil: consulta, dados/avatar, senha | OK | Harness; `08` |
 | API-8 | Carteiras: consulta, cadastro, atualização | OK | Harness (409 por versão); `08` |
-| API-9 | Erros: validação, sessão inválida, sem permissão, inexistente, conflito de disponibilidade, falha transitória | OK | Harness; `qa-volta2` "QA-004/005 runtime"; SEG (403/404) |
+| API-9 | Erros: validação, sessão inválida, sem permissão, inexistente, conflito de disponibilidade, falha transitória | OK | Harness; `contracts-regressions` "QA-004/005 runtime"; SEG (403/404) |
 | API-10 | Idempotency key: mesma tentativa → mesmo pedido; mesma chave com conteúdo diferente → conflito | OK | Harness; `07`; SEG passo 2 (200 com o mesmo `ord_*`; 409 `IDEMPOTENCY_CONFLICT`) |
 | API-11 | Contratos documentados | OK | ARCHITECTURE §2 e §3; `src/api/contracts/endpoints.ts` |
 
@@ -175,7 +175,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 |---|---|---|---|
 | MSW-1 | Mocks na camada de rede, reusados em dev, demo e testes | OK | SW do MSW + `ws.link`; `VITE_ENABLE_MOCKS=true` em `.env.development` e `.env.production`; suíte contra o build de produção |
 | MSW-2 | Nenhuma resposta fictícia em componentes, hooks ou Axios | OK | Grep: zero import de `src/mocks` fora dele além de `src/main.tsx`; ESLint `no-restricted-imports`; REV: fixtures só em `browser-*.js` (`grep -l "Aurora Digital" dist/assets/*.js`) |
-| MSW-3 | Estado consistente entre catálogo, favoritos, carrinho, perfil, carteiras, pedidos | OK | Harness "two tabs share one DB", "confirming an order subtracts…"; `qa-integrada` |
+| MSW-3 | Estado consistente entre catálogo, favoritos, carrinho, perfil, carteiras, pedidos | OK | Harness "two tabs share one DB", "confirming an order subtracts…"; `purchase-journey` |
 | MSW-4 | Persistência local + reset para cenário conhecido | OK | Harness "reset restores the seed…", "persist across reload" |
 | MSW-5 | Lentidão, latência variável, timeouts, sem conexão, HTTP de erro, configuráveis e reproduzíveis | OK | Cenários `latency.*`, `network.*`, `http.*` (harness); uso na UI em `12`, `05-cart`, `08` |
 | MSW-6 | Fixtures variadas para filtros/paginação; ≥2 usuários | OK | Harness "seed is deterministic and rich" (60 NFTs); alice e bob |
@@ -197,7 +197,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | RT-1 | `nft.updated` atualiza preço/disponibilidade em catálogo, detalhe e carrinho | OK | `01-catalog`, `02-detail`, `05-cart` "preço e disponibilidade chegam por nft.updated com o carrinho aberto" |
-| RT-2 | `order.updated` atualiza pedido e apresenta confirmação/recusa | OK | `10` (pendente → confirmado com foco no título, recusado), `qa-integrada` |
+| RT-2 | `order.updated` atualiza pedido e apresenta confirmação/recusa | OK | `10` (pendente → confirmado com foco no título, recusado), `purchase-journey` |
 | RT-3 | Eventos com id estável, recurso afetado e versão | OK | `src/api/contracts/events.ts`; harness; `00-smoke` payload inválido |
 | RT-4 | Tolerar duplicatas e eventos antigos sem regredir nem reaplicar efeitos | OK | `10` "eventos duplicados e antigos não reaplicam nem regridem o estado terminal"; `00-smoke` |
 | RT-5 | Reconciliação com REST após reconexão | OK | `10` "conexão cai com o pedido pendente: ao reconectar o estado é recuperado do REST" |
@@ -213,7 +213,7 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 | UI-1 | Fidelidade: tipografia, cores, espaçamentos, hierarquia, imagens, proporções | parcial | FID mediu fundo, fonte, hero, títulos; **aberto:** imagem do Detalhe 404 px contra 444 px, Confirmação não medida, sem relatório de reverificação |
 | UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | `13-overflow` (telas públicas e da conta em 390/768/1440), `92-header-tablet`; FID. **Falta:** Confirmação e checkout em 768 sem medição |
 | UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | OK | `12-skeletons` (catálogo e detalhe, CLS, reduced-motion), `05-cart` "carrinho lento: skeleton do resumo sem CLS" |
-| A11Y-1 | Navegação por teclado e foco visível | OK | `11` (Tab, Enter, foco visível), `07-focus`, `qa-fundacao-shell` "teclado" |
+| A11Y-1 | Navegação por teclado e foco visível | OK | `11` (Tab, Enter, foco visível), `07-focus`, `shell-routes-guards` "teclado" |
 | A11Y-2 | Controle de foco em diálogos e drawers | OK | `15-foco-dialogos`: diálogo de revisão do pagamento (foco dentro, Tab/Shift+Tab presos, Esc fecha e devolve o foco a "Confirmar compra" — BUG-QA-011 corrigido), Sheet do menu mobile (deslogado e logado) e menu da conta; também `11`, `00-smoke`, `10` |
 | A11Y-3 | Semântica, labels e erros associados | OK | `11` (`aria-describedby`, foco no primeiro inválido), `08`, `91/93/95` (axe sem crítico ou sério; verify a11y 28) |
 | A11Y-4 | Alternativas textuais | OK | axe `91/93/95` (verify) sobre catálogo, detalhe, conta e checkout |
@@ -232,8 +232,8 @@ Mapeamento grupo → spec na tabela do topo.
 | E2E-02 | Acesso direto ao detalhe e inexistente | OK | `tests/e2e/02-detail.spec.ts` |
 | E2E-03 | Cadastro, login, expiração, logout, troca de usuário | OK | `03-conta-sessao` (cadastro, login, expiração, logout, troca pela UI), `20`, `21` |
 | E2E-04 | Favoritos com falha e recuperação | OK | `04-favorites` "falha da mutation desfaz o otimismo, avisa e a nova tentativa funciona" |
-| E2E-05 | Carrinho, quantidades, remoção, cupom, persistência refresh/login | OK | `05-cart`, `qa-integrada` |
-| E2E-06 | Compra completa até recibo | OK | `06-compra`, `qa-integrada` |
+| E2E-05 | Carrinho, quantidades, remoção, cupom, persistência refresh/login | OK | `05-cart`, `purchase-journey` |
+| E2E-06 | Compra completa até recibo | OK | `06-compra`, `purchase-journey` |
 | E2E-07 | Falha de pagamento, clique repetido, timeout com mesmo pedido | OK | `07-pagamento-falhas` |
 | E2E-08 | Perfil, avatar, senha, carteiras com erros | OK | `08-perfil-carteiras` |
 | E2E-09 | Preço/disponibilidade via Socket.IO no checkout | OK | `09-realtime-checkout` |
@@ -261,7 +261,7 @@ Mapeamento grupo → spec na tabela do topo.
 |---|---|---|---|
 | DEL-1 | Código, lockfile, assets, mocks, fixtures, testes, configs de auditoria | OK | `package-lock.json`, `src/mocks`, `tests/`, `scripts/verify.mjs`, `lighthouse/` (config e relatórios) |
 | DEL-2 | Deploy público == código; mocks e tempo real funcionando | OK | Suíte completa contra https://wensch-challenge-junglegaming.vercel.app: 458 passed, 22 skipped, 0 failed; Vercel serve 9b0f011 (READY), igual ao HEAD enviado naquele momento (9b0f011); commits posteriores (421ab7e, 824a22f) só alteram testes e relatórios. Refazer o smoke se o app mudar |
-| DEL-3 | Acesso direto e refresh no ambiente publicado | OK | Suíte completa contra https://wensch-challenge-junglegaming.vercel.app: 458 passed, 22 skipped, 0 failed; Vercel serve 9b0f011 (READY) (acesso direto e refresh cobertos: `00-smoke`, `qa-fundacao-shell`, `06`; headers CSP, Permissions-Policy, COOP e HSTS presentes) |
+| DEL-3 | Acesso direto e refresh no ambiente publicado | OK | Suíte completa contra https://wensch-challenge-junglegaming.vercel.app: 458 passed, 22 skipped, 0 failed; Vercel serve 9b0f011 (READY) (acesso direto e refresh cobertos: `00-smoke`, `shell-routes-guards`, `06`; headers CSP, Permissions-Policy, COOP e HSTS presentes) |
 | DEL-4 | README: setup, env, credenciais, cenários/reset, comandos, reprodução de falhas | OK | `README.md` (185 linhas): setup, env, credenciais fictícias, cenários e reset, comandos, reprodução de falhas, resultados do Lighthouse |
 | DEL-5 | ARCHITECTURE: contratos, eventos, sessão, carrinho, cache, reconciliação, limitações, UX, desvios Figma | OK | `ARCHITECTURE.md` §2 a §13: decisões D1..D22, D30..D32 e D40; D23..D29 não existem (renumeração), lacuna registrada na tabela; D40 = página `/favorites` |
 | DEL-6 | Comandos: dev c/ mocks, build, preview, typecheck, lint, Playwright, Lighthouse | OK | `package.json` scripts, todos existentes; `npm run lighthouse` → `lighthouse/run.mjs` presente e executado (relatórios de 2026-11-04) |
