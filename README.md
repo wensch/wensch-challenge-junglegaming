@@ -191,7 +191,10 @@ A única meta não atingida é a Performance mobile (68 e 68 contra 90). O LCP o
 - Não há frames de tablet, rodapé mobile, perfil/carteiras mobile nem busca desktop no Figma; o layout nesses casos é derivado. Páginas editoriais, suporte, atividade, ofertas e downloads levam a `/em-breve` e não simulam sucesso.
 - A página `/favorites` (Lista de interesse) existe e funciona: lista os favoritos do usuário autenticado, remove com atualização otimista e rollback em falha, atualiza preço e disponibilidade em tempo real e mostra estados de carregamento, vazio e erro (D40). Não há quadro dela no Figma.
 - Login e cadastro são rotas (o Figma mostra modais); a confirmação do pedido também é rota. O ícone "thank you" não foi exportado.
-- Tabela completa dos desvios (D1 a D22, D30 a D32 e D40) em [ARCHITECTURE §13](ARCHITECTURE.md#13-desvios-do-figma).
+- Tabela completa dos desvios (D1 a D22, D30 a D32 e D40 a D44) em [ARCHITECTURE §13](ARCHITECTURE.md#13-desvios-do-figma).
+- Imagens de NFT, Hero e ícones vêm do arquivo Figma do desafio (cópia de trabalho); são usadas apenas como dados fictícios de demonstração. A arte do Hero em 3x foi exportada do mesmo Figma e servida em WebP. Fonte Roboto Mono sob licença OFL.
+- A página 1 do catálogo reproduz o Figma (ordem, nomes, preços); as contagens da barra lateral vêm dos dados reais (36 itens, 4 páginas) e por isso diferem dos números desenhados no Figma (ARCHITECTURE §13, D43).
+- Parcial na matriz: medição da Confirmação e do checkout em 768 px; imagem principal do Detalhe (404 px contra 444 px no Figma); Performance mobile do Lighthouse justificada (ver Resultados do Lighthouse).
 - Pendências e partes ainda não comprovadas por evidência: veja a coluna de status em [docs/requirements-matrix.md](docs/requirements-matrix.md).
 
 ## Uso de IA
