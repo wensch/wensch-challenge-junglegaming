@@ -1,6 +1,6 @@
 # STATUS
 
-**Fase atual:** Fase 5 — entrega. Todas as fases de construção concluídas; fechando lacunas de teste (a11y/listeners) e o push final.
+**Fase atual:** ENTREGA PRONTA — todas as fases concluídas; `main` = produção = CI verde (e7f39d6).
 **Última atualização:** 2026-11-03
 
 ## Etapas
@@ -87,7 +87,9 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Produção (Vercel) | orquestrador | serve **9b0f011** (READY); suíte completa contra a produção: **458 passed, 22 skipped, 0 failed** |
 | Reteste final do delta | revisor sênior + QA | **APPROVED** ×2 ([revisor](reports/s-integrada/revisor-frontend-senior.md), [QA](reports/s-integrada/qa-features.md)); achado médio de teste (cliques rápidos) corrigido com teste de mutação |
 | Matriz de requisitos | auditor-requisitos | **fechada: 137 OK · 10 parcial · 0 pendente**; nenhuma pendência bloqueia a entrega; 6 eliminatórios OK ([rel](reports/s-integrada/auditor-requisitos.md)) |
-| Lacunas de teste (A11Y-2/E2E-11 foco em diálogos, A11Y-7 zoom 200%, RT-7 listeners) | qa-features | em andamento |
+| Lacunas de teste (A11Y-2/E2E-11 foco em diálogos, A11Y-7 zoom 200%, RT-7 listeners) | qa-features | **OK** — specs 15/16/17; 2 defeitos reais corrigidos: BUG-QA-011 (foco volta a "Confirmar compra" ao fechar a revisão) e BUG-QA-012 (reflow do rodapé a 320 px); BUG-QA-013 (contadores de listeners) fica como limitação |
+| Estado final | orquestrador | **verify local GREEN** (456 e2e, 22 visuais, 27 a11y; 2 flaky só no retry) · **CI Ubuntu success** no push e7f39d6 (14m34s) · **produção serve e7f39d6** (READY) · suíte contra a produção em 1a976f9: 502 passed, 0 failed, 5 flaky só no retry |
+| Incidentes do CI na reta final (resolvidos) | orquestrador | (1) baselines Linux do rodapé mobile desatualizadas após BUG-QA-012 → regeneradas pelo workflow `visual-baselines` (só 3 de 22 mudaram; rodapé antigo vazava da coluna a 390 px); (2) `95-a11y-checkout` falhava por contraste falso: o botão "Enviar pedido" nasce desabilitado e anima opacidade 0,5→1 ao habilitar; axe medindo no meio da transição → teste agora espera o botão habilitado e as animações finitas (84/84 sem retry) |
 
 ## Orçamento de uso
 Ciclo enxuto em vigor (CLAUDE.md): QA + revisor sênior por slice; segurança só em conta e checkout; reteste só do diff; máx. 2 agentes em paralelo; auditor em Sonnet.
@@ -102,9 +104,11 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - Deduplicação entre slices (dois `Field`, duas `useWallets`, três hooks de credencial, dois mapeadores de erro, mensagens de `QuoteIssue`): refatoração depois da integração, sem mudança de comportamento (revisor item 5).
 - BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
-## Abertas de propósito (não bloqueiam)
-Deduplicação entre slices; BUG-QA-009 (6 `waitForTimeout`); BUG-QA-010 (link "Lista de interesse" no menu do sheet mobile); baixas de segurança 1–5; R2–R5 do revisor; Perf mobile do Lighthouse (70/68 contra 90, justificada em `lighthouse/README.md`); parciais: UI-1/UI-2/TEL-10 (imagem do Detalhe 404 px × 444 px no Figma), TEL-11/12.
+## Abertas de propósito (não bloqueiam a entrega)
+- **Lighthouse mobile:** Performance 70/68 contra a meta de 90, justificada com dados em `lighthouse/README.md` (LCP observado 0,65 s, simulado 5,8 s; 528 KB gz de JS, um terço é a camada de mocks exigida no build de demonstração; LH-5 proíbe simplificar para a nota). A11y, BP e SEO em 100; CLS 0; desktop 97/98.
+- **Matriz:** 141 OK · 6 parciais (LH-2; UI-1/UI-2/TEL-10: imagem do Detalhe 404 px, leitura do gate esclarecida em D31, medição formal não refeita; TEL-11/TEL-12).
+- Deduplicação entre slices (dois `Field`, duas `useWallets`, hooks de credencial, mapeadores de erro); BUG-QA-009 (6 `waitForTimeout`); BUG-QA-010 (link "Lista de interesse" fora do menu do sheet mobile); BUG-QA-013; baixas de segurança 1–5; R2–R5 do revisor.
+- Testes que só passam no retry sob carga (aparecem como "flaky", nunca silenciosos): varrimento de CSP logado (`qa-volta2`), `95-a11y-checkout` mobile (já corrigido pela espera de estado), rotas públicas contra a produção por latência de rede.
 
-## Próximo passo
-1. Integrar os testes das lacunas, `verify` em main, push final, CI verde e deploy == HEAD.
-2. Se o app mudar, refazer o smoke em produção.
+## Como reproduzir a evidência
+`npm ci && npm run verify` (clone limpo verificado em 9b0f011) · `BASE_URL=https://wensch-challenge-junglegaming.vercel.app npx playwright test` · `npm run lighthouse` · CI: GitHub Actions `verify` · baselines Linux: workflow `visual-baselines`.
