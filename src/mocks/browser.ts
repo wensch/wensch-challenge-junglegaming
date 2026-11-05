@@ -1,6 +1,7 @@
 import { setupWorker } from 'msw/browser'
 import { installControl } from './control'
 import { loadPersisted, setDb } from './db'
+import { TRANSPORT_FAILURE_EVENT } from '@/api/transport-events'
 import { PING_PATH, restHandlers } from './handlers'
 import { API_BASE } from './http'
 import { resumePendingOrders } from './orders'
@@ -27,6 +28,58 @@ export async function startMocks(): Promise<void> {
     await new Promise<never>(() => {})
   }
   installControl()
+  watchWorker()
+}
+
+const HEALTH_INTERVAL_MS = 8_000
+const FULL_RESTART_COOLDOWN_MS = 60_000
+let reviving: Promise<boolean> | null = null
+let lastFullRestart = 0
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
+/**
+ * Keeps the simulated backend answering for the whole session, not only at boot.
+ *
+ * The browser stops an idle service worker (and freezes background timers, so MSW's own 5 s keep-alive stops
+ * too). The restarted worker starts with an EMPTY list of active clients and lets every /api request through
+ * to the network, where the SPA rewrite answers with HTML: screens fall into an error state until a reload.
+ * Re-activating this client is the same message MSW posts at start (`MOCK_ACTIVATE`, see
+ * public/mockServiceWorker.js); it does not touch the WebSocket interception, so a live socket survives.
+ * A full stop/start is the last resort (rate limited so a failure scenario cannot make it loop).
+ */
+export function reviveWorker(): Promise<boolean> {
+  reviving ??= (async () => {
+    if (await swAnswers()) return true
+    navigator.serviceWorker.controller?.postMessage('MOCK_ACTIVATE')
+    for (let i = 0; i < 10; i++) {
+      await sleep(100)
+      if (await swAnswers()) return true
+    }
+    if (Date.now() - lastFullRestart < FULL_RESTART_COOLDOWN_MS) return false
+    lastFullRestart = Date.now()
+    await worker.stop()
+    await worker.start({ onUnhandledRequest: 'bypass', quiet: true })
+    return swAnswers()
+  })()
+    .catch(() => false)
+    .finally(() => {
+      reviving = null
+    })
+  return reviving
+}
+
+/** When to check: the tab comes back, the connection returns, the HTTP client reports a transport failure, and every few seconds while visible. */
+function watchWorker(): void {
+  const check = () => {
+    if (document.visibilityState === 'visible') void reviveWorker()
+  }
+  document.addEventListener('visibilitychange', check)
+  window.addEventListener('pageshow', check)
+  window.addEventListener('online', check)
+  window.addEventListener('focus', check)
+  window.addEventListener(TRANSPORT_FAILURE_EVENT, () => void reviveWorker())
+  window.setInterval(check, HEALTH_INTERVAL_MS)
 }
 
 const RELOAD_FLAG = '__mock_sw_reload'

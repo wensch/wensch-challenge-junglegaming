@@ -13,6 +13,7 @@ import type { z } from 'zod'
 import { ApiError, apiErrorBodySchema, HEADERS, type EndpointAuth, type EndpointDef, type FieldErrors } from '@/api/contracts'
 import { env } from '@/env'
 import { logger } from '@/lib/log'
+import { notifyTransportFailure } from './transport-events'
 import { ensureGuestId, getToken } from '@/session/store'
 
 export const REQUEST_TIMEOUT_MS = 10_000
@@ -119,6 +120,7 @@ export function toApiError(error: unknown): unknown {
 
   if (!error.response) {
     const timedOut = error.code === AxiosError.ECONNABORTED || error.code === AxiosError.ETIMEDOUT
+    if (!timedOut) notifyTransportFailure()
     return new ApiError(
       {
         code: 'TRANSIENT',
@@ -135,6 +137,14 @@ export function toApiError(error: unknown): unknown {
   if (parsed.success) {
     const payload = { ...parsed.data.error, requestId: parsed.data.error.requestId ?? requestId }
     return new ApiError(payload, status)
+  }
+
+  // An error that is neither an API error body nor JSON (the SPA fallback, or the empty 404 of a static host)
+  // never reached the API: the same as a lost connection. Retryable, and it lets the mock layer recover first.
+  const contentType = String(error.response.headers?.['content-type'] ?? '')
+  if (!contentType.includes('json')) {
+    notifyTransportFailure()
+    return new ApiError({ code: 'TRANSIENT', reason: 'network', message: 'Sem conexão com o servidor.', ...(requestId ? { requestId } : {}) }, 0)
   }
 
   // Body outside the contract: classify by status only. 5xx stays retryable; anything else is not
@@ -222,6 +232,12 @@ export async function send<D extends EndpointDef>(def: D, args: SendArgs): Promi
     // Contract bug (or a non-API response such as the SPA fallback). Logged, surfaced as a
     // non-retryable server failure (status is 2xx, so `shouldRetry` declines it).
     logger.error(`[api] ${def.method} ${args.path}: response outside the contract`, parsed.error.issues)
+    if (typeof response.data === 'string') {
+      // The API URL answered with a document (the SPA fallback), so the request never reached the API: a
+      // transport failure, retryable like a lost connection. Lets the demo's mock layer recover first.
+      notifyTransportFailure()
+      throw new ApiError({ code: 'TRANSIENT', reason: 'network', message: 'Sem conexão com o servidor.' }, 0)
+    }
     throw new ApiError({ code: 'TRANSIENT', reason: 'server', message: 'Resposta inesperada do servidor.' }, response.status)
   }
   return parsed.data as ResponseOf<D>
