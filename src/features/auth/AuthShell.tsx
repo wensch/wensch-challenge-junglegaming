@@ -8,7 +8,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import { Link } from '@tanstack/react-router'
 import { X } from 'lucide-react'
 import type { AuthSearch } from '@/api/contracts'
-import { FacebookGlyph } from '@/components/layout/brand-icons'
+import { FacebookLoginIcon, GoogleIcon } from '@/components/icons/figma'
 import { Button } from '@/components/ui/button'
 import { hasClientNavigated } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
@@ -104,13 +104,11 @@ export function AuthShell({
         </div>
         <div className="mt-4 flex flex-col gap-3" aria-describedby="social-note">
           <Button disabled variant="outline" className="h-10 rounded-control border-line text-caption-sm font-bold text-text-secondary">
-            <span aria-hidden="true" className="text-body-md font-bold text-[#4285f4]">
-              G
-            </span>
+            <GoogleIcon />
             Continuar com Google
           </Button>
           <Button disabled variant="outline" className="h-10 rounded-control border-line text-caption-sm font-bold text-text-secondary">
-            <FacebookGlyph className="text-[#3b5998]" />
+            <FacebookLoginIcon />
             Continuar com Facebook
           </Button>
           <p id="social-note" className="text-center text-caption-sm text-text-secondary">

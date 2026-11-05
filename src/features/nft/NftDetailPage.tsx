@@ -6,12 +6,12 @@
 import { useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi, Link, useCanGoBack, useRouter } from '@tanstack/react-router'
-import { ChevronLeft, Mail, Star } from 'lucide-react'
+import { Mail } from 'lucide-react'
+import { ArrowLeftIcon, LinkedinIcon, StarIcon, TwitterIcon } from '@/components/icons/figma'
 import { isApiError, type Edition, type NftDetail } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { errorMessageOf, PageFrame } from '@/components/layout/PageStates'
-import { LinkedinGlyph, TwitterGlyph } from '@/components/layout/brand-icons'
 import { nftQueries } from '@/queries/nfts'
 import { toSummary } from '@/queries/favorites'
 import { cn } from '@/lib/utils'
@@ -39,9 +39,9 @@ function shareLinks(name: string) {
   const url = encodeURIComponent(window.location.href)
   const text = encodeURIComponent(`${name} na KURIO`)
   return [
-    { label: 'Compartilhar no LinkedIn (abre em nova aba)', href: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`, icon: <LinkedinGlyph aria-hidden="true" className="size-[15px]" />, external: true },
+    { label: 'Compartilhar no LinkedIn (abre em nova aba)', href: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`, icon: <LinkedinIcon className="size-6" />, external: true },
     { label: 'Compartilhar por e-mail', href: `mailto:?subject=${text}&body=${url}`, icon: <Mail aria-hidden="true" className="size-[18px]" />, external: false },
-    { label: 'Compartilhar no Twitter (abre em nova aba)', href: `https://twitter.com/intent/tweet?url=${url}&text=${text}`, icon: <TwitterGlyph aria-hidden="true" className="size-4" />, external: true },
+    { label: 'Compartilhar no Twitter (abre em nova aba)', href: `https://twitter.com/intent/tweet?url=${url}&text=${text}`, icon: <TwitterIcon className="size-6" />, external: true },
   ]
 }
 
@@ -109,11 +109,11 @@ function BackBar({ nft }: { nft: NftDetail }) {
     <div className="mb-2 flex items-center justify-between md:hidden">
       {canGoBack ? (
         <button type="button" aria-label="Voltar" onClick={() => router.history.back()} className="grid size-[35px] place-items-center rounded-full border border-line-soft text-text-primary">
-          <ChevronLeft aria-hidden="true" className="size-5" />
+          <ArrowLeftIcon />
         </button>
       ) : (
         <Link to="/" aria-label="Voltar ao catálogo" className="grid size-[35px] place-items-center rounded-full border border-line-soft text-text-primary">
-          <ChevronLeft aria-hidden="true" className="size-5" />
+          <ArrowLeftIcon />
         </Link>
       )}
       <FavoriteButton nft={toSummary(nft)} variant="icon" className="size-[35px] border border-line-soft bg-transparent" />
@@ -145,7 +145,7 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
                 {nft.name}
               </h1>
               <p className="flex h-[27px] shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 text-caption-sm font-bold text-text-accent md:hidden">
-                <Star aria-hidden="true" className="size-[14px]" fill="currentColor" strokeWidth={0} />
+                <StarIcon />
                 <span className="sr-only">Avaliação </span>
                 {nft.rating.average}
                 <span className="font-normal">({nft.rating.count})</span>

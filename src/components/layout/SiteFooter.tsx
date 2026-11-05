@@ -7,7 +7,7 @@
  */
 import { Link } from '@tanstack/react-router'
 import type { Category } from '@/api/contracts'
-import { FacebookGlyph, InstagramGlyph, LinkedinGlyph, TwitterGlyph, YoutubeGlyph } from './brand-icons'
+import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from '@/components/icons/figma'
 import type { UnavailableSection } from './sections'
 
 const highlights = [
@@ -43,11 +43,11 @@ const collectionLinks: { label: string; category: Category }[] = [
 ]
 
 const socials = [
-  { label: 'Facebook', Icon: FacebookGlyph },
-  { label: 'Instagram', Icon: InstagramGlyph },
-  { label: 'Twitter', Icon: TwitterGlyph },
-  { label: 'LinkedIn', Icon: LinkedinGlyph },
-  { label: 'YouTube', Icon: YoutubeGlyph },
+  { label: 'Facebook', Icon: FacebookIcon },
+  { label: 'Instagram', Icon: InstagramIcon },
+  { label: 'Twitter', Icon: TwitterIcon },
+  { label: 'LinkedIn', Icon: LinkedinIcon },
+  { label: 'YouTube', Icon: YoutubeIcon },
 ] as const
 
 const linkClass = 'text-body-sm text-foreground hover:text-text-accent'
@@ -182,7 +182,7 @@ export function SiteFooter() {
                     to="/em-breve"
                     search={{ secao: 'redes-sociais' }}
                     aria-label={`${label} (em breve)`}
-                    className="grid size-8 place-items-center rounded-control border border-primary text-primary hover:bg-secondary"
+                    className="grid size-8 place-items-center rounded-control text-primary hover:bg-secondary"
                   >
                     <Icon />
                   </Link>

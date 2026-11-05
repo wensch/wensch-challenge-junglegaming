@@ -5,7 +5,7 @@
  */
 import { useRef, useState } from 'react'
 import { useNavigate, useRouterState, useSearch } from '@tanstack/react-router'
-import { Search } from 'lucide-react'
+import { SearchIcon } from '@/components/icons/figma'
 import { SearchForm } from './SearchForm'
 
 export function HeaderSearch() {
@@ -56,7 +56,7 @@ export function HeaderSearch() {
         onClick={() => setOpen((v) => !v)}
         className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent"
       >
-        <Search aria-hidden="true" className="size-6" strokeWidth={1.75} />
+        <SearchIcon />
       </button>
       {open && (
         <div id="header-search-panel" className="absolute top-full right-0 z-30 mt-3 w-[min(360px,calc(100vw-48px))] rounded-control border border-line-soft bg-popover p-3 shadow-lg">

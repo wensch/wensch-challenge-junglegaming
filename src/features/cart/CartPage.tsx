@@ -6,7 +6,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeftIcon } from '@/components/icons/figma'
 import { isApiError, type CartLine, type Quote, type QuoteIssue } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -145,7 +145,7 @@ export function CartPage() {
           aria-label="Voltar"
           className="absolute left-0 grid size-9 place-items-center rounded-full bg-surface-card text-text-accent outline-none focus-visible:ring-3 focus-visible:ring-ring/60 lg:hidden"
         >
-          <ArrowLeft aria-hidden="true" className="size-5" />
+          <ArrowLeftIcon />
         </button>
         <h1 ref={headingRef} tabIndex={-1} className="text-body-lg font-bold text-text-primary outline-none lg:sr-only">
           Carrinho de NFTs

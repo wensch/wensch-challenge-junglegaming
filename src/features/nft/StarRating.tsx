@@ -1,5 +1,6 @@
 /** Five stars for a rating string such as "4.8" (rounded to the nearest whole star; text is the label). */
 import { Star } from 'lucide-react'
+import { StarIcon } from '@/components/icons/figma'
 import { cn } from '@/lib/utils'
 
 function starsOf(average: string): number {
@@ -12,7 +13,7 @@ export function StarRating({ value, label, className }: { value: string; label: 
   return (
     <span role="img" aria-label={label} className={cn('inline-flex gap-1 text-text-accent', className)}>
       {Array.from({ length: 5 }, (_, i) => (
-        <Star key={i} aria-hidden="true" className="size-[15px]" fill={i < filled ? 'currentColor' : 'none'} strokeWidth={1.5} />
+        i < filled ? <StarIcon key={i} /> : <Star key={i} aria-hidden="true" className="size-[14px]" strokeWidth={1.5} />
       ))}
     </span>
   )
