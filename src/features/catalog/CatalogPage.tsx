@@ -53,7 +53,7 @@ export function CatalogPage() {
         </div>
 
         <div className="min-w-0">
-          <div className="mb-3 flex items-start justify-between gap-6 md:mb-4">
+          <div className="mb-3 flex items-baseline justify-between gap-6 md:mb-4">
             <CatalogTabs className="min-w-0" />
             <SortSelect className="hidden shrink-0 md:flex" />
           </div>

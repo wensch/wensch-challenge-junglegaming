@@ -10,7 +10,7 @@ export function CatalogTabs({ className }: { className?: string }) {
   const { search } = useCatalogSearch()
   return (
     <nav aria-label="Seções do catálogo" className={className}>
-      <ul className="flex flex-wrap gap-x-5 gap-y-2">
+      <ul className="flex gap-x-3 overflow-x-auto md:flex-wrap md:gap-x-5 md:gap-y-2 md:overflow-visible">
         {CATALOG_TABS.map((tab) => {
           const active = search.tab === tab
           return (
@@ -20,7 +20,7 @@ export function CatalogTabs({ className }: { className?: string }) {
                 search={(prev) => ({ ...prev, tab, page: 1 })}
                 aria-current={active ? 'true' : undefined}
                 className={cn(
-                  'block border-b-2 pb-1 text-body-sm leading-4 whitespace-nowrap transition-colors',
+                  'block border-b-2 pb-1 text-body-sm leading-4 whitespace-nowrap max-md:text-sm transition-colors',
                   active ? 'border-primary font-bold text-text-accent' : 'border-transparent text-text-primary hover:text-text-accent',
                 )}
               >
