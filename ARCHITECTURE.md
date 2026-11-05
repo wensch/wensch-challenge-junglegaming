@@ -309,11 +309,11 @@ Transporte: MSW `ws.link(VITE_SOCKET_URL)` + `@mswjs/socket.io-binding@0.2.0` (e
 
 | # | Frame / nó | Desvio | Motivo | Alternativa |
 |---|---|---|---|---|
-| D1 | Mobile / Início — Tab Bar (70395:245), botão central (15:5529) | O glifo de "scanner" do botão central foi trocado por ícone de menu e o botão abre o menu completo (Sheet) | O Figma não define ação para o scanner; abaixo de `md` não há header, então Mercado/Criadores/Aprenda/Entrar ficariam inalcançáveis | Se o design definir o scanner, o menu migra para outro ponto e o botão volta ao glifo original |
+| D1 | Mobile / Início — Tab Bar (70395:245), botão central (15:5529) | O botão central usa o glifo de "scanner" do Figma (ícone exportado), mas abre o menu completo (Sheet), com `aria-label="Abrir menu"` | O Figma não define ação para o scanner; abaixo de `md` não há header, então Mercado/Criadores/Aprenda/Entrar ficariam inalcançáveis | Se o design definir o scanner, o menu migra para outro ponto e o botão volta ao glifo original |
 | D2 | Mobile / Início — Tab Bar | Fundo com cantos arredondados + anel da cor da página ao redor do botão central, em vez do recorte curvo (vector 15:5504) | Recorte em SVG por viewport acrescenta complexidade sem ganho funcional; o anel reproduz o "entalhe" visualmente | Exportar o vector do Figma e usá-lo como máscara |
 | D3 | Rodapé (instância Footer 70492:696) em mobile | Não há frame mobile do rodapé; layout derivado: destaques em lista (ícone 48 px à esquerda), faixa da marca empilhada, links em 2 colunas, mesmo conteúdo | Ausência de frame | — |
 | D4 | Rodapé — newsletter | Campo e botão "Enviar" desabilitados, com o texto visível "Newsletter em breve." (uma linha) e o complemento "Inscrições ainda não estão abertas." em `sr-only`, ligado ao formulário por `aria-describedby` | Fora do escopo; o desafio proíbe simular sucesso. Na volta 2 o texto foi encurtado para caber na altura do bloco do Figma (+2 px) | Habilitar quando houver endpoint |
-| D5 | Rodapé — redes sociais | Ícones desenhados à mão (`brand-icons.tsx`) no estilo lucide; levam a `/em-breve?secao=redes-sociais` | lucide-react 1.x removeu ícones de marca; não há perfis reais | Trocar por SVG oficiais das marcas se exigido |
+| D5 | Rodapé — redes sociais | Usam os SVGs do Figma (`design/icons`); levam a `/em-breve?secao=redes-sociais` | Não há perfis reais das redes | Trocar por SVG oficiais das marcas se exigido |
 | D6 | Header desktop (revisto após a medição de fidelidade) | Em ≥ 1200 px segue o Figma: coluna de 1200, nav em x = 376 da coluna ("Início" em x = 496 no frame de 1440, como na referência) e gap de 40 px. Entre 768 e 1199 px, que não têm frame, a nav entra **no fluxo** entre logo e ações (`flex-1`, centralizada no espaço livre) e não é mais `absolute left-1/2`. Gaps: 16 px abaixo de `lg`, 40 px na nav e 24 px nas ações a partir de `lg`. O botão da conta fica limitado a 140 px abaixo de `lg`. Não há sobreposição de 768 a 1440, logado ou não: em 768 "Aprenda" termina em x = 470 e a busca começa em 540 | Não há frame tablet. A versão anterior (nav centralizada na página) colidia com a busca entre 768 e cerca de 850 px | Tab bar até 1023 px, se o design pedir |
 | D7 | Rodapé 1440 (medido contra o Figma) | Medidas alinhadas ao Figma: bloco de destaques 252 px (Figma 250), faixa da marca 88, links 236, copyright 36. Divisores em x = 417/683/949. Colunas da faixa e dos links em x = 152/455/758/1060. Linhas de link a cada 30 px. Selo de carteiras em 9 px sem quebra. Abaixo de `lg`, faixa e links em 2 colunas (antes eram 4 colunas apertadas em 768) | Fidelidade #2, #3 e #8 | — |
 | D8 | Tab bar mobile | Raio superior de 40 px (antes 28), mais perto do recorte do Figma | Fidelidade visual | — |
@@ -347,13 +347,14 @@ O enunciado (§8) pede que qualquer substituição de asset e qualquer ajuste de
 
 | Item | O que foi feito | Motivo | Ref. |
 |---|---|---|---|
-| Glifo de scanner da tab bar mobile | Trocado por ícone de menu que abre o menu completo | O Figma não define ação para o scanner e, abaixo de `md`, não há header | D1 |
+| Glifo de scanner da tab bar mobile | Usa o ícone do Figma, mas a ação é abrir o menu completo | O Figma não define ação para o scanner e, abaixo de `md`, não há header | D1 |
 | Recorte curvo da tab bar (vector 15:5504) | Substituído por cantos arredondados e anel da cor da página | Evita SVG por viewport sem ganho funcional | D2, D8 |
-| Ícones de redes sociais do rodapé | Desenhados à mão no estilo lucide (`brand-icons.tsx`) | `lucide-react` 1.x removeu os ícones de marca; não há perfis reais | D5 |
+| Ícones de redes sociais do rodapé | SVGs exportados do Figma (substituem os que eu havia desenhado à mão) | Fidelidade ao layout | D5 |
 | Ícone "thank you" da confirmação | Não exportado; omitido | Sem asset exportado | D21 |
 | Seção editorial "Diário da Cunhagem" e suas imagens | Não implementada | Páginas editoriais estão fora do escopo (§3) | D14 |
 | Selo "Raro" dos cards | Substituído por "Esgotado" e "Novo" | O contrato de dados não tem esse atributo | D17 |
 | Artes dos NFTs | As artes do arquivo (`design/assets`) foram copiadas para `public/nft` e reutilizadas pelos itens do seed; nenhuma URL externa de imagem | Execução local e determinismo | `src/mocks/README.md` |
+| Biblioteca de ícones | Os 25 ícones exportados do Figma (Iconly) estão em `design/icons/*.svg` e viram componentes React por `node scripts/gen-icons.mjs` (`src/components/icons/figma.tsx`): cor herdada do texto (`currentColor`), exceto os logotipos de marca; ids de máscara únicos por instância. O `lucide-react` continua só onde o Figma não exporta ícone equivalente (lixeira, + e −, fechar, setas e chevrons, e-mail, olho de senha visível, coração preenchido, estrela vazia, avatar) | Fidelidade ao layout, sem perder tema e contraste | §13 |
 | Fonte Roboto Mono | Servida de `public/fonts` (self-hosted), com `font-display: swap` e preload | Funcionar sem rede externa | §12 |
 | Favicon e `robots.txt` | Criados (não existem no Figma) | Boas práticas e SEO do Lighthouse | `public/` |
 
