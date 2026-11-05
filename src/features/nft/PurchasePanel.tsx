@@ -46,7 +46,7 @@ type QuantityOutput = { quantity: number }
 
 export function EditionChips({ editions, selectedId, onSelect }: { editions: Edition[]; selectedId: string; onSelect: (id: string) => void }) {
   return (
-    <div role="group" aria-labelledby="edition-label" className="flex flex-col gap-3">
+    <div role="group" aria-labelledby="edition-label" className="flex flex-col gap-2 md:gap-3">
       <p id="edition-label" className="text-body-sm font-bold text-text-primary">
         Edição:
       </p>
@@ -132,10 +132,10 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
   const describedBy = [error ? errorId : null, hintId].filter(Boolean).join(' ')
 
   return (
-    <form onSubmit={(e) => void submit('add')(e)} noValidate aria-label="Comprar" className="flex flex-col gap-4">
+    <form onSubmit={(e) => void submit('add')(e)} noValidate aria-label="Comprar" className="flex flex-col gap-4 max-md:-mx-6 max-md:mt-6 max-md:rounded-t-[40px] max-md:bg-surface-card max-md:px-6 max-md:pt-5 max-md:pb-6 max-md:shadow-[0_-8px_24px_rgb(0_0_0/0.25)] md:order-1">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-4 md:flex-nowrap">
-        <div className="flex items-center gap-3">
-          <span className="text-body-sm text-text-secondary md:hidden" aria-hidden="true">
+        <div className="flex items-center md:gap-3">
+          <span className="mr-2 text-body-sm text-text-secondary md:hidden" aria-hidden="true">
             Qtd.
           </span>
           <button
@@ -143,7 +143,7 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
             aria-label="Diminuir quantidade"
             disabled={unavailable || atMin}
             onClick={() => step(-1)}
-            className="grid size-[26px] place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
+            className="grid h-[30px] w-5 place-items-center max-md:mx-0.5 rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
           >
             <Minus aria-hidden="true" className="size-4" strokeWidth={2.5} />
           </button>
@@ -157,7 +157,7 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
             disabled={unavailable}
             aria-invalid={error ? true : undefined}
             aria-describedby={describedBy}
-            className="h-8 w-10 rounded-control bg-transparent text-center text-body-lg font-bold text-text-primary aria-invalid:border aria-invalid:border-destructive disabled:opacity-50 md:text-heading"
+            className="h-8 w-[31px] rounded-control md:w-10 bg-transparent text-center text-body-lg font-bold text-text-primary aria-invalid:border aria-invalid:border-destructive disabled:opacity-50 md:text-heading"
             {...register('quantity', { onChange: () => clearErrors('root.server') })}
           />
           <button
@@ -165,19 +165,19 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
             aria-label="Aumentar quantidade"
             disabled={unavailable || atMax}
             onClick={() => step(1)}
-            className="grid size-[26px] place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
+            className="grid h-[30px] w-5 place-items-center max-md:mx-0.5 rounded-full bg-primary text-primary-foreground disabled:opacity-40 md:size-[33px]"
           >
             <Plus aria-hidden="true" className="size-4" strokeWidth={2.5} />
           </button>
         </div>
         <NftPrice price={edition.price} compareAtPrice={edition.compareAtPrice} className="text-body-lg md:hidden" />
 
-        <div className="flex w-full items-center gap-2 md:w-auto">
+        <div className="flex w-full items-center gap-3 md:w-auto md:gap-2">
           <Button
             type="button"
             disabled={unavailable || add.isPending}
             onClick={() => void submit('buy')()}
-            className="h-[60px] flex-1 rounded-full text-body-lg font-bold md:h-10 md:w-[130px] md:flex-none md:rounded-control md:text-body-md"
+            className="h-[60px] w-[196px] flex-none rounded-full text-body-lg font-bold md:h-10 md:w-[130px] md:flex-none md:rounded-control md:text-body-md"
           >
             <span className="md:hidden">Comprar NFT</span>
             <span className="hidden md:inline">COMPRAR</span>
