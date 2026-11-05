@@ -6,7 +6,7 @@
 import { useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getRouteApi, Link, useCanGoBack, useRouter } from '@tanstack/react-router'
-import { ChevronLeft, Mail } from 'lucide-react'
+import { ChevronLeft, Mail, Star } from 'lucide-react'
 import { isApiError, type Edition, type NftDetail } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -60,7 +60,7 @@ function Breadcrumb() {
 }
 
 function Frame({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto w-full max-w-page px-gutter pt-6 pb-16 md:pt-8 xl:px-0">{children}</div>
+  return <div className="mx-auto w-full max-w-page px-gutter pt-0 pb-16 md:pt-8 xl:px-0">{children}</div>
 }
 
 function DetailSkeleton() {
@@ -68,11 +68,12 @@ function DetailSkeleton() {
     <Frame>
       <div aria-busy="true" aria-label="Carregando detalhes do NFT" role="status">
         <Skeleton className="hidden h-4 w-36 md:block" />
-        <div className="mt-4 flex flex-col gap-8 md:mt-7 lg:min-h-[582px] lg:flex-row">
-          <div className="lg:w-[573px] lg:shrink-0">
+        <div className="flex flex-col md:mt-7 md:gap-8 lg:min-h-[582px] lg:flex-row">
+          <div className="max-md:-mx-6 max-md:rounded-t-[40px] max-md:bg-surface-card max-md:px-7 max-md:pt-[23px] max-md:pb-4 lg:w-[573px] lg:shrink-0">
+            <Skeleton className="mb-2 size-[35px] rounded-full md:hidden" />
             <GallerySkeleton />
           </div>
-          <div className="flex min-h-[596px] flex-1 flex-col gap-6 lg:min-h-0" aria-hidden="true">
+          <div className="flex min-h-[549px] flex-1 flex-col gap-6 lg:min-h-0" aria-hidden="true">
             <Skeleton className="h-[37px] w-3/4" />
             <Skeleton className="h-5 w-1/3" />
             <Skeleton className="h-[72px] w-full" />
@@ -105,7 +106,7 @@ function BackBar({ nft }: { nft: NftDetail }) {
   const router = useRouter()
   const canGoBack = useCanGoBack()
   return (
-    <div className="mb-4 flex items-center justify-between md:hidden">
+    <div className="mb-2 flex items-center justify-between md:hidden">
       {canGoBack ? (
         <button type="button" aria-label="Voltar" onClick={() => router.history.back()} className="grid size-[35px] place-items-center rounded-full border border-line-soft text-text-primary">
           <ChevronLeft aria-hidden="true" className="size-5" />
@@ -131,20 +132,20 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
   return (
     <Frame>
       <Breadcrumb />
-      <BackBar nft={nft} />
       <div className="md:mt-7 lg:flex lg:gap-8">
-        <div className="lg:w-[573px] lg:shrink-0">
+        <div className="max-md:-mx-6 max-md:rounded-t-[40px] max-md:bg-surface-card max-md:px-7 max-md:pt-[23px] max-md:pb-4 lg:w-[573px] lg:shrink-0">
+          <BackBar nft={nft} />
           <Gallery images={nft.gallery} name={nft.name} />
         </div>
 
-        <div className="mt-6 flex min-w-0 flex-1 flex-col gap-5 max-md:-mx-6 max-md:rounded-t-[40px] max-md:bg-surface-card max-md:px-6 max-md:pt-8 max-md:pb-6 md:mt-6 lg:mt-0">
+        <div className="mt-6 flex min-w-0 flex-1 flex-col gap-3 max-md:-mx-6 max-md:bg-surface-card max-md:px-6 max-md:pt-2 md:mt-6 md:gap-5 lg:mt-0">
           <div>
             <div className="flex items-start justify-between gap-3">
               <h1 ref={headingRef} tabIndex={-1} className="text-body-lg leading-7 font-bold text-text-primary outline-none md:text-[28px] md:leading-[37px]">
                 {nft.name}
               </h1>
-              <p className="flex shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 py-1 text-caption-sm font-bold text-text-accent md:hidden">
-                <span aria-hidden="true">★</span>
+              <p className="flex h-[27px] shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 text-caption-sm font-bold text-text-accent md:hidden">
+                <Star aria-hidden="true" className="size-[14px]" fill="currentColor" strokeWidth={0} />
                 <span className="sr-only">Avaliação </span>
                 {nft.rating.average}
                 <span className="font-normal">({nft.rating.count})</span>
@@ -157,7 +158,7 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
                 <span>{nft.rating.count} avaliações de colecionadores</span>
               </p>
             </div>
-            <p role="status" data-testid="nft-live-updates" className={cn('mt-2 min-h-5 text-caption-sm text-text-accent')}>
+            <p role="status" data-testid="nft-live-updates" className={cn('text-caption-sm text-text-accent max-md:sr-only md:mt-2 md:min-h-5')}>
               {liveMessage}
             </p>
           </div>
@@ -169,15 +170,15 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
 
           <EditionChips editions={nft.editions} selectedId={edition.id} onSelect={(id) => void navigate({ search: (prev) => ({ ...prev, edition: id }), replace: true })} />
 
-          <PurchasePanel key={nft.id} nft={nft} edition={edition} />
-
-          <ul className="flex flex-col gap-3 text-body-sm text-text-secondary">
+          <ul className="flex flex-col gap-3 text-body-sm text-text-secondary md:order-2">
             <li>ID do token: {nft.tokenId}</li>
             <li>Coleção: {nft.collection.name}</li>
             <li>Atributos: {attributes}</li>
           </ul>
 
-          <div className="flex items-center gap-2 text-caption-sm font-bold text-text-primary max-md:hidden">
+          <PurchasePanel key={nft.id} nft={nft} edition={edition} />
+
+          <div className="flex items-center gap-2 text-caption-sm font-bold text-text-primary max-md:hidden md:order-3">
             <span>Compartilhar este NFT:</span>
             {shareLinks(nft.name).map((link) => (
               <a

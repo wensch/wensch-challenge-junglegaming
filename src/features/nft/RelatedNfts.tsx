@@ -5,7 +5,7 @@ import { errorMessageOf } from '@/components/layout/PageStates'
 import { nftQueries } from '@/queries/nfts'
 import { NftCard, NftCardSkeleton } from './NftCard'
 
-const ROW = 'flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-5 md:gap-[7px] md:overflow-visible [&>li]:w-[190px] [&>li]:shrink-0 [&>li]:snap-start md:[&>li]:w-auto'
+const ROW = 'flex snap-x snap-mandatory scroll-px-6 gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-5 md:gap-[7px] md:overflow-visible [&>li]:w-[190px] [&>li]:shrink-0 [&>li]:snap-start md:[&>li]:w-auto'
 
 export function RelatedNfts({ collectionId, excludeId }: { collectionId: string; excludeId: string }) {
   const related = useQuery(nftQueries.list({ collectionId, excludeId, pageSize: 5 }))
