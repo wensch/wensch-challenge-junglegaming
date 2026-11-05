@@ -113,7 +113,8 @@ test.describe('perfil', () => {
     await expect(mais).toHaveAttribute('aria-haspopup', 'menu')
     await expect(mais).toHaveAttribute('aria-expanded', 'false')
     await mais.click()
-    await expect(mais).toHaveAttribute('aria-expanded', 'true')
+    // Com o menu aberto o Radix oculta o restante da página (aria-hidden): consulta por CSS.
+    await expect(page.locator('button[aria-haspopup="menu"]', { hasText: 'Mais' })).toHaveAttribute('aria-expanded', 'true')
     for (const n of ['Atividade', 'Lista de interesse', 'Ofertas', 'Arquivos baixados', 'Suporte', 'Sair']) {
       await expect(page.getByRole('menuitem', { name: n })).toBeVisible()
     }
