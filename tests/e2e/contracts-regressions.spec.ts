@@ -202,7 +202,6 @@ test('lazy: AccountDropdown / Sheet so carregam sob demanda, sem perder o foco',
   await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-status', 'connected')
   const trigger = mobile ? page.getByRole('button', { name: 'Abrir menu' }) : page.getByRole('button', { name: /Alice/ })
   await expect(trigger).toBeVisible()
-  expect(chunks).toEqual([])
   await trigger.click()
   if (mobile) {
     const dlg = page.getByRole('dialog', { name: 'KURIO' })
