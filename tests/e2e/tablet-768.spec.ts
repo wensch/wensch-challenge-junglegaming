@@ -6,7 +6,7 @@ import AxeBuilder from '@axe-core/playwright'
 import type { Page } from '@playwright/test'
 import { loginAs } from '../account-helpers'
 import { expect, isMobileProject, test, USERS } from '../fixtures'
-import { loginWithCart, pickEditions } from '../s3-helpers'
+import { loginWithCart, pickEditions } from '../checkout-helpers'
 import { settleAnimations } from '../settle-animations'
 
 test.use({ viewport: { width: 768, height: 1024 } })
@@ -22,8 +22,7 @@ async function seriousViolations(page: Page) {
 }
 
 test.describe('@a11y tablet 768', () => {
-  // BUG-QA-014: a 768 px o 4º ponto do carrossel do Hero viola target-size (serious). Reativar ao corrigir.
-  test.fixme('início', async ({ page, boot }) => {
+  test('início', async ({ page, boot }) => {
     await boot('/')
     await expect(page.getByTestId('catalog-grid')).toBeVisible()
     await expect(page.getByRole('region', { name: 'Destaques' }).getByRole('img').first()).toBeVisible()

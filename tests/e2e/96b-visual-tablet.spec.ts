@@ -4,7 +4,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, isMobileProject, test } from '../fixtures'
-import { loginWithCart, pickEditions } from '../s3-helpers'
+import { loginWithCart, pickEditions } from '../checkout-helpers'
 
 test.use({ viewport: { width: 768, height: 1024 } })
 // eslint-disable-next-line no-empty-pattern -- Playwright exige desestruturação no 1º argumento

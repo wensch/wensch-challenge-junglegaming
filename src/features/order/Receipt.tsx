@@ -108,8 +108,9 @@ export function ConfirmedReceipt({ order, headingRef }: { order: Order; headingR
               rel="noopener noreferrer"
               className="inline-flex h-12 items-center rounded-control bg-primary px-4 text-body-md font-bold text-primary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/60"
             >
-              Ver no Etherscan<span className="sr-only"> (abre em nova aba, simulado)</span>
+              Ver no Etherscan<span className="sr-only"> (abre em nova aba)</span>
             </a>
+            <p className="mt-2 text-caption text-text-secondary">Transação simulada: este hash não existe na rede real, então o explorador pode não encontrá-lo.</p>
           </div>
         ) : null}
       </div>

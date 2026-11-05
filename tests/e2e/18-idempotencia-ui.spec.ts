@@ -7,7 +7,7 @@
  */
 import type { Page, Request } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 interface OrderBody {
   quoteId: string

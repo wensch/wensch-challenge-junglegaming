@@ -147,7 +147,7 @@ export function Hero() {
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
           {items.length > 1 && (
-            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex md:ml-[548px]">
+            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex min-[1200px]:ml-[548px]">
               {items.map((item, i) => (
                 <button
                   key={item.id}
