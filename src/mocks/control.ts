@@ -1,5 +1,5 @@
 /** `window.__mock`: the only way tests and the demo panel talk to the simulated server. */
-import type { MockControl, ScenarioName } from '@/api/contracts'
+import type { MockControl, ScenarioName } from '@/api/contracts/scenarios'
 import { patchNft } from './catalog'
 import { clearPersisted, setDb } from './db'
 import { resetLatencyState } from './latency'

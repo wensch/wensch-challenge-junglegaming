@@ -3,7 +3,7 @@
  * on load, or `window.__mock.setScenarios`. One-shot scenarios (`*.once`, timeout-after-create, ...) track a
  * `fired` set so they disarm after their first effect; re-selecting scenarios re-arms them.
  */
-import { isScenarioName, type ScenarioName } from '@/api/contracts'
+import { isScenarioName, type ScenarioName } from '@/api/contracts/scenarios'
 
 export const SCENARIOS_KEY = 'mock:scenarios'
 const FIRED_KEY = 'mock:scenarios:fired'
