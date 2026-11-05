@@ -147,8 +147,11 @@ test.describe('geometria e boot', () => {
         if (f === page.mainFrame()) navs++
       })
       await page.goto(path)
-      await page.reload()
-      await page.reload()
+      // A reload racing the page's own first-load navigation (service worker takeover) is aborted by the browser:
+      // that is the stress this test applies, not a failure of the app.
+      const reload = () => page.reload().catch((e: Error) => { if (!/ERR_ABORTED|detached/.test(e.message)) throw e })
+      await reload()
+      await reload()
       await page.waitForFunction(() => !!window.__mock)
       await page.goto('/')
       await page.goto(path, { waitUntil: 'commit' })
