@@ -65,34 +65,6 @@ export function TextField({ label, required, error, hint, className, ...input }:
   )
 }
 
-export function SelectField({
-  label,
-  required,
-  error,
-  hint,
-  className,
-  children,
-  ...select
-}: ComponentProps<'select'> & { label: string; error?: string | undefined; hint?: string }) {
-  return (
-    <FieldShell label={label} required={required} error={error} {...(hint ? { hint } : {})} {...(className ? { className } : {})}>
-      {({ id, describedBy, invalid }) => (
-        <select
-          id={id}
-          aria-required={required || undefined}
-          aria-invalid={invalid || undefined}
-          aria-describedby={describedBy}
-          className={cn(control, 'appearance-none bg-[length:16px] bg-[right_12px_center] bg-no-repeat pr-9', invalid ? 'border-destructive' : 'border-line-soft')}
-          style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23cfb28c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E\")" }}
-          {...select}
-        >
-          {children}
-        </select>
-      )}
-    </FieldShell>
-  )
-}
-
 export function TextAreaField({ label, error, hint, className, ...area }: Omit<ComponentProps<'textarea'>, 'children'> & { label: string; error?: string | undefined; hint?: string }) {
   return (
     <FieldShell label={label} error={error} {...(hint ? { hint } : {})} {...(className ? { className } : {})}>

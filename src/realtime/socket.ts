@@ -119,10 +119,6 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
       eventListeners.add(listener)
       return () => void eventListeners.delete(listener)
     },
-    /** Lets REST responses feed the version map (e.g. after GET /orders/:id). */
-    noteVersion(key: string, version: number) {
-      reconciler?.noteVersion(key, version)
-    },
   }
 }
 

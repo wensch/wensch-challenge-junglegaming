@@ -3,7 +3,7 @@
  * with the owner's token (`ownedQueryFn`). Writes go through `keepNewest`, so a late REST snapshot
  * never turns a confirmed/declined order back into pending.
  */
-import { queryOptions, skipToken, useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query'
+import { skipToken, useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query'
 import { isApiError, isTerminalOrderStatus, type ApiError, type CreateOrderRequest, type Order, type OrderListResponse, type OrderStatus } from '@/api/contracts'
 import { ordersApi } from '@/api/endpoints'
 import { MAX_QUERY_RETRIES, retryDelay } from './client'
@@ -30,23 +30,6 @@ const fetchOrder = (user: UserCredential, orderId: string) => ownedQueryFn({ kin
 const fetchOrders = (user: UserCredential, status?: OrderStatus) => ownedQueryFn({ kind: 'user', ...user }, (as, signal) => ordersApi.listOrders(status, { signal, as }))
 const NO_ORDER_KEY = ['order', 'none'] as const
 const NO_ORDERS_KEY = ['orders', 'none'] as const
-
-export const orderQueries = {
-  detail: (user: UserCredential, orderId: string) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).order(orderId),
-      queryFn: fetchOrder(user, orderId),
-      staleTime: orderStaleTime,
-      structuralSharing: keepNewest,
-    }),
-  list: (user: UserCredential, status?: OrderStatus) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).orderList(status),
-      queryFn: fetchOrders(user, status),
-      staleTime: 0,
-      structuralSharing: keepNewest,
-    }),
-}
 
 // ---------------------------------------------------------------------------
 // Hooks. Pending orders are ALWAYS stale (`staleTime: 0`) and `refetchOnWindowFocus` stays on

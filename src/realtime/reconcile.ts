@@ -53,8 +53,6 @@ export interface ReconcilerOptions {
 
 export interface Reconciler {
   handle(payload: unknown): ReconcileResult
-  /** Feed a version observed through REST (keeps late/duplicated events from regressing state). */
-  noteVersion(key: string, version: number): void
   knownVersion(key: string): number
   onReconnect(): void
   /** Stops watching the query cache (socket teardown). */
@@ -243,10 +241,6 @@ export function createReconciler({ queryClient, getUserId, maxSeen = 500, log = 
     return { outcome, event: e }
   }
 
-  function noteVersion(key: string, version: number) {
-    if (version > knownVersion(key)) versions.set(key, version)
-  }
-
   function onReconnect() {
     void queryClient.invalidateQueries({ queryKey: queryKeys.nfts.all() })
     void queryClient.invalidateQueries({ predicate: (q) => isCartKey(q.queryKey) || isQuoteKey(q.queryKey) })
@@ -254,5 +248,5 @@ export function createReconciler({ queryClient, getUserId, maxSeen = 500, log = 
     if (userId) void queryClient.invalidateQueries({ queryKey: queryKeys.user(userId).orders() })
   }
 
-  return { handle, noteVersion, knownVersion, onReconnect, dispose: unsubscribe }
+  return { handle,knownVersion, onReconnect, dispose: unsubscribe }
 }

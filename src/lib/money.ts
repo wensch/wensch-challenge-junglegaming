@@ -79,7 +79,6 @@ export function compare(a: string, b: string): -1 | 0 | 1 {
 }
 
 export const eq = (a: string, b: string) => compare(a, b) === 0
-export const gt = (a: string, b: string) => compare(a, b) > 0
 export const lt = (a: string, b: string) => compare(a, b) < 0
 export const isZero = (a: string) => toD(a).isZero()
 

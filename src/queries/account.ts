@@ -5,7 +5,7 @@
  * write to the cache while that user is still the current one (a logout or user switch in between
  * must not resurrect a removed `['u', ...]` entry).
  */
-import { queryOptions, skipToken, useMutation, useQuery, useQueryClient, type QueryClient, type QueryKey } from '@tanstack/react-query'
+import { skipToken, useMutation, useQuery, useQueryClient, type QueryClient, type QueryKey } from '@tanstack/react-query'
 import type {
   ApiError,
   ChangePasswordRequest,
@@ -24,23 +24,6 @@ import { ownedQueryFn, ownerChangedError } from './owner'
 import type { UserCredential } from './orders'
 import { cachedSession, currentUserId, sessionQueryOptions, useSession } from './session'
 import { keepNewest } from './versioned'
-
-export const accountQueries = {
-  profile: (user: UserCredential) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).profile(),
-      queryFn: ownedQueryFn({ kind: 'user', ...user }, (as, signal) => profileApi.getProfile({ signal, as })),
-      staleTime: STALE.account,
-      structuralSharing: keepNewest,
-    }),
-  wallets: (user: UserCredential) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).wallets(),
-      queryFn: ownedQueryFn({ kind: 'user', ...user }, (as, signal) => walletsApi.listWallets({ signal, as })),
-      staleTime: STALE.account,
-      structuralSharing: keepNewest,
-    }),
-}
 
 const NO_USER_KEY = ['account', 'none'] as const
 
