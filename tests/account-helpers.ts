@@ -40,6 +40,18 @@ export async function logoutThroughUi(page: Page, displayName: string, mobile: b
   await page.getByRole('menuitem', { name: 'Sair' }).click()
 }
 
+/** "Sair" of the account nav: a button on desktop, an item of the "Mais" menu below `md`. */
+export async function accountNavSignOut(page: Page) {
+  const nav = page.getByRole('navigation', { name: 'Minha conta' })
+  const mais = nav.getByRole('button', { name: 'Mais' })
+  if (await mais.isVisible()) {
+    await mais.click()
+    await page.getByRole('menuitem', { name: 'Sair' }).click()
+    return
+  }
+  await nav.getByRole('button', { name: 'Sair' }).click()
+}
+
 /** Logs in through the form and waits until the session is established (socket bound to the user). */
 export async function loginAs(page: Page, creds: { email: string; password: string }) {
   await submitLogin(page, creds)

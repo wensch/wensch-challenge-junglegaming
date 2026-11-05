@@ -2,7 +2,7 @@
  * E2E-03 (§9 item 3): cadastro, login (retorno ao fluxo), expiração, logout e troca de usuário,
  * tudo pela interface. Requisitos: TEL-6, TEL-7, CON-1..5, CON-8.
  */
-import { cacheKeys, loginAs, logoutThroughUi, submitLogin } from '../account-helpers'
+import { accountNavSignOut, cacheKeys, loginAs, logoutThroughUi, submitLogin } from '../account-helpers'
 import { expect, isMobileProject, test, USERS } from '../fixtures'
 
 const probe = (page: import('@playwright/test').Page) => page.getByTestId('realtime-probe')
@@ -118,7 +118,7 @@ test.describe('logout e troca de usuário', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Perfil do colecionador' })).toBeVisible()
     await expect.poll(async () => (await cacheKeys(page)).some((k) => k[0] === 'u' && k[2] === 'profile')).toBe(true)
 
-    await page.getByRole('navigation', { name: 'Minha conta' }).getByRole('button', { name: 'Sair' }).click()
+    await accountNavSignOut(page)
     await expect(page).toHaveURL('/')
     await expect(probe(page)).toHaveAttribute('data-user', 'guest')
     await expect.poll(async () => (await cacheKeys(page)).filter((k) => k[0] === 'u')).toEqual([])
