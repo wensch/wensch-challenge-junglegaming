@@ -13,7 +13,7 @@ import { applyFieldErrors } from '@/features/shared/forms'
 import { useApplyCoupon, useRemoveCoupon } from '@/queries/cart-mutations'
 import { cn } from '@/lib/utils'
 
-export function couponErrorMessage(error: unknown): string {
+function couponErrorMessage(error: unknown): string {
   if (isApiError(error)) {
     if (error.is('COUPON_EXPIRED')) return `O cupom ${error.payload.couponCode} expirou.`
     if (error.is('COUPON_INVALID')) return `O cupom ${error.payload.couponCode} é inválido.`

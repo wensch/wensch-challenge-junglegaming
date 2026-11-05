@@ -22,7 +22,7 @@ export const STALE = {
   session: Number.POSITIVE_INFINITY,
 } as const
 
-export function isRetryableError(error: unknown): boolean {
+function isRetryableError(error: unknown): boolean {
   return isApiError(error) && error.retryable && (error.status === 0 || error.status >= 500)
 }
 

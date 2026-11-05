@@ -15,9 +15,9 @@ import { env } from '@/env'
 import { logger } from '@/lib/log'
 import { createReconciler, type ReconcileOutcome, type Reconciler } from './reconcile'
 
-export type RealtimeStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
+type RealtimeStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
-export interface RealtimeState {
+interface RealtimeState {
   status: RealtimeStatus
   /** User the socket was opened for (`null` = visitor). */
   userId: string | null
@@ -26,7 +26,7 @@ export interface RealtimeState {
   applied: number
 }
 
-export interface StartOptions {
+interface StartOptions {
   token: string | null
   userId: string | null
   queryClient: QueryClient
@@ -34,7 +34,7 @@ export interface StartOptions {
 
 type EventListener = (event: RealtimeEvent) => void
 /** Typed with the contract maps; incoming payloads are still validated by the reconciler (zod). */
-export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
 type Factory = (url: string, token: string | null) => AppSocket
 
 const defaultFactory: Factory = (url, token) =>
@@ -42,7 +42,7 @@ const defaultFactory: Factory = (url, token) =>
 
 const INITIAL: RealtimeState = { status: 'idle', userId: null, connections: 0, lastEvent: null, applied: 0 }
 
-export function createRealtimeManager(url: string, factory: Factory = defaultFactory) {
+function createRealtimeManager(url: string, factory: Factory = defaultFactory) {
   let socket: AppSocket | null = null
   let reconciler: Reconciler | null = null
   let state: RealtimeState = INITIAL
@@ -121,8 +121,6 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
     },
   }
 }
-
-export type RealtimeManager = ReturnType<typeof createRealtimeManager>
 
 /** App-wide instance (one socket per session). */
 export const realtime = createRealtimeManager(env.socketUrl)

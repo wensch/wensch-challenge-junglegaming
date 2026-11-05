@@ -37,12 +37,12 @@ import { isCartKey, isQuoteKey, PRIVATE_PREFIX, queryKeys } from '@/queries/keys
 
 export type ReconcileOutcome = 'applied' | 'invalid' | 'duplicate' | 'foreign' | 'stale'
 
-export interface ReconcileResult {
+interface ReconcileResult {
   outcome: ReconcileOutcome
   event: RealtimeEvent | null
 }
 
-export interface ReconcilerOptions {
+interface ReconcilerOptions {
   queryClient: QueryClient
   /** User of the session that owns the socket (`null` for visitors). */
   getUserId: () => string | null

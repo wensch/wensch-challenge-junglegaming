@@ -13,7 +13,7 @@ import { errorMessageOf } from '@/components/layout/PageStates'
 import { NftCard, NftCardSkeleton } from '@/features/nft/NftCard'
 import { hasActiveFilters, useCatalogSearch } from './useCatalogSearch'
 
-export const GRID_CLASS = 'grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-[34px] md:gap-y-[72px] lg:grid-cols-2 xl:grid-cols-3 max-md:[&>li:nth-child(even)]:mt-8'
+const GRID_CLASS = 'grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-[34px] md:gap-y-[72px] lg:grid-cols-2 xl:grid-cols-3 max-md:[&>li:nth-child(even)]:mt-8'
 
 /** Same height as a full 3x3 desktop grid, so message states do not make the footer jump. */
 const STATE_MIN_HEIGHT = 'min-h-[320px] md:min-h-[560px]'

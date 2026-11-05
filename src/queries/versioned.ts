@@ -20,7 +20,7 @@ const isOrderStatus = (v: unknown): v is OrderStatus => typeof v === 'string' &&
 const sameResource = (a: Rec, b: Rec) => a.id === undefined || b.id === undefined || a.id === b.id
 
 /** Which of two snapshots of the same resource may stay in the cache. */
-export function pickNewest<T>(old: T, next: T): T {
+function pickNewest<T>(old: T, next: T): T {
   if (!isVersioned(old) || !isVersioned(next) || !sameResource(old, next)) return next
   if (isOrderStatus(old.status) && isTerminalOrderStatus(old.status) && old.status !== next.status) return old
   return old.version > next.version ? old : next

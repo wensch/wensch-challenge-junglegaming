@@ -18,7 +18,7 @@ const NO_FAVORITES_KEY = ['favorites', 'none'] as const
 
 export type UserOwner =Extract<OwnerCredential, { kind: 'user' }>
 
-export const favoritesQueryOptions = (owner: UserOwner) =>
+const favoritesQueryOptions = (owner: UserOwner) =>
   queryOptions({
     queryKey: queryKeys.user(owner.userId).favorites(),
     queryFn: ownedQueryFn(owner, (as, signal) => favoritesApi.listFavorites({ signal, as })),
@@ -27,7 +27,7 @@ export const favoritesQueryOptions = (owner: UserOwner) =>
   })
 
 /** Logged user as a cache owner (`null` for visitors and while the session is resolving). */
-export function useUserOwner(): UserOwner | null {
+function useUserOwner(): UserOwner | null {
   const session = useSession()
   return session.data ? { kind: 'user', userId: session.data.user.id, token: session.data.token } : null
 }
@@ -62,7 +62,7 @@ function withMembership(data: FavoritesResponse, nft: NftSummary, favorited: boo
   return favorited ? { nftIds: [nft.id, ...nftIds], items: [toSummary(nft), ...items] } : { nftIds, items }
 }
 
-export interface ToggleFavoriteVars {
+interface ToggleFavoriteVars {
   nft: NftSummary
   /** Desired state after the click. */
   favorited: boolean

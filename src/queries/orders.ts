@@ -18,7 +18,7 @@ export interface UserCredential {
 }
 
 /** Fallback polling while an order is pending and the socket is down (ARCHITECTURE §7). */
-export const PENDING_ORDER_POLL_MS = 5_000
+const PENDING_ORDER_POLL_MS = 5_000
 
 /** Terminal orders never change: no refetch. Pending ones are always stale. */
 function orderStaleTime(query: { state: { data: Order | undefined } }): number {

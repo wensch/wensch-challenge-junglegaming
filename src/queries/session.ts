@@ -92,7 +92,7 @@ export function currentUserId(queryClient: QueryClient): string | null {
  *   user re-logged); `syncSessionWithStorage` drops them once the new owner is known to be someone else.
  *   If storage is empty (logout elsewhere), every draft is removed.
  */
-export type TeardownReason = 'logout' | 'expired' | 'unauthenticated' | 'switch' | 'external'
+type TeardownReason = 'logout' | 'expired' | 'unauthenticated' | 'switch' | 'external'
 
 /**
  * Removes every trace of the current user (order matters):

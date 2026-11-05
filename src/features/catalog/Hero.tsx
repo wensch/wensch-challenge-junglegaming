@@ -73,7 +73,7 @@ function HeroFrame({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function HeroSkeleton() {
+function HeroSkeleton() {
   return (
     <HeroFrame>
       <HeroCopy>

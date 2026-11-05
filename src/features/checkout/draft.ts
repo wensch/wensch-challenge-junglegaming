@@ -31,7 +31,7 @@ const draftSchema = z.object({
     .partial(),
   connection: connectionSchema.nullable(),
 })
-export type CheckoutDraft = z.infer<typeof draftSchema>
+type CheckoutDraft = z.infer<typeof draftSchema>
 
 const slot = (userId: string) => userDraftKey(userId, 'checkout')
 

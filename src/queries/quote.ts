@@ -12,7 +12,7 @@ import { queryKeys } from './keys'
 import { ownedQueryFn, ownerKey, type OwnerCredential } from './owner'
 import { keepNewest } from './versioned'
 
-export const QUOTE_GC_MS = 30_000
+const QUOTE_GC_MS = 30_000
 const NO_QUOTE_KEY = ['quote', 'none'] as const
 
 export const quoteQueryKey = (owner: OwnerCredential, network: Network) => queryKeys.owner(ownerKey(owner)).quote(network)

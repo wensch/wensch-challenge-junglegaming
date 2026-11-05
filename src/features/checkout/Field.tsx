@@ -18,7 +18,7 @@ interface FieldShellProps {
   children: (props: { id: string; describedBy: string | undefined; invalid: boolean }) => ReactNode
 }
 
-export function FieldShell({ label, required, error, hint, className, children }: FieldShellProps) {
+function FieldShell({ label, required, error, hint, className, children }: FieldShellProps) {
   const id = useId()
   const errorId = `${id}-error`
   const hintId = `${id}-hint`

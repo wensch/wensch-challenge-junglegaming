@@ -23,7 +23,7 @@ export function normalizeNftListQuery(query: Partial<NftListQuery>): NormalizedN
 const tag = <T>() => <const K extends readonly unknown[]>(key: K) => key as DataTag<K, T, ApiError>
 
 export const PRIVATE_PREFIX = 'u' as const
-export const GUEST_PREFIX = 'guest' as const
+const GUEST_PREFIX = 'guest' as const
 
 /** Who owns a cart/quote: the logged user or the visitor id. */
 export type CartOwner = { kind: 'user'; userId: string } | { kind: 'guest'; guestId: string }

@@ -14,7 +14,7 @@ import { NETWORK_LABELS, shortAddress, SLOT_LABELS, WALLET_TYPE_LABELS } from '.
 import { isSameUser, useConnectWallet, useDisconnectWallet } from './wallets'
 import { useUserCredential } from '@/queries/orders'
 
-export interface WalletPanelProps {
+interface WalletPanelProps {
   wallets: Wallet[]
   walletId: string
   network: Network

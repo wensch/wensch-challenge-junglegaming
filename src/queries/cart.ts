@@ -15,7 +15,7 @@ const NO_CART_KEY = ['cart', 'none'] as const
 const fetchCartOf = (owner: OwnerCredential) => ownedQueryFn(owner, (as, signal) => cartApi.getCart({ signal, as }))
 
 /** Cart of `owner`, fetched with the owner's own credential (Authorization or X-Guest-Id). */
-export const cartQueryOptions = (owner: OwnerCredential) =>
+const cartQueryOptions = (owner: OwnerCredential) =>
   queryOptions({
     queryKey: queryKeys.owner(ownerKey(owner)).cart(),
     queryFn: fetchCartOf(owner),

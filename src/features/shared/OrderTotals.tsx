@@ -6,7 +6,7 @@
 import { formatEth, isZero } from '@/lib/money'
 import { cn } from '@/lib/utils'
 
-export interface OrderTotalsProps {
+interface OrderTotalsProps {
   subtotal: string
   discount: string
   /** Label of the discount row (Figma: "Desconto do lançamento"); the coupon label when there is one. */
@@ -20,7 +20,7 @@ export interface OrderTotalsProps {
 }
 
 /** Figma shows the empty discount as "(-) 00.00". */
-export function formatDiscount(discount: string): string {
+function formatDiscount(discount: string): string {
   return isZero(discount) ? '(-) 00.00' : `(-) ${formatEth(discount)}`
 }
 
