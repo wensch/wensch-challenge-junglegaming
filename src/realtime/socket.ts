@@ -12,6 +12,7 @@ import { io, type Socket } from 'socket.io-client'
 import type { QueryClient } from '@tanstack/react-query'
 import { EVENT_TYPES, type ClientToServerEvents, type RealtimeEvent, type ServerToClientEvents } from '@/api/contracts'
 import { env } from '@/env'
+import { logger } from '@/lib/log'
 import { createReconciler, type ReconcileOutcome, type Reconciler } from './reconcile'
 
 export type RealtimeStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
@@ -67,7 +68,7 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
 
   function start({ token, userId, queryClient }: StartOptions) {
     stop()
-    const rec = createReconciler({ queryClient, getUserId: () => userId, log: (m, d) => console.warn(m, d) })
+    const rec = createReconciler({ queryClient, getUserId: () => userId, log: (m, d) => logger.warn(m, d) })
     const s = factory(url, token)
     socket = s
     reconciler = rec
@@ -97,7 +98,7 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
         try {
           l(event)
         } catch (err) {
-          console.error('[realtime] event listener failed', err)
+          logger.error('[realtime] event listener failed', err)
         }
       }
     }

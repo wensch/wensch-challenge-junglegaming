@@ -12,6 +12,7 @@ import axios, { AxiosError, AxiosHeaders, type AxiosRequestConfig } from 'axios'
 import type { z } from 'zod'
 import { ApiError, apiErrorBodySchema, HEADERS, type EndpointAuth, type EndpointDef, type FieldErrors } from '@/api/contracts'
 import { env } from '@/env'
+import { logger } from '@/lib/log'
 import { ensureGuestId, getToken } from '@/session/store'
 
 export const REQUEST_TIMEOUT_MS = 10_000
@@ -220,7 +221,7 @@ export async function send<D extends EndpointDef>(def: D, args: SendArgs): Promi
   if (!parsed.success) {
     // Contract bug (or a non-API response such as the SPA fallback). Logged, surfaced as a
     // non-retryable server failure (status is 2xx, so `shouldRetry` declines it).
-    console.error(`[api] ${def.method} ${args.path}: response outside the contract`, parsed.error.issues)
+    logger.error(`[api] ${def.method} ${args.path}: response outside the contract`, parsed.error.issues)
     throw new ApiError({ code: 'TRANSIENT', reason: 'server', message: 'Resposta inesperada do servidor.' }, response.status)
   }
   return parsed.data as ResponseOf<D>
