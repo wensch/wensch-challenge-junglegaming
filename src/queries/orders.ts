@@ -49,8 +49,8 @@ export const orderQueries = {
 }
 
 // ---------------------------------------------------------------------------
-// Hooks (S3). Pending orders are ALWAYS stale (`staleTime: 0`) and `refetchOnWindowFocus` stays on
-// (R6): coming back to the tab or reconnecting re-reads the order from REST, which is the source of
+// Hooks. Pending orders are ALWAYS stale (`staleTime: 0`) and `refetchOnWindowFocus` stays on
+// so coming back to the tab or reconnecting re-reads the order from REST, which is the source of
 // truth after any gap in the event stream. Terminal orders are `Infinity` (never refetched).
 // ---------------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ export function usePendingOrders() {
 /**
  * Creates the order. `retry`: only TRANSIENT failures (timeout, network, 5xx), up to 2x with backoff,
  * ALWAYS with the same `Idempotency-Key` (it travels in the variables), so a retry after a timeout
- * returns the SAME order (200). F8: nothing is written to the cache of an owner that is no longer current.
+ * returns the SAME order (200). Nothing is written to the cache of an owner that is no longer current.
  */
 export function useCreateOrder() {
   const qc = useQueryClient()

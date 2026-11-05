@@ -92,7 +92,7 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
         applied: state.applied + (outcome === 'applied' ? 1 : 0),
       })
       if (outcome !== 'applied' || !event) return
-      // One failing slice listener must not starve the others (nor break the socket handler).
+      // One failing listener must not starve the others (nor break the socket handler).
       for (const l of eventListeners) {
         try {
           l(event)

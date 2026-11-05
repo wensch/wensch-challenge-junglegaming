@@ -1,6 +1,6 @@
 /**
- * "Add to cart" (slice S1). Only adds an item; the rest of the cart mutations live in
- * `cart-mutations.ts` (S3). The owner (logged user or visitor id) is resolved when the mutation runs:
+ * "Add to cart". Only adds an item; the rest of the cart mutations live in
+ * `cart-mutations.ts`. The owner (logged user or visitor id) is resolved when the mutation runs:
  * a visitor gets a guest id first (`ensureGuestId`), so the cart key exists before the request.
  */
 import { useMutation, useQueryClient } from '@tanstack/react-query'

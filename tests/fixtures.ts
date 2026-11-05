@@ -89,7 +89,7 @@ export const USERS = {
 /**
  * Logs in through the real REST endpoint (MSW) and stores the session the same way the app does
  * (`kurio.session`), then reloads and waits for the mock worker of the new document to be ready.
- * Used until the login screen exists (slice S2).
+ * Faster than the UI form, for specs that are not about the login screen.
  */
 export async function loginViaApi(page: Page, user: { email: string; password: string }) {
   const session = await page.evaluate(async (creds) => {

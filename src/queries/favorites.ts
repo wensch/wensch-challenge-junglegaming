@@ -2,7 +2,7 @@
  * Favorites (FAV-1, INT-8): `['u', userId, 'favorites']`, authenticated only.
  * The toggle is optimistic: `onMutate` snapshots and writes the new membership, `onError` rolls back
  * and announces the failure (sonner region = `aria-live="polite"`), `onSettled` re-syncs with the
- * server. Every write checks that the owner is still the current identity (F8 of the foundation review).
+ * server. Every write checks that the owner is still the current identity.
  */
 import { queryOptions, skipToken, useMutation, type QueryKey, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'

@@ -49,7 +49,7 @@ export function OrderPage({ orderId }: { orderId: string }) {
   useEffect(() => {
     if (!user || !status || status === 'pending' || settledFor.current === `${orderId}:${status}`) return
     settledFor.current = `${orderId}:${status}`
-    if (!isCurrentOwner({ kind: 'user', ...user })) return // F8
+    if (!isCurrentOwner({ kind: 'user', ...user })) return // the session changed during the call: discard the result
     if (readAttempt(user.userId)?.orderId === orderId) clearAttempt(user.userId)
     if (status === 'confirmed') {
       clearDraft(user.userId)

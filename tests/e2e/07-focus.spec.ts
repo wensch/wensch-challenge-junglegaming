@@ -1,5 +1,5 @@
 /**
- * Focus management (BUG-QA-002/006): a full load leaves the focus at the document start (first Tab
+ * Focus management: a full load leaves the focus at the document start (first Tab
  * = skip link); a client-side navigation moves it to the new page's <h1>, /em-breve included.
  */
 import { expect, test } from '../fixtures'

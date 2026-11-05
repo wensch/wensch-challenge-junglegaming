@@ -6,7 +6,7 @@
  *    mesmo fiber de `cacheKeys`;
  *  - efeito observável: evento emitido por `window.__mock.emit` para um usuário que já saiu NÃO é aplicado,
  *    e um único evento válido aumenta `data-applied` em exatamente 1 (sem socket/handler duplicado).
- * Lacuna (BUG-QA-013): o app não expõe a contagem de listeners do socket nem de conexões abertas no servidor simulado.
+ * Lacuna: o app não expõe a contagem de listeners do socket nem de conexões abertas no servidor simulado.
  */
 import type { Page } from '@playwright/test'
 import { loginAs, logoutThroughUi } from '../account-helpers'

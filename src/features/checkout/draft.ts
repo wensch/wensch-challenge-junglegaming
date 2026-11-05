@@ -1,7 +1,7 @@
 /**
  * Collector draft (rascunho do colecionador), kept in `sessionStorage` under `kurio.u.<userId>.checkout`.
  *
- * Isolation (ELIM-4 / security #13): the key carries the user id, a draft is only written while that
+ * Isolation (ELIM-4): the key carries the user id, a draft is only written while that
  * user is the session owner, and `clearUserDrafts` (logout, user switch, teardown of another user)
  * removes everything under the prefix. A draft kept after an EXPIRED session belongs to the same user and
  * resumes after login. Read values are validated: an entry that does not match the schema is ignored (and

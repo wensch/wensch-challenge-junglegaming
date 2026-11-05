@@ -1,4 +1,4 @@
-/** After a CLIENT-SIDE navigation the page `h1` takes focus (same rule as `PageFrame`, shell volta 2). */
+/** After a CLIENT-SIDE navigation the page `h1` takes focus (same rule as `PageFrame`). */
 import { useEffect, useRef } from 'react'
 import { hasClientNavigated } from '@/lib/navigation'
 

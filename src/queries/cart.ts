@@ -1,4 +1,4 @@
-/** Cart query (shared by the header badge and the cart slice). */
+/** Cart query (shared by the header badge and the cart screen). */
 import { queryOptions, skipToken, useQuery, type QueryClient, type QueryKey } from '@tanstack/react-query'
 import type { ApiError, Cart } from '@/api/contracts'
 import { cartApi } from '@/api/endpoints'
@@ -20,7 +20,7 @@ export const cartQueryOptions = (owner: OwnerCredential) =>
     queryKey: queryKeys.owner(ownerKey(owner)).cart(),
     queryFn: fetchCartOf(owner),
     staleTime: STALE.cart,
-    // R4: the cart is versioned; a late GET (or a merge written meanwhile) can never move it backwards.
+    // The cart is versioned; a late GET (or a merge written meanwhile) can never move it backwards.
     structuralSharing: keepNewest,
   })
 
