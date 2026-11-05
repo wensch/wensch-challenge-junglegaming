@@ -112,3 +112,9 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 
 ## Como reproduzir a evidência
 `npm ci && npm run verify` (clone limpo verificado em 9b0f011) · `BASE_URL=https://wensch-challenge-junglegaming.vercel.app npx playwright test` · `npm run lighthouse` · CI: GitHub Actions `verify` · baselines Linux: workflow `visual-baselines`.
+
+## Estado final — 2026-11-05
+- Home igual ao Figma (ordem, nomes com token, preços, Spotlight), 36 NFTs em 4 páginas, arte do Hero em 3x (WebP), busca em barra de largura total (D44), dica de ENS dinâmica, nomes de item sem corte, auto-recuperação do service worker do mock.
+- `npm run verify`: GREEN na main (11:08). CI `verify` do commit c55fb77: success. Deploy Vercel do mesmo SHA: READY.
+- Suíte contra produção: 550 passed, 3 flaky (passaram no retry), 1 falha corrigida no teste (reload abortado no boot frio; 36/36 depois).
+- Pendências conhecidas: ver "Limitações conhecidas" no README (Confirmação e checkout em 768 px sem medição; imagem do Detalhe 404 vs 444 px; Performance mobile do Lighthouse justificada).
