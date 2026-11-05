@@ -4,7 +4,7 @@
  * Below `lg` this is how the filters are reached (the sidebar only exists from `lg`).
  */
 import { useState } from 'react'
-import { SlidersHorizontal } from 'lucide-react'
+import { Settings2 } from 'lucide-react'
 import type { NftListResponse } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -33,7 +33,7 @@ export function MobileSearchBar({ facets }: { facets: NftListResponse['facets'] 
             aria-label="Filtros e ordenação"
             className="grid size-[45px] shrink-0 place-items-center rounded-card bg-gradient-to-br from-text-accent to-primary text-primary-foreground"
           >
-            <SlidersHorizontal aria-hidden="true" className="size-[22px]" />
+            <Settings2 aria-hidden="true" className="size-[22px]" />
           </button>
         </SheetTrigger>
         <SheetContent side="bottom" className="max-h-[88dvh] overflow-y-auto rounded-t-panel border-line px-4 pt-6 pb-8">
