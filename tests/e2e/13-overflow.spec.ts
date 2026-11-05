@@ -46,6 +46,15 @@ test.describe('sem rolagem horizontal', () => {
     }
     await expectNoOverflow(page, '/login', seen)
     await expectNoOverflow(page, '/register', seen)
+    await expectNoOverflow(page, '/criadores', async () => {
+      await expect(page.getByTestId('creators-grid')).toBeVisible()
+    })
+    await expectNoOverflow(page, '/aprenda', async () => {
+      await expect(page.getByTestId('articles-list')).toBeVisible()
+    })
+    await expectNoOverflow(page, '/aprenda/raridade-atributos-e-procedencia', async () => {
+      await expect(page.getByTestId('article')).toBeVisible()
+    })
 
     const [a] = await pickEditions(page, 1)
     await loginWithCart(page, [{ item: a!, quantity: 2 }])

@@ -7,7 +7,7 @@
  * - Visitor data: `['guest', guestId, ...]` (cart and quote before login).
  */
 import type { DataTag } from '@tanstack/react-query'
-import { nftListQuerySchema, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus, type Profile, type WalletsResponse } from '@/api/contracts'
+import { nftListQuerySchema, type ArticleCategory, type ArticleDetail, type ArticleListResponse, type CreatorListQuery, type CreatorListResponse, type ApiError, type Cart, type FeaturedResponse, type NftDetail, type NftListQuery, type Network, type Order, type OrderStatus, type Profile, type WalletsResponse } from '@/api/contracts'
 
 /** Nominal brand: only `normalizeNftListQuery` produces a `NormalizedNftListQuery`. */
 declare const normalizedBrand: unique symbol
@@ -41,6 +41,15 @@ export const queryKeys = {
     details: () => ['nfts', 'detail'] as const,
     detail: (nftId: string) => tag<NftDetail>()(['nfts', 'detail', nftId]),
     featured: () => tag<FeaturedResponse>()(['nfts', 'featured']),
+  },
+
+  /** Editorial content (v1.4.0): public, never user-scoped. */
+  creators: {
+    list: (query: CreatorListQuery) => tag<CreatorListResponse>()(['creators', 'list', query]),
+  },
+  articles: {
+    list: (category: ArticleCategory | undefined) => tag<ArticleListResponse>()(['articles', 'list', category ?? 'all']),
+    detail: (slug: string) => tag<ArticleDetail>()(['articles', 'detail', slug]),
   },
 
   /** Every private key of every user (teardown target). */

@@ -156,7 +156,7 @@ test('contrato x mock: avatar/explorer https-only; seeds sem http: nem SVG', asy
   }
 })
 
-const CSP_ROUTES = ['/', '/cart', '/login', '/register', '/nft/nft_004', '/em-breve', '/checkout', '/favorites', '/profile', '/wallets', '/orders/ord_0001', '/rota-inexistente']
+const CSP_ROUTES = ['/', '/cart', '/login', '/register', '/nft/nft_004', '/em-breve', '/criadores', '/aprenda', '/aprenda/como-proteger-sua-carteira', '/checkout', '/favorites', '/profile', '/wallets', '/orders/ord_0001', '/rota-inexistente']
 
 // One test per audience: each one boots once and loads 12 full documents (8 workers on Windows push a
 // single combined test past 30 s). `test.slow()` keeps headroom under load.

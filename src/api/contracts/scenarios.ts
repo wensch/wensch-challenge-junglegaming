@@ -38,7 +38,7 @@ export const SCENARIOS = {
     covers: '§6 resultado vazio',
     description: 'GET /nfts responde items: [] e total 0 para qualquer filtro (facets zeradas).',
     effect: 'Catálogo exibe estado vazio com ação para limpar filtros; paginação some.',
-    affects: ['listNfts'],
+    affects: ['listNfts', 'listCreators', 'listArticles'],
   },
   'latency.slow': {
     group: 'network',
@@ -87,7 +87,7 @@ export const SCENARIOS = {
     covers: '§6 HTTP 5xx',
     description: 'GET /nfts e GET /nfts/:nftId respondem 503 TRANSIENT (retryAfterMs 1000) enquanto ativo.',
     effect: 'Após esgotar retries, estado de erro com botão de nova tentativa; recupera ao sair do cenário.',
-    affects: ['listNfts', 'getNft'],
+    affects: ['listNfts', 'getNft', 'listCreators', 'listArticles', 'getArticle'],
   },
   'favorites.fail': {
     group: 'http',

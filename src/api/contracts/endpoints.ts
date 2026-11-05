@@ -14,6 +14,7 @@ import type { z } from 'zod'
 import { loginRequestSchema, registerRequestSchema, sessionSchema } from './auth'
 import { addCartItemRequestSchema, applyCouponRequestSchema, cartSchema, mergeCartRequestSchema, mergeCartResponseSchema, updateCartItemRequestSchema } from './cart'
 import { HEADERS } from './common'
+import { articleDetailSchema, articleListQuerySchema, articleListResponseSchema, creatorListQuerySchema, creatorListResponseSchema } from './content'
 import type { ApiErrorCode } from './errors'
 import { favoritesResponseSchema, favoriteToggleResponseSchema } from './favorites'
 import { featuredResponseSchema, nftDetailSchema, nftListQuerySchema, nftListResponseSchema } from './nfts'
@@ -104,6 +105,11 @@ export const endpoints = {
   updateWallet: { method: 'PATCH', path: '/wallets/:walletId', auth: 'session', body: updateWalletRequestSchema, response: walletSchema, status: 200, errors: ['VALIDATION', 'NOT_FOUND', 'FORBIDDEN', 'CONFLICT_VERSION'] },
   connectWallet: { method: 'POST', path: '/wallets/:walletId/connect', auth: 'session', body: connectWalletRequestSchema, response: walletConnectionSchema, status: 200, errors: ['NOT_FOUND', 'FORBIDDEN'] },
   disconnectWallet: { method: 'DELETE', path: '/wallets/:walletId/connection', auth: 'session', response: null, status: 204, errors: ['NOT_FOUND'] },
+
+  // --- Editorial (v1.4.0): creators and learning articles, public ---
+  listCreators: { method: 'GET', path: '/creators', auth: 'public', query: creatorListQuerySchema, response: creatorListResponseSchema, status: 200, errors: ['VALIDATION'] },
+  listArticles: { method: 'GET', path: '/articles', auth: 'public', query: articleListQuerySchema, response: articleListResponseSchema, status: 200, errors: ['VALIDATION'] },
+  getArticle: { method: 'GET', path: '/articles/:slug', auth: 'public', response: articleDetailSchema, status: 200, errors: ['NOT_FOUND'] },
 } as const satisfies Record<string, EndpointDef>
 
 export type EndpointName = keyof typeof endpoints
