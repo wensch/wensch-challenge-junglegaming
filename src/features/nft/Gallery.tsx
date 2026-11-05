@@ -35,6 +35,8 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
         <div data-testid="gallery-main" className="grid aspect-square place-items-center md:rounded-card md:bg-surface-card md:p-5">
           <img
             src={current.src}
+            srcSet={current.srcset}
+            sizes="(min-width: 48rem) 444px, 100vw"
             alt={current.alt}
             width={current.width}
             height={current.height}

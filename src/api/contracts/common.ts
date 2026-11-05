@@ -41,6 +41,8 @@ export const imageSchema = z.object({
   alt: z.string(),
   width: z.int().positive(),
   height: z.int().positive(),
+  /** Optional responsive candidates (`url 240w, url 480w`), same format as the `srcset` attribute. */
+  srcset: z.string().min(1).optional(),
 })
 export type Image = z.infer<typeof imageSchema>
 

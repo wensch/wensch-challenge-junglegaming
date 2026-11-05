@@ -7,8 +7,8 @@ Nota: a porta 4190 e bloqueada pelo Chrome/fetch (ERR_UNSAFE_PORT), por isso 419
 
 | Pagina | Perfil | Perf | A11y | BP | SEO | LCP ms | CLS | TBT ms | FCP ms | SI ms |
 |---|---|---|---|---|---|---|---|---|---|---|
-| inicio (/) | mobile | **68** | 100 | 100 | 100 | 5800 | 0.000 | 446 | 915 | 1027 |
-| detalhe (/nft/nft_002) | mobile | **68** | 100 | 100 | 100 | 5463 | 0.000 | 459 | 901 | 1475 |
+| inicio (/) | mobile | **78** | 100 | 100 | 100 | 4959 | 0.000 | 204 | 905 | 905 |
+| detalhe (/nft/nft_002) | mobile | **79** | 100 | 100 | 100 | 4856 | 0.000 | 201 | 902 | 931 |
 | inicio (/) | desktop | 97 | 100 | 100 | 100 | 1256 | 0.000 | 1 | 247 | 314 |
 | detalhe (/nft/nft_002) | desktop | 98 | 100 | 100 | 100 | 1147 | 0.000 | 0 | 245 | 290 |
 
@@ -47,3 +47,16 @@ Por que a nota mobile fica abaixo, com os dados medidos:
 7. (baixa, flake) `src/mocks/browser.ts:79`: evitar o reload na primeira visita (ex.: `clients.claim` ja no install) para o trace ficar estavel e o primeiro carregamento nao pagar duas vezes.
 
 Nenhuma dessas correcoes simplifica o app: MSW, Socket.IO e demais itens da stack permanecem.
+
+## Rodada de otimizacao 2 (antes -> depois, medianas de 3, mobile)
+
+| Etapa | Inicio perf / LCP / TBT | Detalhe perf / LCP / TBT |
+|---|---|---|
+| Antes | 68 / 5800 / 446 | 68 / 5463 / 459 |
+| + imagens WebP + srcset (hero 240/480/900) | 66 / 5749 / 508 | 72 / 5527 / 341 |
+| + chunk `vendor` agrupado (advancedChunks) | 78 / 4959 / 204 | 79 / 4856 / 201 |
+
+- Imagens (`scripts/optimize-images.mjs`, originais em `assets-src/nft`): sozinhas nao mexeram na nota, porque o LCP simulado e dominado por bytes de JS e CPU, nao pela imagem (hero 130 KB -> 7 KB no mobile).
+- `vendor` unico reduz ~55 requisicoes pequenas (cada uma custa um RTT simulado de 150 ms): +10 pontos e TBT 446 -> 204 ms. `socket.io-client`/`engine.io-client` ficam fora de chunks compartilhados com os mocks (engine.io captura `WebSocket` ao avaliar; um chunk `realtime` compartilhado fez BP cair para 96 por conexao real antes do MSW).
+- Cache imutavel de `/nft` e `/fonts` em `vercel.json`.
+- Ainda nao atingido (meta 90): restam MSW 176 KB gz + vendor 224 KB gz (47% nao usado no 1o paint) no caminho do primeiro dado. Proximos passos: dividir `vendor` por rota (radix dialog/select/dropdown so nas rotas que usam), importar `socket.io-client` apos o 1o render, enxugar o chunk dos mocks.

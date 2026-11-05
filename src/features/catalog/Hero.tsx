@@ -97,6 +97,8 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
       <Link to="/nft/$id" params={{ id: current.id }} aria-label={`Ver ${current.name}`} className="block size-full">
         <img
           src={current.image.src}
+          srcSet={current.image.srcset}
+          sizes="(min-width: 75rem) 450px, (min-width: 48rem) 300px, 120px"
           alt={current.image.alt}
           width={current.image.width}
           height={current.image.height}
