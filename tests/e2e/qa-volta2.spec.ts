@@ -40,7 +40,6 @@ test.describe('reteste QA-001 redirect (node + browser)', () => {
       const r = safeRedirectSchema.safeParse(v)
       const out = r.success ? r.data : null
       if (out !== null) expect(new URL(out, 'http://x').origin, JSON.stringify(v)).toBe('http://x')
-      console.log(JSON.stringify(v), '->', JSON.stringify(out))
     }
   })
   for (const v of ['/.//evil.com', '/\t/evil.com', '/..//evil.com', '/%2e//evil.com']) {
@@ -50,7 +49,6 @@ test.describe('reteste QA-001 redirect (node + browser)', () => {
       await expect(page.getByRole('heading', { level: 1, name: 'Entrar' })).toBeVisible()
       const u = new URL(page.url())
       const r = u.searchParams.get('redirect')
-      console.log('browser', JSON.stringify(v), '->', JSON.stringify(r))
       if (r) expect(new URL(r, u.origin).origin).toBe(u.origin)
     })
   }
@@ -107,10 +105,8 @@ test('QA-004/005 runtime: respostas reais casam com o declarado', async ({ page,
   await boot('/')
   const s = await loginViaApi(page, USERS.alice)
   const o = await call(page, 'POST', '/orders', { token: s.token, body: { walletId: 'wal_inexistente', quoteId: 'q', items: [] } })
-  console.log('createOrder carteira invalida ->', o.status, JSON.stringify(o.body?.error?.code))
   expect(E.createOrder!.errors).toContain(o.body.error.code)
   const c = await call(page, 'GET', '/cart')
-  console.log('getCart sem guest ->', c.status, JSON.stringify(c.body?.error?.code))
   expect(E.getCart!.errors).toContain(c.body.error.code)
 })
 
@@ -144,13 +140,12 @@ test('contrato x mock: avatar/explorer https-only; seeds sem http: nem SVG', asy
   expect(dump).not.toMatch(/"http:\/\//)
   expect(dump).not.toMatch(/\.svg|image\/svg/i)
   const urls = [...dump.matchAll(/"(?:explorerUrl|avatarUrl)":"([^"]*)"/g)].map((m) => m[1]!)
-  console.log('explorer/avatar urls no seed:', urls.length)
+  expect(urls.length).toBeGreaterThan(0)
   for (const u of urls) expect(u.startsWith('https://') || u.startsWith('/')).toBe(true)
 
   const s = await loginViaApi(page, USERS.alice)
   const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
   const ok = await call(page, 'PUT', '/profile/avatar', { token: s.token, form: { name: 'a.png', type: 'image/png', data: png } })
-  console.log('upload png ->', ok.status, String(ok.body?.avatarUrl).slice(0, 30))
   expect(ok.status).toBe(200)
   expect(avatarUrlSchema.safeParse(ok.body.avatarUrl).success).toBe(true)
   expect(ok.body.avatarUrl).toMatch(/^data:image\/png;base64,/)
@@ -206,7 +201,7 @@ test('lazy: AccountDropdown / Sheet so carregam sob demanda, sem perder o foco',
   await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-status', 'connected')
   const trigger = mobile ? page.getByRole('button', { name: 'Abrir menu' }) : page.getByRole('button', { name: /Alice/ })
   await expect(trigger).toBeVisible()
-  console.log('chunks antes do clique:', chunks)
+  expect(chunks).toEqual([])
   await trigger.click()
   if (mobile) {
     const dlg = page.getByRole('dialog', { name: 'KURIO' })
@@ -222,7 +217,7 @@ test('lazy: AccountDropdown / Sheet so carregam sob demanda, sem perder o foco',
     await expect(page.getByRole('menuitem', { name: 'Sair' })).toBeHidden()
     await expect(trigger).toBeFocused()
   }
-  console.log('chunks depois:', chunks)
+  expect(chunks.length).toBeGreaterThan(0)
 })
 
 test('cancelamento: logout com requisicao privada em voo + refresh nao deixa dados nem ressuscita sessao', async ({ page, boot }, info) => {
