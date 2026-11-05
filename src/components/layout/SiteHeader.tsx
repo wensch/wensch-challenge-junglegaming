@@ -8,9 +8,9 @@
  * in the flex flow between logo and actions (`flex-1`, centered in the free space), so it can never
  * overlap the search/cart/account group at tablet widths.
  */
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, type ComponentType } from 'react'
 import { Link } from '@tanstack/react-router'
-import { LogIn, ShoppingCart, User } from 'lucide-react'
+import { CartIcon, LogoutIcon, UserIcon, type IconProps } from '@/components/icons/figma'
 import { Button } from '@/components/ui/button'
 import { HeaderSearch } from '@/features/catalog/HeaderSearch'
 import { useCart } from '@/queries/cart'
@@ -21,12 +21,12 @@ import { accountButtonClass } from './header-styles'
 // The account menu (DropdownMenu) is only needed for logged users: loaded on demand.
 const AccountDropdown = lazy(() => import('./AccountDropdown'))
 
-export function CartBadgeIcon({ className }: { className?: string }) {
+export function CartBadgeIcon({ className, icon: Glyph = CartIcon }: { className?: string; icon?: ComponentType<IconProps> }) {
   const cart = useCart()
   const count = cart.data?.itemCount ?? 0
   return (
     <span className={cn('relative inline-flex', className)}>
-      <ShoppingCart aria-hidden="true" className="size-6" strokeWidth={1.75} />
+      <Glyph />
       {count > 0 && (
         <span
           aria-hidden="true"
@@ -55,7 +55,7 @@ function AccountMenu() {
     return (
       <Button asChild className="h-[35px] w-[100px] gap-1.5 rounded-control px-2.5 text-body-md font-medium">
         <Link to="/login">
-          <LogIn aria-hidden="true" className="size-5" strokeWidth={1.75} />
+          <LogoutIcon />
           Entrar
         </Link>
       </Button>
@@ -68,7 +68,7 @@ function AccountMenu() {
       fallback={
         // Same box as the trigger while its chunk loads (no layout shift, not interactive yet).
         <span aria-hidden="true" className={cn('inline-flex items-center rounded-control border px-2.5', accountButtonClass)}>
-          <User className="size-5" strokeWidth={1.75} />
+          <UserIcon />
           <span className="truncate">{user.displayName}</span>
         </span>
       }

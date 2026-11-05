@@ -3,7 +3,7 @@
  * download the DropdownMenu code (ARCHITECTURE §12, bundle).
  */
 import { Link } from '@tanstack/react-router'
-import { Heart, LogOut, User, Wallet } from 'lucide-react'
+import { HeartIcon, LocationIcon, LogoutIcon, UserIcon } from '@/components/icons/figma'
 import type { User as SessionUser } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,7 +28,7 @@ export default function AccountDropdown({ user }: { user: SessionUser }) {
           {renderableAvatarSrc(user.avatarUrl) ? (
             <Avatar decorative url={user.avatarUrl} name={user.displayName} className="size-5" />
           ) : (
-            <User aria-hidden="true" className="size-5" strokeWidth={1.75} />
+            <UserIcon />
           )}
           <span className="truncate">{user.displayName}</span>
           <span className="sr-only">: abrir menu da conta</span>
@@ -40,23 +40,23 @@ export default function AccountDropdown({ user }: { user: SessionUser }) {
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link to="/profile">
-              <User aria-hidden="true" /> Meu perfil
+              <UserIcon /> Meu perfil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/wallets">
-              <Wallet aria-hidden="true" /> Carteiras
+              <LocationIcon /> Carteiras
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/favorites">
-              <Heart aria-hidden="true" /> Lista de interesse
+              <HeartIcon /> Lista de interesse
             </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem disabled={isPending} onSelect={() => void logout()}>
-          <LogOut aria-hidden="true" /> Sair
+          <LogoutIcon /> Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

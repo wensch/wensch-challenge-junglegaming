@@ -8,7 +8,8 @@
  */
 import { lazy, Suspense, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Heart, House, ScanLine, User } from 'lucide-react'
+import { Heart } from 'lucide-react'
+import { HomeIcon, ScanIcon, ShopIcon, UserIcon } from '@/components/icons/figma'
 import { useCart } from '@/queries/cart'
 import { CartBadgeIcon, cartLabel } from './SiteHeader'
 
@@ -43,7 +44,7 @@ function MobileMenu() {
         }}
         className="absolute -top-8 left-1/2 grid size-[65px] -translate-x-1/2 place-items-center rounded-full border-[6px] border-background bg-gradient-to-br from-text-accent to-primary text-primary-foreground shadow-lg"
       >
-        <ScanLine aria-hidden="true" className="h-6 w-[27px]" strokeWidth={2} />
+        <ScanIcon />
       </button>
       {mounted && (
         <Suspense fallback={null}>
@@ -62,7 +63,7 @@ export function MobileTabBar() {
         <ul className="grid h-full grid-cols-5 items-center px-4">
           <li className="grid place-items-center">
             <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} aria-label="Início" className={tab}>
-              <House aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.5} />
+              <HomeIcon />
             </Link>
           </li>
           <li className="grid place-items-center">
@@ -75,12 +76,12 @@ export function MobileTabBar() {
           </li>
           <li className="grid place-items-center">
             <Link to="/cart" aria-label={cartLabel(cart.data?.itemCount ?? 0)} className={tab}>
-              <CartBadgeIcon className="[&>svg]:size-5" />
+              <CartBadgeIcon icon={ShopIcon} />
             </Link>
           </li>
           <li className="grid place-items-center">
             <Link to="/profile" aria-label="Perfil" className={tab}>
-              <User aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.5} />
+              <UserIcon />
             </Link>
           </li>
         </ul>

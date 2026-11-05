@@ -8,7 +8,8 @@ import { useEffect, useId, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
-import { Minus, Plus, ShoppingCart } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
+import { ShopIcon } from '@/components/icons/figma'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { isApiError, type Edition, type NftDetail } from '@/api/contracts'
@@ -191,7 +192,7 @@ export function PurchasePanel({ nft, edition }: { nft: NftDetail; edition: Editi
             onClick={() => void submit('add')()}
             className="size-[60px] shrink-0 rounded-full border-line-soft bg-surface-card text-text-accent md:order-first md:size-10 md:rounded-control md:border-primary"
           >
-            <ShoppingCart aria-hidden="true" className="size-5" />
+            <ShopIcon />
           </Button>
           <FavoriteButton nft={toSummary(nft)} variant="button" className="hidden md:inline-flex" />
         </div>

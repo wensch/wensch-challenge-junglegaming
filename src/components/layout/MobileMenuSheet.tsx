@@ -4,7 +4,8 @@
  */
 import type { RefObject } from 'react'
 import { Link } from '@tanstack/react-router'
-import { House, LogIn, LogOut, Search, ShoppingCart, User, Wallet } from 'lucide-react'
+import { LogIn } from 'lucide-react'
+import { HomeIcon, LocationIcon, LogoutIcon, SearchIcon, ShopIcon, UserIcon } from '@/components/icons/figma'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -45,17 +46,17 @@ export default function MobileMenuSheet({ open, onOpenChange, returnFocusRef }: 
           <ul className="flex flex-col gap-1">
             <li>
               <Link to="/" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
-                <House aria-hidden="true" className="size-5" /> Início
+                <HomeIcon /> Início
               </Link>
             </li>
             <li>
               <Link to="/" hash="mercado" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
-                <ShoppingCart aria-hidden="true" className="size-5" /> Mercado
+                <ShopIcon /> Mercado
               </Link>
             </li>
             <li>
               <Link to="/" hash="busca" activeOptions={{ exact: true, includeHash: true, includeSearch: false }} className={menuLink} onClick={close}>
-                <Search aria-hidden="true" className="size-5" /> Buscar NFTs
+                <SearchIcon /> Buscar NFTs
               </Link>
             </li>
             <li>
@@ -75,12 +76,12 @@ export default function MobileMenuSheet({ open, onOpenChange, returnFocusRef }: 
               <>
                 <li>
                   <Link to="/profile" className={menuLink} onClick={close}>
-                    <User aria-hidden="true" className="size-5" /> Meu perfil
+                    <UserIcon /> Meu perfil
                   </Link>
                 </li>
                 <li>
                   <Link to="/wallets" className={menuLink} onClick={close}>
-                    <Wallet aria-hidden="true" className="size-5" /> Carteiras
+                    <LocationIcon /> Carteiras
                   </Link>
                 </li>
                 <li>
@@ -93,7 +94,7 @@ export default function MobileMenuSheet({ open, onOpenChange, returnFocusRef }: 
                       void logout()
                     }}
                   >
-                    <LogOut aria-hidden="true" className="size-5" /> Sair
+                    <LogoutIcon /> Sair
                   </Button>
                 </li>
               </>

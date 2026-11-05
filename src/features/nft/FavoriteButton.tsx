@@ -5,6 +5,7 @@
  */
 import { useLocation, useNavigate } from '@tanstack/react-router'
 import { Heart } from 'lucide-react'
+import { HeartIcon } from '@/components/icons/figma'
 import type { NftSummary } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -45,7 +46,7 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
           className,
         )}
       >
-        <Heart aria-hidden="true" className="size-4" fill={active ? 'currentColor' : 'none'} strokeWidth={1.75} />
+        {active ? <Heart aria-hidden="true" className="size-4" fill="currentColor" strokeWidth={1.75} /> : <HeartIcon />}
       </button>
     )
   }
@@ -55,7 +56,7 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
       variant="outline"
       className={cn('h-10 w-[130px] gap-2 rounded-control border-primary bg-transparent px-0 text-body-md font-medium text-text-primary hover:bg-surface-dark', className)}
     >
-      <Heart aria-hidden="true" className="size-5" fill={active ? 'currentColor' : 'none'} strokeWidth={1.75} />
+      {active ? <Heart aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.75} /> : <HeartIcon className="size-5" />}
       Favoritar
     </Button>
   )

@@ -2,7 +2,7 @@
 import { useEffect, useId } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Search } from 'lucide-react'
+import { EllipseStrokeIcon } from '@/components/icons/figma'
 import { z } from 'zod'
 import { cn } from '@/lib/utils'
 
@@ -45,7 +45,7 @@ export function SearchForm({ value, onSearch, placeholder, inputId, className, i
         Buscar NFTs
       </label>
       <div className="flex items-center gap-2">
-        <Search aria-hidden="true" className="size-5 shrink-0 text-text-secondary" />
+        <EllipseStrokeIcon className="shrink-0 text-text-secondary" />
         <input
           id={id}
           type="search"

@@ -3,9 +3,10 @@
  * (x = 458 at 1440). Below `md` the menu becomes a horizontal list above the content (no mobile frame).
  * Items outside the challenge scope lead to `/em-breve` (ARCHITECTURE §12).
  */
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type ComponentType, type ReactNode } from 'react'
 import { Link, useLocation, type LinkProps } from '@tanstack/react-router'
-import { Bell, ChevronDown, Download, Heart, LifeBuoy, LogOut, MapPin, ShoppingBag, User } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+import { ActivityIcon, DangerTriangleIcon, DownloadIcon, HeartIcon, LocationIcon, LogoutIcon, ShoppingBagIcon, UserIcon, type IconProps } from '@/components/icons/figma'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { hasClientNavigated } from '@/lib/navigation'
@@ -15,15 +16,15 @@ import { useLogout } from '@/session/hooks'
 const item =
   'flex items-center gap-3 border-l-[6px] border-transparent px-[10px] py-[10px] text-body-sm text-text-accent transition-colors hover:bg-surface-dark data-[status=active]:border-primary data-[status=active]:bg-surface-dark'
 
-type Item = { label: string; icon: typeof User; link: Pick<LinkProps, 'to' | 'search'> }
+type Item = { label: string; icon: ComponentType<IconProps>; link: Pick<LinkProps, 'to' | 'search'> }
 const ITEMS: Item[] = [
-  { label: 'Dados do perfil', icon: User, link: { to: '/profile' } },
-  { label: 'Carteiras', icon: MapPin, link: { to: '/wallets' } },
-  { label: 'Atividade', icon: ShoppingBag, link: { to: '/em-breve', search: { secao: 'atividade' } } },
-  { label: 'Lista de interesse', icon: Heart, link: { to: '/favorites' } },
-  { label: 'Ofertas', icon: Bell, link: { to: '/em-breve', search: { secao: 'ofertas' } } },
-  { label: 'Arquivos baixados', icon: Download, link: { to: '/em-breve', search: { secao: 'arquivos' } } },
-  { label: 'Suporte', icon: LifeBuoy, link: { to: '/em-breve', search: { secao: 'suporte' } } },
+  { label: 'Dados do perfil', icon: UserIcon, link: { to: '/profile' } },
+  { label: 'Carteiras', icon: LocationIcon, link: { to: '/wallets' } },
+  { label: 'Atividade', icon: ShoppingBagIcon, link: { to: '/em-breve', search: { secao: 'atividade' } } },
+  { label: 'Lista de interesse', icon: HeartIcon, link: { to: '/favorites' } },
+  { label: 'Ofertas', icon: ActivityIcon, link: { to: '/em-breve', search: { secao: 'ofertas' } } },
+  { label: 'Arquivos baixados', icon: DownloadIcon, link: { to: '/em-breve', search: { secao: 'arquivos' } } },
+  { label: 'Suporte', icon: DangerTriangleIcon, link: { to: '/em-breve', search: { secao: 'suporte' } } },
 ]
 
 const TABS = ITEMS.slice(0, 2)
@@ -54,14 +55,14 @@ function CompactMenu({ logout, isPending }: { logout: () => unknown; isPending: 
           {MORE.map(({ label, icon: Icon, link }) => (
             <DropdownMenuItem key={label} asChild className="min-h-11">
               <Link {...link} aria-current={isCurrent(link, pathname, search as Record<string, unknown>) ? 'page' : undefined}>
-                <Icon aria-hidden="true" className="size-4" />
+                <Icon />
                 {label}
               </Link>
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
           <DropdownMenuItem className="min-h-11 font-bold" disabled={isPending} onSelect={() => void logout()}>
-            <LogOut aria-hidden="true" className="size-4" />
+            <LogoutIcon />
             Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -85,7 +86,7 @@ export function AccountLayout({ title, children }: { title: string; children: Re
           {ITEMS.map(({ label, icon: Icon, link }) => (
             <li key={label}>
               <Link {...link} className={item} activeOptions={{ exact: true }}>
-                <Icon aria-hidden="true" className="size-4 shrink-0" />
+                <Icon className="shrink-0" />
                 <span className="whitespace-nowrap">{label}</span>
               </Link>
             </li>
@@ -97,7 +98,7 @@ export function AccountLayout({ title, children }: { title: string; children: Re
               onClick={() => void logout()}
               className={cn(item, 'cursor-pointer font-bold disabled:opacity-60 w-full')}
             >
-              <LogOut aria-hidden="true" className="size-4 shrink-0" />
+              <LogoutIcon className="shrink-0" />
               Sair
             </button>
           </li>

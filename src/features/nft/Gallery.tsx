@@ -3,7 +3,7 @@
  * Thumbnails are real buttons (`aria-current`); zoom opens a dialog (focus trap, Esc, focus return).
  */
 import { useState } from 'react'
-import { Search } from 'lucide-react'
+import { SearchIcon } from '@/components/icons/figma'
 import type { Image } from '@/api/contracts'
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -50,7 +50,7 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
               aria-label="Ampliar imagem"
               className="absolute top-4 right-4 hidden size-[30px] place-items-center rounded-full bg-ink/80 text-text-primary hover:text-text-accent md:grid"
             >
-              <Search aria-hidden="true" className="size-5" strokeWidth={1.75} />
+              <SearchIcon />
             </button>
           </DialogTrigger>
           <DialogContent className="max-w-[min(90vw,720px)] bg-surface-card p-4">
