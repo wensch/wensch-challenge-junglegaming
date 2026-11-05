@@ -79,7 +79,7 @@ function HeroSkeleton() {
       <HeroCopy>
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
-          <div className="h-6" />
+          <div className="h-6 max-md:hidden" />
         </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">
