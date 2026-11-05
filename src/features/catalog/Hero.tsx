@@ -24,7 +24,7 @@ function HeroCopy({ children }: { children?: React.ReactNode }) {
     <div className="flex min-w-0 flex-1 flex-col max-md:pb-6 justify-between self-stretch md:min-w-0 md:flex-1 md:justify-center min-[1200px]:w-[600px] min-[1200px]:flex-none md:gap-8 md:self-center">
       <div className="flex flex-col gap-1.5 md:gap-3">
         <p className="text-body-sm leading-4 text-text-primary">Bem-vindo à Kurio</p>
-        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none max-md:text-[clamp(17px,4.8vw,20px)] max-md:leading-6 md:text-heading min-[1200px]:text-display">
+        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none max-md:text-[clamp(16px,4.4vw,20px)] max-md:leading-6 md:text-heading min-[1200px]:text-display">
           <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
           <span className="hidden md:inline">
             SEJA DONO DO FUTURO

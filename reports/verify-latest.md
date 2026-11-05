@@ -1,12 +1,10 @@
-# verify — 2026-11-05T09:58:42.976Z
+# verify — 2026-11-05T11:37:54.566Z
 
-Result: **GREEN**
+Result: **RED**
 
 | step | status | time | command |
 |---|---|---|---|
-| typecheck | PASS | 5.9s | `npx tsc -b --noEmit` |
-| lint | PASS | 11.3s | `npx eslint .` |
-| build | PASS | 2.9s | `npx vite build` |
-| e2e | PASS | 363.2s | `npx playwright test --grep-invert "@visual|@a11y"` |
-| visual | PASS | 22.7s | `npx playwright test --grep @visual --pass-with-no-tests` |
-| a11y | PASS | 38.7s | `npx playwright test --grep @a11y --pass-with-no-tests` |
+| typecheck | PASS | 8.8s | `npx tsc -b --noEmit` |
+| lint | PASS | 13.3s | `npx eslint .` |
+| build | PASS | 3.4s | `npx vite build` |
+| e2e | FAIL | 623.6s | `npx playwright test --grep-invert "@visual|@a11y"` |
