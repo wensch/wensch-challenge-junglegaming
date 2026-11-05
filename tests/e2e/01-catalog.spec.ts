@@ -171,4 +171,19 @@ test.describe('catálogo', () => {
     await expect(scope2.getByRole('slider', { name: 'Preço mínimo (ETH)' })).toHaveValue('30')
     await expect(scope2.getByRole('slider', { name: 'Preço máximo (ETH)' })).toHaveValue('60')
   })
+  test('barra de ferramentas alinhada: abas na mesma linha e "Ordenar por" no mesmo eixo', async ({ page, boot }, info) => {
+    const mobile = isMobileProject(info.project.name)
+    await boot('/')
+    await gridReady(page)
+    const tabs = page.getByRole('navigation', { name: 'Seções do catálogo' }).getByRole('link')
+    await expect(tabs).toHaveCount(3)
+    const boxes = await Promise.all([0, 1, 2].map(async (i) => (await tabs.nth(i).boundingBox())!))
+    for (const b of boxes) expect(Math.abs(b.y - boxes[0]!.y)).toBeLessThanOrEqual(2)
+    if (!mobile) {
+      const sort = (await page.getByRole('combobox', { name: 'Ordenar por' }).boundingBox())!
+      const tabText = boxes[0]!
+      // Centro do texto da aba (sem o sublinhado de 2 px + 4 px de respiro) x centro do seletor.
+      expect(Math.abs(tabText.y + (tabText.height - 6) / 2 - (sort.y + sort.height / 2))).toBeLessThanOrEqual(2)
+    }
+  })
 })
