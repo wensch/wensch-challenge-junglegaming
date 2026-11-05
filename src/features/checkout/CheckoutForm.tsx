@@ -247,20 +247,21 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
       <div>
         <h2 className="mb-4 text-body-md font-bold text-text-primary">Perfil do colecionador</h2>
         <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-          <TextField label="Nome de exibição" required autoComplete="name" error={errors.displayName?.message} {...register('displayName')} />
-          <TextField label="Nome de usuário" required autoComplete="username" error={errors.username?.message} {...register('username')} />
-          <TextField label="Nome do perfil" required error={errors.profileName?.message} {...register('profileName')} />
+          <TextField label="Nome de exibição" required autoComplete="name" placeholder="Ex.: Carteira principal" error={errors.displayName?.message} {...register('displayName')} />
+          <TextField label="Nome de usuário" required autoComplete="username" placeholder="Ex.: mateus-wensch" error={errors.username?.message} {...register('username')} />
+          <TextField label="Nome do perfil" required placeholder="Ex.: mateus-wensch" error={errors.profileName?.message} {...register('profileName')} />
           <TextField label="Endereço da carteira" readOnly value={wallet?.address ?? ''} placeholder="Endereço 0x da carteira" />
           <TextField label="Tipo de carteira" readOnly value={wallet ? WALLET_TYPE_LABELS[wallet.type] : ''} placeholder="Selecione uma carteira" />
-          <TextField label="Código de indicação" required autoCapitalize="characters" error={errors.referralCode?.message} {...register('referralCode')} />
-          <TextField label="E-mail" required type="email" autoComplete="email" error={errors.email?.message} {...register('email')} />
+          <TextField label="Código de indicação" required hint="4 a 16 caracteres: letras, números ou hífen" placeholder="Ex.: KURIO-2026" autoCapitalize="characters" error={errors.referralCode?.message} {...register('referralCode')} />
+          <TextField label="E-mail" required type="email" autoComplete="email" placeholder="Ex.: voce@exemplo.com" error={errors.email?.message} {...register('email')} />
           <div>
             <TextField
               label="Nome ENS"
               required
               spellCheck={false}
               autoCapitalize="none"
-              hint={`Será salvo como nome${ENS_SUFFIX}`}
+              placeholder="Ex.: mateus"
+              hint={`Será salvo como mateus${ENS_SUFFIX}`}
               error={errors.ensLabel?.message}
               {...register('ensLabel')}
             />
@@ -296,7 +297,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
         ) : quote.isError ? (
           <div role="alert" className="flex flex-col items-start gap-3 text-body-sm text-text-primary">
             <p>Não foi possível calcular os valores agora.</p>
-            <Button type="button" variant="outline" onClick={() => void quote.refetch()} className="h-9 rounded-control px-4 text-body-sm font-bold">
+            <Button type="button" variant="outline" onClick={() => void quote.refetch()} className="h-9 rounded-control px-4 text-body-sm font-bold max-lg:rounded-full">
               Tentar novamente
             </Button>
           </div>
@@ -347,7 +348,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
           onMessage={onAnnounce}
         />
 
-        <Button ref={confirmRef} type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold">
+        <Button ref={confirmRef} type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold max-lg:h-[60px] max-lg:rounded-full">
           Confirmar compra
         </Button>
       </div>

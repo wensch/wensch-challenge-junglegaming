@@ -23,7 +23,7 @@ export function RelatedNfts({ excludeNftIds }: { excludeNftIds: ReadonlySet<stri
             : items.map((n) => (
                 <li key={n.id}>
                   <Link to="/nft/$id" params={{ id: n.id }} className="group block outline-none focus-visible:ring-3 focus-visible:ring-ring/60">
-                    <span className="grid h-[255px] place-items-center overflow-hidden bg-surface-card">
+                    <span className="grid h-[255px] grid-rows-[minmax(0,1fr)] place-items-center overflow-hidden bg-surface-card">
                       <img src={n.image.src} alt={n.image.alt || n.name} width={n.image.width} height={n.image.height} loading="lazy" className="h-full w-full object-cover" />
                     </span>
                     <span className="mt-3 block truncate text-body-sm text-text-primary group-hover:underline">{n.name}</span>

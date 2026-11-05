@@ -41,7 +41,7 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
       <div data-testid="wallet-empty" className="rounded-control border border-line-soft bg-surface-card p-4 text-body-sm text-text-primary">
         <p className="font-bold">Nenhuma carteira cadastrada</p>
         <p className="mt-1 text-text-secondary">Cadastre uma carteira principal para concluir a compra.</p>
-        <Button asChild className="mt-3 h-10 rounded-control px-5 text-body-md font-bold">
+        <Button asChild className="mt-3 h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
           <Link to="/wallets">Cadastrar carteira</Link>
         </Button>
       </div>
@@ -95,7 +95,22 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
 
   return (
     <fieldset data-testid="wallet-panel" className="min-w-0 border-0 p-0">
-      <legend className="mb-3 text-body-md font-bold text-text-primary">Carteira e rede</legend>
+      <legend className="mb-3 flex w-full items-center justify-between text-body-md font-bold text-text-primary">
+        Carteira e rede
+        {wallets.length > 1 ? (
+          <button
+            type="button"
+            onClick={() => {
+              const i = wallets.findIndex((w) => w.id === walletId)
+              const next = wallets[(i + 1) % wallets.length]
+              if (next) changeWallet(next.id)
+            }}
+            className="rounded-control text-body-sm font-bold text-text-accent underline-offset-4 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/60 lg:hidden"
+          >
+            Trocar carteira
+          </button>
+        ) : null}
+      </legend>
       <div role="radiogroup" aria-label="Carteira cadastrada" className="flex flex-col gap-3">
         {wallets.map((w) => {
           const checked = w.id === walletId
@@ -103,11 +118,14 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
             <label
               key={w.id}
               className={cn(
-                'flex min-h-[52px] cursor-pointer items-center gap-3 rounded-control border px-4 py-2 text-body-sm text-text-primary has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/60',
-                checked ? 'border-text-primary' : 'border-line-soft',
+                'flex min-h-[52px] cursor-pointer items-center gap-3 rounded-control border px-4 py-2 text-body-sm text-text-primary has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/60 max-lg:min-h-[72px] max-lg:rounded-[20px] max-lg:bg-surface-card max-lg:px-5',
+                checked ? 'border-text-primary max-lg:border-brand' : 'border-line-soft max-lg:border-transparent',
               )}
             >
-              <input type="radio" name="wallet" value={w.id} checked={checked} onChange={() => changeWallet(w.id)} className="size-4 shrink-0 accent-brand" />
+              <input type="radio" name="wallet" value={w.id} checked={checked} onChange={() => changeWallet(w.id)} className="size-4 shrink-0 accent-brand max-lg:size-5" />
+              <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full bg-brand/15 text-body-sm font-bold text-brand lg:hidden">
+                {WALLET_TYPE_LABELS[w.type].charAt(0)}
+              </span>
               <span className="flex min-w-0 flex-col">
                 <span className="truncate">
                   {SLOT_LABELS[w.slot]} · {WALLET_TYPE_LABELS[w.type]}
@@ -132,7 +150,7 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
             setRejection(null)
             onNetworkChange(e.target.value as Network)
           }}
-          className="mt-1.5 h-10 w-full rounded-control border border-line-soft bg-transparent px-3 text-body-sm text-text-primary outline-none focus-visible:border-brand focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="mt-1.5 h-10 w-full rounded-control max-lg:h-12 max-lg:rounded-full max-lg:px-5 border border-line-soft bg-transparent px-3 text-body-sm text-text-primary outline-none focus-visible:border-brand focus-visible:ring-3 focus-visible:ring-ring/50"
         >
           {NETWORKS.map((n) => (
             <option key={n} value={n} className="bg-surface-card">
@@ -149,7 +167,7 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
             : 'Carteira desconectada.'}
         </p>
         {connected ? (
-          <Button type="button" variant="outline" onClick={doDisconnect} disabled={disconnect.isPending} className="h-10 rounded-control text-body-md font-bold">
+          <Button type="button" variant="outline" onClick={doDisconnect} disabled={disconnect.isPending} className="h-10 rounded-control text-body-md font-bold max-lg:h-12 max-lg:rounded-full">
             Desconectar carteira
           </Button>
         ) : (
@@ -158,7 +176,7 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
             onClick={doConnect}
             disabled={connect.isPending}
             aria-describedby={error ? 'checkout-connection-error' : undefined}
-            className="h-10 rounded-control text-body-md font-bold"
+            className="h-10 rounded-control text-body-md font-bold max-lg:h-12 max-lg:rounded-full"
           >
             {connect.isPending ? 'Conectando…' : 'Conectar carteira'}
           </Button>

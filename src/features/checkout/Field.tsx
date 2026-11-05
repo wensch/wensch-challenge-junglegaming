@@ -34,7 +34,7 @@ function FieldShell({ label, required, error, hint, className, children }: Field
         ) : null}
       </label>
       {children({ id, describedBy, invalid: !!error })}
-      {hint && !error ? (
+      {hint ? (
         <p id={hintId} className="text-caption-sm text-text-secondary">
           {hint}
         </p>
