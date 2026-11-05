@@ -5,7 +5,8 @@
 import { z } from 'zod'
 import type { Coupon, Edition, Network, NftDetail, Order, Quote, Wallet } from '@/api/contracts'
 
-export const DB_VERSION = 1
+/** Bump whenever the seed changes shape or content (e.g. image URLs): a stale persisted DB from an older deploy is then discarded and reseeded. */
+export const DB_VERSION = 2
 export const DB_STORAGE_KEY = `mock:db:v${DB_VERSION}`
 /** Tiny revision stamp written after every DB write; comparing it avoids re-reading the (possibly MB-sized) DB. */
 export const DB_REV_KEY = `${DB_STORAGE_KEY}:rev`

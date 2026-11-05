@@ -482,7 +482,7 @@ test.describe('state and lifecycle', () => {
     const again = await api(page, 'GET', '/nfts?pageSize=60')
     expect(JSON.stringify(again.body.items.map((n: Json) => [n.id, n.name, n.price]))).toBe(snapshot)
 
-    const raw = await page.evaluate(() => localStorage.getItem('mock:db:v1') ?? '')
+    const raw = await page.evaluate(() => localStorage.getItem('mock:db:v2') ?? '')
     expect(raw).not.toContain('Senha@123')
     expect(raw).not.toContain('Senha@456')
     expect(raw).toMatch(/"passwordHash":"[a-f0-9]{64}"/)
@@ -790,12 +790,12 @@ test.describe('state and lifecycle', () => {
 
   test('a corrupted or wrong-version persisted DB is discarded and reseeded', async ({ page }) => {
     await boot(page)
-    await page.evaluate(() => localStorage.setItem('mock:db:v1', '{"schema":1,"users":"nope"}'))
+    await page.evaluate(() => localStorage.setItem('mock:db:v2', '{"schema":2,"users":"nope"}'))
     await page.reload()
     await page.waitForFunction(() => !!window.__mock)
     expect((await api(page, 'GET', '/nfts')).body.meta.total).toBe(36)
     await login(page, ALICE)
-    await page.evaluate(() => localStorage.setItem('mock:db:v1', JSON.stringify({ schema: 99 })))
+    await page.evaluate(() => localStorage.setItem('mock:db:v2', JSON.stringify({ schema: 99 })))
     await page.reload()
     await page.waitForFunction(() => !!window.__mock)
     await login(page, ALICE)
