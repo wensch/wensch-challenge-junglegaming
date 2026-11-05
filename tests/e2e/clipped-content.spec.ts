@@ -18,7 +18,7 @@ const MIN_TEXT_WIDTH = 120
  * Known defects, reported to the orchestrator and not owned by this slice part: the Spotlight image (max 168/288 px) is cut 5 px (390) / 33 px (768) inside a narrower box. Spotlight is
  * owned by another agent; remove its entry here once fixed.
  */
-const KNOWN = [/h-auto w-auto rounded-\[20px\] object-contain.*inside <span class="relative grid/]
+const KNOWN: RegExp[] = []
 
 function findClipped(args: { tol: number; minText: number }): string[] {
   const { tol, minText } = args

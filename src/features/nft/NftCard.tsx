@@ -58,7 +58,7 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
             decoding="async"
             className={cn(
               'h-auto w-auto rounded-[20px] object-contain',
-              related ? 'max-h-[243px] max-w-[190px]' : 'max-h-[168px] max-w-[168px] md:max-h-[288px] md:max-w-[250px]',
+              related ? 'max-h-[243px] max-w-[min(190px,100%)]' : 'max-h-[168px] max-w-[min(168px,100%)] md:max-h-[288px] md:max-w-[min(250px,100%)]',
             )}
           />
           {badge && (
