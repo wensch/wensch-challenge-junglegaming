@@ -53,7 +53,7 @@ test.describe('skeletons e recuperação', () => {
   test('detalhe lento mostra skeleton e depois o conteúdo', async ({ page, boot }) => {
     await boot('/nft/nft_002', ['latency.slow'])
     await expect(page.getByRole('status', { name: 'Carregando detalhes do NFT' })).toBeVisible()
-    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible({ timeout: 15_000 })
   })
 
   test('detalhe lento: o rodapé não se move quando o conteúdo chega (CLS < 0,1)', async ({ page }) => {
@@ -72,7 +72,7 @@ test.describe('skeletons e recuperação', () => {
     await expect(skeleton).toBeVisible()
     const footer = page.locator('footer').first()
     const before = await footer.boundingBox()
-    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible({ timeout: 20_000 })
+    await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible({ timeout: 20_000 })
     await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible({ timeout: 20_000 })
     const after = await footer.boundingBox()
     expect(Math.abs(before!.y - after!.y)).toBeLessThan(40)
@@ -86,7 +86,7 @@ test.describe('skeletons e recuperação', () => {
     await expect(page.getByRole('alert')).toBeVisible()
     await mock.setScenarios(['default'])
     await page.getByRole('button', { name: 'Tentar novamente' }).click()
-    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible()
   })
 
   test('catálogo: queda de rede mostra erro e a nova tentativa recupera', async ({ page, boot, mock }) => {

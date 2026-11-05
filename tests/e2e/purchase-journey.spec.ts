@@ -25,7 +25,7 @@ test.describe('qa integrada', () => {
       await page.waitForFunction(() => !!window.__mock)
       await submitLogin(page, USERS.alice)
       await page.waitForURL('**/cart')
-      await expect(page.getByTestId('cart-line').first()).toContainText('Prisma Boreal')
+      await expect(page.getByTestId('cart-line').first()).toContainText('Sage Nomad')
       const subtotal = await page.getByTestId('cart-subtotal').textContent()
 
       await page.getByLabel('Código promocional').fill('WELCOME10')
@@ -86,7 +86,7 @@ test.describe('qa integrada', () => {
     await page.waitForURL('**/cart')
     await expect(page.getByTestId('cart-line')).toHaveCount(0)
     const kurio = await page.evaluate(() => JSON.stringify(Object.entries(localStorage).filter(([k]) => k.startsWith('kurio.'))))
-    expect(kurio).not.toContain('Prisma Boreal')
+    expect(kurio).not.toContain('Sage Nomad')
     expect(kurio).not.toContain('usr_001')
   })
 })

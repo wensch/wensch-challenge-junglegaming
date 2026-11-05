@@ -192,7 +192,7 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
   default: async (page) => {
     const r = await api(page, 'GET', '/nfts')
     expect(r.status).toBe(200)
-    expect(r.body.meta.total).toBe(60)
+    expect(r.body.meta.total).toBe(36)
     expect(r.body.items).toHaveLength(9)
     expect(r.ms).toBeGreaterThan(130)
     expect(r.ms).toBeLessThan(1200)
@@ -472,8 +472,8 @@ test.describe('state and lifecycle', () => {
   test('seed is deterministic and rich; passwords are only stored hashed', async ({ page }) => {
     await boot(page)
     const all = await api(page, 'GET', '/nfts?pageSize=60')
-    expect(all.body.items).toHaveLength(60)
-    expect(all.body.items.filter((n: Json) => n.soldOut).length).toBeGreaterThanOrEqual(5)
+    expect(all.body.items).toHaveLength(36)
+    expect(all.body.items.filter((n: Json) => n.soldOut).length).toBeGreaterThanOrEqual(4)
     const detail = await Promise.all(all.body.items.slice(0, 12).map((n: Json) => api(page, 'GET', `/nfts/${n.id}`)))
     const kinds = new Set(detail.flatMap((d) => d.body.editions.map((e: Json) => e.kind)))
     expect([...kinds].sort()).toEqual(['1/1', '1/10', '1/50', 'open'])
@@ -793,7 +793,7 @@ test.describe('state and lifecycle', () => {
     await page.evaluate(() => localStorage.setItem('mock:db:v1', '{"schema":1,"users":"nope"}'))
     await page.reload()
     await page.waitForFunction(() => !!window.__mock)
-    expect((await api(page, 'GET', '/nfts')).body.meta.total).toBe(60)
+    expect((await api(page, 'GET', '/nfts')).body.meta.total).toBe(36)
     await login(page, ALICE)
     await page.evaluate(() => localStorage.setItem('mock:db:v1', JSON.stringify({ schema: 99 })))
     await page.reload()

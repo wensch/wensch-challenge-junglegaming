@@ -19,7 +19,7 @@ export async function pickEditions(page: Page, count: number, minAvailable = 3):
   return page.evaluate(
     async ([n, min]) => {
       const out: Seeded[] = []
-      for (let i = 1; i <= 60 && out.length < n; i++) {
+      for (let i = 1; i <= 36 && out.length < n; i++) {
         const id = `nft_${String(i).padStart(3, '0')}`
         const r = await fetch(`/api/nfts/${id}`)
         if (!r.ok) continue

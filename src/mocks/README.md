@@ -16,7 +16,7 @@ Network fees: ethereum `0.0021`, polygon `0.0003`, solana `0.00005` ETH.
 
 ## Data & persistence
 
-- Seed: fixed PRNG seed (`rng.ts`) and fixed base date => identical on every run. 60 NFTs (`nft_001..nft_060`), 9 categories, editions 1/1, 1/10, 1/50 and open, 7 sold out, some on sale.
+- Seed: fixed PRNG seed (`rng.ts`) and fixed base date => identical on every run. 36 NFTs (`nft_001..nft_036`, 4 pages of 9; the first 9 mirror the Figma home grid), 9 categories, editions 1/1, 1/10, 1/50 and open, 4 sold out (nft_010, 014, 023, 032), some on sale.
 - Images: `public/nft/*.png` (copied from `design/assets`), no external URLs.
 - DB lives in memory and is saved to `localStorage["mock:db:v1"]` after every mutation (bump `DB_VERSION` in `db.ts` to invalidate). Scenarios: `mock:scenarios` (+ `mock:scenarios:fired`).
 - Passwords: `SHA-256(salt ":" password)` via WebCrypto, per-user salt. Tokens are opaque (`tok_` + 24 random bytes), only their SHA-256 is stored; lifetime 8 h; expiry is simulated by scenarios.

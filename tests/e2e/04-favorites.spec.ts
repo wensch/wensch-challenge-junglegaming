@@ -5,7 +5,7 @@
 import { expect, loginViaApi, test, USERS } from '../fixtures'
 
 const heart = (page: import('@playwright/test').Page, mobile: boolean) =>
-  mobile ? page.getByRole('button', { name: 'Favoritar Quimera Selvagem' }) : page.getByRole('button', { name: /Favoritar|Favoritado/ })
+  mobile ? page.getByRole('button', { name: 'Favoritar Neon Vessel' }) : page.getByRole('button', { name: /Favoritar|Favoritado/ })
 
 test.describe('favoritos', () => {
   test('visitante é levado ao login e volta ao NFT', async ({ page, boot }) => {

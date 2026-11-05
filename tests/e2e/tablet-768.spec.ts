@@ -31,7 +31,7 @@ test.describe('@a11y tablet 768', () => {
 
   test('detalhe', async ({ page, boot }) => {
     await boot('/nft/nft_002')
-    await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible()
     await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible()
     expect(await seriousViolations(page)).toEqual([])
   })
