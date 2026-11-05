@@ -13,7 +13,7 @@ async function measure(page: Page) {
     const header = document.querySelector('header')!
     const rect = (el: Element | null) => el!.getBoundingClientRect()
     const links = [...header.querySelectorAll('nav[aria-label="Principal"] a')]
-    const actions = header.querySelector('button[aria-label="Buscar NFTs"]')!.parentElement!.parentElement!
+    const actions = header.querySelector('button[aria-label="Buscar NFTs"]')!.parentElement!
     return {
       logoRight: rect(header.querySelector('a')).right,
       navLeft: rect(links[0]!).left,
