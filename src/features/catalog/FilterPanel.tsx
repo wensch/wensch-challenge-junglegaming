@@ -4,25 +4,15 @@
  * Facet counts come from the API (computed without the facet's own filter) and stay on screen
  * (keepPreviousData) while a new page loads.
  */
-import { useEffect, useId } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useId, useState } from 'react'
 import { Check } from 'lucide-react'
-import { z } from 'zod'
-import { CATEGORIES, ETH_PATTERN, NETWORKS, type Category, type Network, type NftListResponse } from '@/api/contracts'
+import { CATEGORIES, NETWORKS, type Category, type Network, type NftListResponse } from '@/api/contracts'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { formatEth } from '@/lib/money'
+import { add, compare, formatEth, normalize, percentOf, sub } from '@/lib/money'
 import { cn } from '@/lib/utils'
 import { CATEGORY_LABELS, NETWORK_LABELS } from './labels'
 import { useCatalogSearch } from './useCatalogSearch'
-
-const optionalEth = z
-  .string()
-  .trim()
-  .refine((v) => v === '' || ETH_PATTERN.test(v), 'Use ponto decimal, ex.: 0.5')
-const priceFormSchema = z.object({ priceMin: optionalEth, priceMax: optionalEth })
-type PriceForm = z.infer<typeof priceFormSchema>
 
 type Facets = NftListResponse['facets']
 
@@ -47,55 +37,107 @@ function FacetRow({ label, count, checked, onChange }: { label: string; count: n
   )
 }
 
+const STEPS = 100
+type Bounds = { min: string; max: string }
+
+/** Price of an integer slider step (0..100): lo + (hi - lo) * step%, at most 4 decimals. ETH stays a string. */
+function priceAt({ min, max }: Bounds, step: number): string {
+  return normalize(formatEth(add(min, percentOf(sub(max, min), String(step))), { maxDecimals: 4, unit: false }))
+}
+
+function distance(a: string, b: string): string {
+  return compare(a, b) >= 0 ? sub(a, b) : sub(b, a)
+}
+
+/** Nearest slider step for a decimal price (comparison with money.ts, never Number). */
+function stepFor(bounds: Bounds, value: string | undefined, fallback: number): number {
+  if (value === undefined) return fallback
+  let best = fallback
+  let bestDist: string | undefined
+  for (let step = 0; step <= STEPS; step++) {
+    const d = distance(value, priceAt(bounds, step))
+    if (bestDist === undefined || compare(d, bestDist) < 0) {
+      best = step
+      bestDist = d
+    }
+  }
+  return best
+}
+
+const RANGE_INPUT = cn(
+  'pointer-events-none absolute inset-0 h-6 w-full appearance-none bg-transparent focus-visible:outline-none',
+  '[&::-webkit-slider-runnable-track]:appearance-none [&::-webkit-slider-runnable-track]:bg-transparent',
+  '[&::-moz-range-track]:bg-transparent',
+  '[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:size-6 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[6px] [&::-webkit-slider-thumb]:border-transparent [&::-webkit-slider-thumb]:bg-brand [&::-webkit-slider-thumb]:bg-clip-content',
+  '[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:size-6 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-[6px] [&::-moz-range-thumb]:border-transparent [&::-moz-range-thumb]:bg-brand [&::-moz-range-thumb]:bg-clip-content',
+  'focus-visible:[&::-webkit-slider-thumb]:outline-2 focus-visible:[&::-webkit-slider-thumb]:outline-offset-0 focus-visible:[&::-webkit-slider-thumb]:outline-ring',
+  'focus-visible:[&::-moz-range-thumb]:outline-2 focus-visible:[&::-moz-range-thumb]:outline-ring',
+)
+
 function PriceRangeForm({ facets }: { facets: Facets | undefined }) {
   const uid = useId()
   const { search, update } = useCatalogSearch()
-  const form = useForm<PriceForm>({
-    resolver: zodResolver(priceFormSchema),
-    defaultValues: { priceMin: search.priceMin ?? '', priceMax: search.priceMax ?? '' },
-  })
-  const { register, handleSubmit, reset, formState } = form
-  const { errors } = formState
+  const bounds: Bounds | undefined = facets ? facets.priceRange : undefined
+  const [lo, setLo] = useState(0)
+  const [hi, setHi] = useState(STEPS)
 
-  // The URL is the source of truth (back/forward, clear filters): keep the fields in sync with it.
-  useEffect(() => {
-    reset({ priceMin: search.priceMin ?? '', priceMax: search.priceMax ?? '' })
-  }, [search.priceMin, search.priceMax, reset])
+  // The URL is the source of truth (back/forward, clear filters): keep the handles in sync with it.
+  const syncKey = bounds ? `${bounds.min}|${bounds.max}|${search.priceMin ?? ''}|${search.priceMax ?? ''}` : ''
+  const [syncedKey, setSyncedKey] = useState('')
+  if (bounds && syncKey !== syncedKey) {
+    setSyncedKey(syncKey)
+    setLo(stepFor(bounds, search.priceMin, 0))
+    setHi(stepFor(bounds, search.priceMax, STEPS))
+  }
 
-  const onSubmit = handleSubmit((values) => {
-    void update({ priceMin: values.priceMin || undefined, priceMax: values.priceMax || undefined })
-  })
+  const price = (step: number) => (bounds ? priceAt(bounds, step) : '0')
+  const loText = formatEth(price(lo), { maxDecimals: 4, unit: false })
+  const hiText = formatEth(price(hi), { maxDecimals: 4, unit: false })
 
-  const range = facets ? `Preço disponível: ${formatEth(facets.priceRange.min)} a ${formatEth(facets.priceRange.max)}` : null
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!bounds) return
+    // Handles on the ends mean "no bound" so rounding can never exclude the cheapest/dearest NFT.
+    void update({ priceMin: lo === 0 ? undefined : price(lo), priceMax: hi === STEPS ? undefined : price(hi) })
+  }
+
+  const thumbStyle = (step: number) => `calc(${step}% + ${12 - step * 0.24}px)`
   return (
-    <form onSubmit={onSubmit} noValidate aria-label="Faixa de preço" className="flex flex-col gap-3">
-      <div className="grid grid-cols-2 gap-3">
-        {(['priceMin', 'priceMax'] as const).map((name) => (
-          <div key={name} className="flex flex-col gap-1">
-            <label htmlFor={`${uid}-${name}`} className="text-caption-sm text-text-secondary">
-              {name === 'priceMin' ? 'Mínimo (ETH)' : 'Máximo (ETH)'}
-            </label>
-            <input
-              id={`${uid}-${name}`}
-              inputMode="decimal"
-              autoComplete="off"
-              placeholder={name === 'priceMin' ? '0.02' : '12.3'}
-              aria-invalid={errors[name] ? true : undefined}
-              aria-describedby={errors[name] ? `${uid}-${name}-error` : range ? `${uid}-range` : undefined}
-              className="h-9 w-full min-w-0 rounded-control border border-line-soft bg-ink px-2 text-body-sm text-text-primary placeholder:text-text-secondary/60 aria-invalid:border-destructive"
-              {...register(name)}
-            />
-            {errors[name] && (
-              <p id={`${uid}-${name}-error`} role="alert" className="text-caption-sm text-destructive">
-                {errors[name].message}
-              </p>
-            )}
-          </div>
-        ))}
+    <form onSubmit={onSubmit} aria-label="Faixa de preço" className="flex flex-col gap-3">
+      <div className="relative h-6">
+        <div className="absolute inset-x-3 top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-line-soft" aria-hidden="true" />
+        <div className="absolute top-1/2 h-0.5 -translate-y-1/2 rounded-full bg-brand" style={{ left: thumbStyle(lo), right: `calc(100% - ${thumbStyle(hi)})` }} aria-hidden="true" />
+        <input
+          type="range"
+          min={0}
+          max={STEPS}
+          step={1}
+          value={lo}
+          disabled={!bounds}
+          aria-label="Preço mínimo (ETH)"
+          aria-valuetext={`${loText} ETH`}
+          onChange={(e) => setLo(Math.min(parseInt(e.target.value, 10), hi))}
+          className={cn(RANGE_INPUT, lo >= 50 ? 'z-20' : 'z-10')}
+        />
+        <input
+          type="range"
+          min={0}
+          max={STEPS}
+          step={1}
+          value={hi}
+          disabled={!bounds}
+          aria-label="Preço máximo (ETH)"
+          aria-valuetext={`${hiText} ETH`}
+          onChange={(e) => setHi(Math.max(parseInt(e.target.value, 10), lo))}
+          className={cn(RANGE_INPUT, lo >= 50 ? 'z-10' : 'z-20')}
+        />
       </div>
-      {range && (
-        <p id={`${uid}-range`} className="text-caption-sm text-text-secondary">
-          {range}
+      <p id={`${uid}-text`} data-testid="price-range-text" className="text-caption-sm text-text-primary">
+        Preço: {loText} – {hiText} ETH
+      </p>
+      {bounds && (
+        <p className="text-caption-sm text-text-secondary">
+          Preço disponível: {formatEth(bounds.min)} a {formatEth(bounds.max)}
         </p>
       )}
       <Button type="submit" className="h-7 w-[84px] rounded-control text-caption-sm font-bold">

@@ -137,4 +137,38 @@ test.describe('catálogo', () => {
     await expect(card.getByTestId('nft-price')).toHaveText('7.777 ETH')
     await expect(page.getByTestId('nft-live-updates')).toContainText(name)
   })
+  test('faixa de preço: slider de dois cabos por teclado grava min/max decimais na URL', async ({ page, boot }, info) => {
+    const mobile = isMobileProject(info.project.name)
+    await boot('/')
+    await gridReady(page)
+    const scope = await openFilters(page, mobile)
+    const lo = scope.getByRole('slider', { name: 'Preço mínimo (ETH)' })
+    const hi = scope.getByRole('slider', { name: 'Preço máximo (ETH)' })
+    await expect(lo).toHaveAttribute('aria-valuetext', /^\d+(\.\d{1,4})? ETH$/)
+
+    await lo.focus()
+    for (let i = 0; i < 30; i++) await lo.press('ArrowRight')
+    await hi.focus()
+    await hi.press('Home') // os cabos não se cruzam: o máximo para no mínimo
+    await expect(hi).toHaveValue('30')
+    await hi.press('End')
+    for (let i = 0; i < 40; i++) await hi.press('ArrowLeft')
+    await expect(hi).toHaveValue('60')
+    await expect(scope.getByTestId('price-range-text')).toContainText('Preço:')
+
+    await scope.getByRole('button', { name: 'Aplicar' }).click()
+    await expect(page).toHaveURL(/priceMin=/)
+    const params = new URL(page.url()).searchParams
+    for (const key of ['priceMin', 'priceMax']) expect(JSON.parse(params.get(key)!)).toMatch(/^\d+(\.\d{1,4})?$/)
+    await gridReady(page)
+    await closeFilters(page, mobile)
+    expect((await cardPrices(page)).length).toBeGreaterThan(0)
+
+    // Recarregar com min/max na URL: os cabos refletem os valores.
+    await page.reload()
+    await gridReady(page)
+    const scope2 = await openFilters(page, mobile)
+    await expect(scope2.getByRole('slider', { name: 'Preço mínimo (ETH)' })).toHaveValue('30')
+    await expect(scope2.getByRole('slider', { name: 'Preço máximo (ETH)' })).toHaveValue('60')
+  })
 })
