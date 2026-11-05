@@ -3,12 +3,12 @@
  * Início · Favoritos · [botão central elevado] · Carrinho · Perfil.
  * The central button opens the full menu (Sheet with focus trap, Esc, focus return) so every
  * desktop destination stays reachable below `md`. Deviation: the Figma glyph of the central
- * button is a scan icon with no defined action; it is rendered as a menu icon (ARCHITECTURE §13).
+ * button is a scan icon with no defined action; it is rendered as a ScanLine glyph (the button still opens the menu) (ARCHITECTURE §13).
  * The Sheet itself is loaded on demand (first open, or prefetched on hover/focus/touch).
  */
 import { lazy, Suspense, useRef, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Heart, House, Menu, User } from 'lucide-react'
+import { Heart, House, ScanLine, User } from 'lucide-react'
 import { useCart } from '@/queries/cart'
 import { CartBadgeIcon, cartLabel } from './SiteHeader'
 
@@ -43,7 +43,7 @@ function MobileMenu() {
         }}
         className="absolute -top-8 left-1/2 grid size-[65px] -translate-x-1/2 place-items-center rounded-full border-[6px] border-background bg-gradient-to-br from-text-accent to-primary text-primary-foreground shadow-lg"
       >
-        <Menu aria-hidden="true" className="size-6" strokeWidth={2} />
+        <ScanLine aria-hidden="true" className="h-6 w-[27px]" strokeWidth={2} />
       </button>
       {mounted && (
         <Suspense fallback={null}>

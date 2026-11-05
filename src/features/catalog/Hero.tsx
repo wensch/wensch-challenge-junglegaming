@@ -64,11 +64,11 @@ function HeroFrame({ children }: { children: React.ReactNode }) {
     <section
       aria-label="Destaques"
       className={cn(
-        'relative overflow-hidden rounded-card bg-gradient-to-br from-surface-dark to-surface-card px-4 py-[6px] md:rounded-none md:bg-none md:px-8 md:py-0 min-[1200px]:px-10',
+        'relative overflow-hidden rounded-card bg-gradient-to-br from-surface-dark to-surface-card px-6 py-[6px] md:rounded-none md:bg-none md:px-8 md:py-0 min-[1200px]:px-10',
         HERO_BOX,
       )}
     >
-      <div className={cn('flex items-center justify-between gap-2 md:gap-8', HERO_BOX)}>{children}</div>
+      <div className={cn('flex items-center justify-between gap-3 md:gap-8', HERO_BOX)}>{children}</div>
     </section>
   )
 }
@@ -83,7 +83,7 @@ function HeroSkeleton() {
         </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">
-        <Skeleton className="size-[clamp(104px,30vw,138px)] rounded-[20px] md:size-[300px] md:rounded-[28px] min-[1200px]:size-[450px]" />
+        <Skeleton className="size-[clamp(96px,28vw,120px)] rounded-[20px] md:size-[300px] md:rounded-[28px] min-[1200px]:size-[450px]" />
       </div>
     </HeroFrame>
   )
@@ -93,7 +93,7 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
   const current = items[index]!
   const second = items.length > 1 ? items[(index + 1) % items.length]! : null
   return (
-    <div className="relative size-[clamp(104px,30vw,138px)] shrink-0 md:size-[300px] min-[1200px]:size-[450px]">
+    <div className="relative size-[clamp(96px,28vw,120px)] shrink-0 md:size-[300px] min-[1200px]:size-[450px]">
       <Link to="/nft/$id" params={{ id: current.id }} aria-label={`Ver ${current.name}`} className="block size-full">
         <img
           src={current.image.src}
