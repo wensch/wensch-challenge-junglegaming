@@ -2,7 +2,7 @@
  * Public entry for all frozen contracts (REST, events, errors).
  * Version: 1.2.0 — see ARCHITECTURE.md "Changelog de contratos".
  */
-export const CONTRACTS_VERSION = '1.2.0'
+export const CONTRACTS_VERSION = '1.3.0'
 
 export * from './common'
 export * from './errors'
