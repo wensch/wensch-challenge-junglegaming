@@ -78,9 +78,9 @@ Não bloqueia (abertas de propósito):
 | TEL-7 | Cadastro: criação, validação, tratamento de conflito | OK | `03` (cria conta, `EMAIL_TAKEN` no campo, cenário `register.email-taken`), `11` (regras de senha) |
 | TEL-8 | Perfil: dados, avatar, alteração de senha | OK | `08-perfil-carteiras` (dados após refresh, validação, erros da API, `CONFLICT_VERSION`, avatar, senha) |
 | TEL-9 | Carteiras: principal e secundária, cadastro e edição | OK | `08-perfil-carteiras` (principal e secundária, EVM x Solana, duplicado, `CONFLICT_VERSION`) |
-| TEL-10 | Frames desktop e mobile; perfil/carteiras/confirmação funcionais em mobile | parcial | Specs funcionais rodam no projeto mobile 390 (verify); FID mediu as telas em 390/768/1440. **Falta:** medir a Confirmação; imagem principal do Detalhe 404 px contra 444 px (média, FID #3) sem correção registrada |
+| TEL-10 | Frames desktop e mobile; perfil/carteiras/confirmação funcionais em mobile | parcial | Specs funcionais rodam no projeto mobile 390 (verify); FID mediu as telas em 390/768/1440. Confirmação medida em 1440 e 390 (`23-figma-geometry`: painel 578, cabeçalho 156, meta 65, faixa 10). imagem principal do Detalhe: painel 444 px e imagem 404 px conferem com o Figma (23-figma-geometry; o 404 era a imagem interna, não desvio) |
 | TEL-11 | Fora de escopo (editorial, suporte, atividade, ofertas, downloads) não aparenta sucesso; links externos coerentes | parcial | `shell-routes-guards` "nenhum link morto; /em-breve não aparenta sucesso". **Falta:** auditoria das ações auxiliares das telas novas (compartilhar, explorer) além de SEG (`noopener`, https) |
-| TEL-12 | Estados não desenhados seguem o padrão visual | parcial | Estados cobertos funcionalmente (`05-cart`, `08`, `12`, `06` "Pedido indisponível") e `PageStates`. **Falta:** FID não mediu os estados de erro e vazio das telas novas |
+| TEL-12 | Estados não desenhados seguem o padrão visual | parcial | Estados cobertos funcionalmente (`05-cart`, `08`, `12`, `06` "Pedido indisponível") e `PageStates`. `24-states-geometry` mede carrinho vazio, NFT inexistente, favoritos vazios e catálogo vazio (desktop e mobile) |
 
 ## Catálogo e detalhe (§3)
 
@@ -210,8 +210,8 @@ Status sobre a camada de mocks. O efeito de cada cenário na UI está nas linhas
 
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
-| UI-1 | Fidelidade: tipografia, cores, espaçamentos, hierarquia, imagens, proporções | parcial | FID mediu fundo, fonte, hero, títulos; **aberto:** imagem do Detalhe 404 px contra 444 px, Confirmação não medida, sem relatório de reverificação |
-| UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | `13-overflow` (telas públicas e da conta em 390/768/1440), `92-header-tablet`; FID. **Falta:** Confirmação e checkout em 768 sem medição |
+| UI-1 | Fidelidade: tipografia, cores, espaçamentos, hierarquia, imagens, proporções | parcial | FID mediu fundo, fonte, hero, títulos; Detalhe e Confirmação medidos (`23-figma-geometry`), Hero com 3 pontos e posição do Figma (`clipped-content`); tablet derivado |
+| UI-2 | Desktop/tablet/mobile; avaliado em 390, 768, 1440 | parcial | `13-overflow` (telas públicas e da conta em 390/768/1440), `92-header-tablet`; FID. Confirmação e checkout em 768 sem medição (tablet derivado, sem frame no Figma) |
 | UI-3 | Skeletons com shimmer (catálogo, detalhe, resumo do carrinho), sem CLS, respeitando reduced motion | OK | `12-skeletons` (catálogo e detalhe, CLS, reduced-motion), `05-cart` "carrinho lento: skeleton do resumo sem CLS" |
 | A11Y-1 | Navegação por teclado e foco visível | OK | `11` (Tab, Enter, foco visível), `07-focus`, `shell-routes-guards` "teclado" |
 | A11Y-2 | Controle de foco em diálogos e drawers | OK | `15-foco-dialogos`: diálogo de revisão do pagamento (foco dentro, Tab/Shift+Tab presos, Esc fecha e devolve o foco a "Confirmar compra" — BUG-QA-011 corrigido), Sheet do menu mobile (deslogado e logado) e menu da conta; também `11`, `00-smoke`, `10` |

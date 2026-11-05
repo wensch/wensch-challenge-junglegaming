@@ -22,6 +22,20 @@ function shortHash(hash: string): string {
   return `0x${hash.slice(2, 6).toUpperCase()}…${hash.slice(-4).toUpperCase()}`
 }
 
+/** Envelope "THANK YOU" (Figma `thank-you 1`, 80x80). The asset was not exported: redrawn as a 2 px outline in the brand color. */
+function ThankYouIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinejoin="round" strokeLinecap="round" className="mx-auto size-20 text-brand">
+      <path d="M40 4 L26 14 H54 Z" />
+      <path d="M26 14 H54 V42 H26 Z" />
+      <path d="M26 42 L10 76 H70 L54 42" />
+      <path d="M10 76 L40 52 L70 76" />
+      <text x="40" y="26" textAnchor="middle" fontSize="8" fontWeight="800" fill="currentColor" stroke="none">THANK</text>
+      <text x="40" y="36" textAnchor="middle" fontSize="8" fontWeight="800" fill="currentColor" stroke="none">YOU</text>
+    </svg>
+  )
+}
+
 export function ReceiptLines({ receipt }: { receipt: ReceiptData }) {
   return (
     <ul data-testid="receipt-lines" aria-label="Itens do pedido" className="flex flex-col gap-3">
@@ -59,8 +73,9 @@ export function ConfirmedReceipt({ order, headingRef }: { order: Order; headingR
   const { receipt } = order
   return (
     <article data-testid="receipt" aria-labelledby="receipt-title" className="mx-auto w-full max-w-[578px] overflow-hidden bg-surface-card">
-      <header className="border-b border-line-soft px-6 pt-8 pb-5 text-center">
-        <h1 id="receipt-title" ref={headingRef} tabIndex={-1} className="outline-none text-body-md font-bold text-brand-secondary">
+      <header className="border-b border-line-soft px-6 py-[22px] text-center">
+        <ThankYouIcon />
+        <h1 id="receipt-title" ref={headingRef} tabIndex={-1} className="mt-4 text-body-md leading-4 font-bold text-brand-secondary outline-none">
           Seus NFTs agora estão na sua carteira
         </h1>
       </header>

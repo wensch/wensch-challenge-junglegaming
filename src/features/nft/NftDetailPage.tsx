@@ -164,7 +164,7 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
           </div>
 
           <div>
-            <h2 className="text-body-sm font-bold text-text-primary">Sobre este NFT:</h2>
+            <h2 className="text-body-sm font-bold text-text-primary max-md:sr-only">Sobre este NFT:</h2>
             <p className="mt-2 text-body-sm leading-[22px] text-text-secondary">{nft.description}</p>
           </div>
 

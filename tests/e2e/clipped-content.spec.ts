@@ -141,6 +141,13 @@ test.describe('conteúdo cortado', () => {
       await expect(art).toBeVisible()
       const [dots, a] = [await hero.getByRole('group', { name: 'Escolher destaque' }).boundingBox(), await art.boundingBox()]
       expect(dots!.x + dots!.width, `pontos @${width}`).toBeLessThanOrEqual(a!.x - 24)
+      if (width >= 1440) {
+        // Figma: 3 dots centered ~616 px from the container, ~49 px above the art's bottom edge, >= 100 px from the art.
+        const lastDot = (await hero.getByRole('group', { name: 'Escolher destaque' }).getByRole('button').last().locator('span').boundingBox())!
+        expect(a!.x - (lastDot.x + lastDot.width), `distância à arte @${width}`).toBeGreaterThanOrEqual(100)
+        expect(a!.y + a!.height - (dots!.y + dots!.height / 2), `altura dos pontos @${width}`).toBeCloseTo(49, -1)
+        expect(await hero.getByRole('group', { name: 'Escolher destaque' }).getByRole('button').count()).toBe(3)
+      }
     }
   })
 

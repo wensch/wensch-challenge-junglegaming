@@ -32,7 +32,7 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
         ))}
       </ul>
       <div className="relative order-1 w-full max-w-[444px] flex-1 md:order-2">
-        <div className="grid aspect-square place-items-center md:rounded-card md:bg-surface-card md:p-5">
+        <div data-testid="gallery-main" className="grid aspect-square place-items-center md:rounded-card md:bg-surface-card md:p-5">
           <img
             src={current.src}
             alt={current.alt}

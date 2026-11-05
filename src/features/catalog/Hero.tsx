@@ -93,7 +93,7 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
   const current = items[index]!
   const second = items.length > 1 ? items[(index + 1) % items.length]! : null
   return (
-    <div className="relative size-[clamp(96px,28vw,120px)] shrink-0 md:size-[300px] wide:size-[450px]">
+    <div className="relative size-[clamp(96px,28vw,120px)] shrink-0 md:size-[300px] wide:-mr-[37px] wide:size-[450px]">
       <Link to="/nft/$id" params={{ id: current.id }} aria-label={`Ver ${current.name}`} className="block size-full">
         <img
           src={current.image.src}
@@ -139,7 +139,8 @@ export function Hero() {
     )
   }
 
-  const items = featured.data.hero
+  // Figma shows 3 dots: the Hero never offers more than 3 featured NFTs, whatever the API returns.
+  const items = featured.data.hero.slice(0, 3)
   const index = selected < items.length ? selected : 0
   return (
     <HeroFrame>
@@ -147,7 +148,7 @@ export function Hero() {
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
           {items.length > 1 && (
-            <div role="group" aria-label="Escolher destaque" className="flex max-md:absolute max-md:inset-x-0 max-md:bottom-0.5 max-md:justify-center md:-ml-1.5 wide:ml-[519px]">
+            <div role="group" aria-label="Escolher destaque" className="flex max-md:absolute max-md:inset-x-0 max-md:bottom-0.5 max-md:justify-center md:-ml-1.5 wide:absolute wide:bottom-[37px] wide:left-[min(616px,calc(100%-552px))] wide:m-0 wide:-translate-x-1/2">
               {items.map((item, i) => (
                 <button
                   key={item.id}
@@ -157,7 +158,7 @@ export function Hero() {
                   onClick={() => setSelected(i)}
                   className="grid size-6 shrink-0 place-items-center rounded-full"
                 >
-                  <span className={cn('block size-[7px] rounded-full', i === index ? 'bg-primary' : 'bg-primary/40')} />
+                  <span className={cn('block size-2 rounded-full', i === index ? 'bg-primary' : 'bg-primary/40')} />
                 </button>
               ))}
             </div>

@@ -355,7 +355,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
           onMessage={onAnnounce}
         />
 
-        <Button ref={confirmRef} type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold max-lg:h-[60px] max-lg:rounded-full">
+        <Button ref={confirmRef} type="submit" disabled={!quote.data || !quote.data.orderable} aria-describedby={blocked.length > 0 ? 'checkout-blocked' : undefined} className="h-[45px] rounded-control text-body-md font-bold max-lg:h-[60px] max-lg:rounded-full max-md:sticky max-md:bottom-[calc(var(--spacing-tabbar)+12px)] max-md:z-30 max-md:shadow-[0_8px_24px_rgb(0_0_0/0.45)]">
           Confirmar compra
         </Button>
       </div>

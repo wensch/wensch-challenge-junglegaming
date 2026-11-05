@@ -123,7 +123,7 @@ export function listNfts(q: NftListQuery, empty = false): NftListResponse {
 export function featured(): { hero: NftSummary[]; spotlight: NftSummary } {
   const all = db().nfts.map(summary)
   const inStock = all.filter((s) => !s.soldOut)
-  const hero = sortItems(inStock.filter((s) => s.isTrending), 'recent').slice(0, 5)
+  const hero = sortItems(inStock.filter((s) => s.isTrending), 'recent').slice(0, 3)
   // Figma side banner: the 2nd most recent listing (Sage Nomad, hat/hoodie gorilla).
   const recent = sortItems(inStock, 'recent')
   const spotlight = recent[1] ?? recent[0] ?? all[0]!
