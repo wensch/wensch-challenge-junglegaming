@@ -84,7 +84,7 @@ function DetailSkeleton() {
         {/* Tabs + "Mais desta coleção": reserved so the footer does not move when the content lands. */}
         <div className="mt-12 md:mt-[96px]" aria-hidden="true">
           <Skeleton className="h-[34px] w-full" />
-          <Skeleton className="mt-4 h-[631px] w-full md:h-[308px]" />
+          <Skeleton className="mt-4 h-[507px] w-full md:h-[237px]" />
         </div>
         <div className="mt-16 md:mt-24" aria-hidden="true">
           <Skeleton className="h-5 w-40" />
