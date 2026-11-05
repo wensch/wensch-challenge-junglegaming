@@ -32,7 +32,7 @@ export function CatalogPage() {
   }, [hash])
 
   const items = query.data?.items
-  const updateMessage = useNftUpdateMessage((id) => items?.find((n) => n.id === id)?.name)
+  const updateMessage = useNftUpdateMessage((id) => { const n = items?.find((x) => x.id === id); return n && `${n.name} ${n.tokenId}` })
   const background = query.isFetching && !query.isPending
   const total = query.data?.meta.total
 

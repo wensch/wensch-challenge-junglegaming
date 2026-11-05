@@ -124,7 +124,9 @@ export function featured(): { hero: NftSummary[]; spotlight: NftSummary } {
   const all = db().nfts.map(summary)
   const inStock = all.filter((s) => !s.soldOut)
   const hero = sortItems(inStock.filter((s) => s.isTrending), 'recent').slice(0, 5)
-  const spotlight = inStock.find((s) => s.compareAtPrice !== null) ?? inStock[0] ?? all[0]!
+  // Figma side banner: the 2nd most recent listing (Sage Nomad, hat/hoodie gorilla).
+  const recent = sortItems(inStock, 'recent')
+  const spotlight = recent[1] ?? recent[0] ?? all[0]!
   return { hero: hero.length ? hero : [spotlight], spotlight }
 }
 

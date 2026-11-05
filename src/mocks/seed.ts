@@ -76,11 +76,13 @@ function applyFigmaFirstPage(nfts: NftRec[]): void {
       ? { src: '/nft/hero-emerald-ape.webp', alt: `Arte do NFT ${f.name}`, width: 1350, height: 1350 } // 3x art delivered for the Hero
       : { src: `/nft/${img.file}.png`, alt: `Arte do NFT ${f.name}`, width: img.width, height: img.height }
     if (i === 0) n.isTrending = true // Hero slide 1 = Emerald Ape
-    const d = n.editions[0]!
     n.name = f.name
     n.tokenId = f.tokenId
     n.image = image
-    n.gallery = [image]
+    // Keep the 4-image gallery; first slot = the card artwork, the rest renamed.
+    n.gallery = n.gallery.map((g, k) => (k === 0 ? image : { ...g, alt: `Arte do NFT ${f.name}, imagem ${k + 1} de 4` }))
+    if (i === 0) return // nft_001 keeps the editions/description set by applyFigmaHero (default edition 1.19)
+    const d = n.editions[0]!
     d.price = f.price
     d.compareAtPrice = f.compareAt
     n.description = `${f.name}, da coleção ${n.collection.name}: uma peça única em edição controlada.`

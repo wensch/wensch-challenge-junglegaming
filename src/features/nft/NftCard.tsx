@@ -73,7 +73,7 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
           )}
         </span>
         <span className="mt-3 block px-2 md:px-0">
-          <span className="block truncate text-body-sm text-text-primary md:text-caption-sm md:leading-4">{nft.name}</span>
+          <span className="block truncate text-body-sm text-text-primary md:text-caption-sm md:leading-4">{nft.tokenId ? `${nft.name} ${nft.tokenId}` : nft.name}</span>
           <NftPrice price={nft.price} compareAtPrice={nft.compareAtPrice} className="mt-0.5 md:mt-1.5 md:text-body-md" />
         </span>
       </Link>

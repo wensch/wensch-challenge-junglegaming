@@ -142,7 +142,7 @@ function DetailContent({ nft, requestedEdition }: { nft: NftDetail; requestedEdi
           <div>
             <div className="flex items-start justify-between gap-3">
               <h1 ref={headingRef} tabIndex={-1} className="text-body-lg leading-7 font-bold text-text-primary outline-none md:text-[28px] md:leading-[37px]">
-                {nft.name}
+                {nft.name} {nft.tokenId}
               </h1>
               <p className="flex h-[27px] shrink-0 items-center gap-1.5 rounded-full border border-primary px-3 text-caption-sm font-bold text-text-accent md:hidden">
                 <StarIcon />
