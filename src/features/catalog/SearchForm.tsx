@@ -1,5 +1,6 @@
 /** Search field (react-hook-form + zod). Shared by the header panel (desktop) and the mobile search bar. */
 import { useEffect, useId } from 'react'
+import type { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Search } from 'lucide-react'
@@ -21,9 +22,11 @@ interface SearchFormProps {
   submitLabel?: string
   /** Accessible name of the search landmark (the header and the page each have one). */
   formLabel: string
+  /** Extra control at the end of the row (e.g. a close button). */
+  trailing?: ReactNode
 }
 
-export function SearchForm({ value, onSearch, placeholder, inputId, className, inputClassName, autoFocus, submitLabel, formLabel }: SearchFormProps) {
+export function SearchForm({ value, onSearch, placeholder, inputId, className, inputClassName, autoFocus, submitLabel, formLabel, trailing }: SearchFormProps) {
   const uid = useId()
   const id = inputId ?? `${uid}-q`
   const { register, handleSubmit, reset, formState } = useForm<SearchFormValues>({
@@ -62,6 +65,7 @@ export function SearchForm({ value, onSearch, placeholder, inputId, className, i
             {submitLabel}
           </button>
         )}
+        {trailing}
       </div>
       {error && (
         <p id={`${id}-error`} role="alert" className="text-caption-sm text-destructive">

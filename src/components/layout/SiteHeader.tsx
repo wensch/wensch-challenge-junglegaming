@@ -12,7 +12,7 @@ import { lazy, Suspense } from 'react'
 import { Link } from '@tanstack/react-router'
 import { LogIn, ShoppingCart, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { HeaderSearch } from '@/features/catalog/HeaderSearch'
+import { HeaderSearchBar, HeaderSearchTrigger, useHeaderSearch } from '@/features/catalog/HeaderSearch'
 import { useCart } from '@/queries/cart'
 import { useSession } from '@/queries/session'
 import { cn } from '@/lib/utils'
@@ -80,6 +80,7 @@ function AccountMenu() {
 
 export function SiteHeader() {
   const cart = useCart()
+  const { open, toggle, close, triggerRef } = useHeaderSearch()
   return (
     <header className="hidden md:block">
       <div className="mx-auto w-full max-w-page px-gutter pt-6 xl:px-0">
@@ -114,7 +115,7 @@ export function SiteHeader() {
           </nav>
 
           <div className="ml-auto flex h-[35px] shrink-0 items-center gap-4 lg:gap-6">
-            <HeaderSearch />
+            <HeaderSearchTrigger open={open} onToggle={toggle} triggerRef={triggerRef} />
             <Link to="/cart" aria-label={cartLabel(cart.data?.itemCount ?? 0)} className="grid size-9 place-items-center rounded-control text-text-primary hover:text-text-accent">
               <CartBadgeIcon />
             </Link>
@@ -122,6 +123,7 @@ export function SiteHeader() {
           </div>
         </div>
       </div>
+      <HeaderSearchBar open={open} close={close} />
     </header>
   )
 }
