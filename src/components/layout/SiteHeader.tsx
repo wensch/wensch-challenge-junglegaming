@@ -29,8 +29,9 @@ export function CartBadgeIcon({ className, icon: Glyph = CartIcon }: { className
       <Glyph />
       {count > 0 && (
         <span
+          key={count}
           aria-hidden="true"
-          className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-micro font-bold text-primary-foreground"
+          className="animate-pop absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-primary px-1 text-micro font-bold text-primary-foreground"
         >
           {count > 99 ? '99+' : count}
         </span>

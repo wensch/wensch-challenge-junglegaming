@@ -15,7 +15,7 @@ export function RelatedNfts({ collectionId, excludeId }: { collectionId: string;
   if (related.isSuccess && items?.length === 0) return null
 
   return (
-    <section aria-labelledby="related-title" className="mt-16 md:mt-24">
+    <section aria-labelledby="related-title" className="animate-rise mt-16 md:mt-24">
       <h2 id="related-title" className="border-b border-line pb-[10px] text-body-sm font-bold text-text-accent">
         Mais desta coleção
       </h2>

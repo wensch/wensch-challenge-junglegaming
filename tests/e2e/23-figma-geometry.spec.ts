@@ -24,6 +24,26 @@ test.describe('geometria desktop (1440)', () => {
   })
 })
 
+test('detalhe: botão Favoritar com a altura do COMPRAR, fonte pequena e coração à esquerda', async ({ page, boot }, info) => {
+  test.skip(info.project.name !== 'desktop', 'o botão rotulado só existe em md+ (mobile usa o ícone redondo)')
+  await boot('/nft/nft_002')
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
+  const fav = page.getByRole('button', { name: /^Favoritar/ }).filter({ hasText: 'Favoritar' })
+  const buy = page.getByRole('button', { name: 'COMPRAR' })
+  const f = (await fav.boundingBox())!
+  const b = (await buy.boundingBox())!
+  const st = await fav.evaluate((n) => ({ fs: getComputedStyle(n).fontSize, bw: getComputedStyle(n).borderTopWidth, text: n.textContent }))
+  const icon = (await fav.locator('svg').boundingBox())!
+  console.log('FAV', JSON.stringify({ f, b, st, icon }))
+  expect(Math.abs(f.height - b.height)).toBeLessThanOrEqual(1)
+  expect(Math.abs(f.width - 130), `largura ${f.width}`).toBeLessThanOrEqual(2)
+  expect(st.fs).toBe('14px')
+  expect(st.bw).toBe('1px')
+  expect(st.text?.trim()).toBe('Favoritar')
+  expect(icon.x - f.x).toBeLessThan(20)
+  expect(icon.x + icon.width).toBeLessThan(f.x + 41)
+})
+
 test('confirmação: painel, cabeçalho, meta e faixa final contra o Figma', async ({ page, boot }, info) => {
   const desktop = info.project.name === 'desktop'
   await boot('/')

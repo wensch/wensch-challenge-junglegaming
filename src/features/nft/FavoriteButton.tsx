@@ -46,7 +46,7 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
           className,
         )}
       >
-        {active ? <Heart aria-hidden="true" className="size-4" fill="currentColor" strokeWidth={1.75} /> : <HeartIcon />}
+        {active ? <Heart aria-hidden="true" className="animate-pop size-4" fill="currentColor" strokeWidth={1.75} /> : <HeartIcon />}
       </button>
     )
   }
@@ -54,9 +54,19 @@ export function FavoriteButton({ nft, variant, className }: FavoriteButtonProps)
     <Button
       {...common}
       variant="outline"
-      className={cn('h-10 w-[130px] gap-2 rounded-control border-primary bg-transparent px-0 text-body-md font-medium text-text-primary hover:bg-surface-dark', className)}
+      className={cn(
+        // Figma "Frame 162": 130x40 like COMPRAR, heart box 20 px at x=13, label 14 px (76 px wide) at x=41, thin accent outline.
+        'h-10 w-[130px] justify-start gap-2 rounded-control border-text-accent bg-transparent pr-0 pl-[13px] text-body-sm font-normal text-text-primary hover:bg-surface-dark hover:text-text-accent',
+        className,
+      )}
     >
-      {active ? <Heart aria-hidden="true" className="size-5" fill="currentColor" strokeWidth={1.75} /> : <HeartIcon className="size-5" />}
+      <span className="grid size-5 shrink-0 place-items-center text-text-accent">
+        {active ? (
+          <Heart key="on" aria-hidden="true" className="animate-pop size-4" fill="currentColor" strokeWidth={1.75} />
+        ) : (
+          <HeartIcon key="off" />
+        )}
+      </span>
       Favoritar
     </Button>
   )

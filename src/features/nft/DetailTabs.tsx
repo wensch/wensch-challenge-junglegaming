@@ -11,7 +11,7 @@ const shortAddress = (a: string) => (a.length > 14 ? `${a.slice(0, 6)}...${a.sli
 
 export function DetailTabs({ nft }: { nft: NftDetail }) {
   return (
-    <Tabs.Root defaultValue="details">
+    <Tabs.Root defaultValue="details" className="animate-rise">
       <Tabs.List aria-label="Informações do NFT" className="flex flex-wrap gap-x-8 border-b border-line">
         <Tabs.Trigger value="details" className={trigger}>
           Detalhes do NFT

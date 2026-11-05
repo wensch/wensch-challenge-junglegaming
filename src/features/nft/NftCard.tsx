@@ -37,15 +37,15 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
   const related = size === 'related'
   const badge = nft.soldOut ? 'Esgotado' : nft.isNew ? 'Novo' : null
   return (
-    <article className="group/card relative flex min-w-0 flex-col" data-testid="nft-card" data-nft-id={nft.id}>
+    <article className="group/card relative flex min-w-0 flex-col transition-transform duration-200 ease-out motion-safe:hover:-translate-y-0.5" data-testid="nft-card" data-nft-id={nft.id}>
       <Link
         to="/nft/$id"
         params={{ id: nft.id }}
-        className="flex min-w-0 flex-col rounded-card outline-offset-4 md:rounded-control"
+        className="flex min-w-0 flex-col rounded-card outline-offset-4 hover:brightness-100 md:rounded-control"
       >
         <span
           className={cn(
-            'relative grid place-items-center overflow-hidden rounded-card bg-surface-card md:rounded-control',
+            'relative grid place-items-center overflow-hidden rounded-card bg-surface-card transition-shadow duration-200 group-hover/card:shadow-[0_8px_24px_rgb(0_0_0/0.35)] md:rounded-control',
             related ? 'h-[255px]' : 'h-[200px] md:h-[300px]',
           )}
         >
@@ -59,7 +59,7 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
             className={cn(
-              'h-auto w-auto rounded-[20px] object-contain',
+              'h-auto w-auto rounded-[20px] object-contain transition-transform duration-300 ease-out motion-safe:group-hover/card:scale-[1.04]',
               related ? 'max-h-[243px] max-w-[min(190px,100%)]' : 'max-h-[168px] max-w-[min(168px,100%)] md:max-h-[288px] md:max-w-[min(250px,100%)]',
             )}
           />
@@ -75,7 +75,7 @@ export function NftCard({ nft, size = 'grid', priority = false }: NftCardProps) 
           )}
         </span>
         <span className="mt-3 block px-2 md:px-0">
-          <span className="block truncate text-body-sm text-text-primary md:text-caption-sm md:leading-4">{nft.tokenId ? `${nft.name} ${nft.tokenId}` : nft.name}</span>
+          <span className="block truncate text-body-sm text-text-primary transition-colors group-hover/card:text-text-accent md:text-caption-sm md:leading-4">{nft.tokenId ? `${nft.name} ${nft.tokenId}` : nft.name}</span>
           <NftPrice price={nft.price} compareAtPrice={nft.compareAtPrice} className="mt-0.5 md:mt-1.5 md:text-body-md" />
         </span>
       </Link>
