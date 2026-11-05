@@ -29,6 +29,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { applyApiError, rootMessage } from '@/features/forms/apiErrors'
+import { EnsDomainSelect } from '@/features/forms/EnsDomainSelect'
 import { controlClass, Field } from '@/features/forms/Field'
 import { useSaveWallet } from '@/queries/account'
 import { cn } from '@/lib/utils'
@@ -273,9 +274,7 @@ export function WalletForm({
       <Field label="Nome ENS" required error={errors.ensLabel?.message}>
         {(c) => (
           <div className="flex gap-2">
-            <span className="grid h-10 w-[78px] shrink-0 place-items-center rounded-control border border-line-soft text-body-sm text-text-primary" aria-hidden="true">
-              {ENS_SUFFIX}
-            </span>
+            <EnsDomainSelect />
             <Input {...c} {...form.register('ensLabel')} autoCapitalize="none" spellCheck={false} aria-label="Nome ENS (sem .eth)" className={controlClass} />
           </div>
         )}

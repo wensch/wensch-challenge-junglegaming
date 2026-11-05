@@ -14,7 +14,7 @@ export const usernameSchema = z
   .trim()
   .min(3, 'Mínimo de 3 caracteres')
   .max(30, 'Máximo de 30 caracteres')
-  .regex(/^[a-z0-9_.]+$/, 'Use letras minúsculas, números, "_" ou "."')
+  .regex(/^[a-z0-9_.-]+$/, 'Use letras minúsculas, números, "_", "." ou "-"')
 
 export const displayNameSchema = z.string().trim().min(2, 'Mínimo de 2 caracteres').max(60, 'Máximo de 60 caracteres')
 
