@@ -21,10 +21,10 @@ function HeroCopy({ children }: { children?: React.ReactNode }) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   useHeadingFocus(headingRef, 'home')
   return (
-    <div className="flex w-[188px] shrink-0 flex-col justify-between self-stretch md:min-w-0 md:flex-1 md:justify-center min-[1200px]:w-[600px] min-[1200px]:flex-none md:gap-8 md:self-center">
+    <div className="flex min-w-0 flex-1 flex-col max-md:pb-6 justify-between self-stretch md:min-w-0 md:flex-1 md:justify-center min-[1200px]:w-[600px] min-[1200px]:flex-none md:gap-8 md:self-center">
       <div className="flex flex-col gap-1.5 md:gap-3">
         <p className="text-body-sm leading-4 text-text-primary">Bem-vindo à Kurio</p>
-        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none md:text-heading min-[1200px]:text-display">
+        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none max-md:text-[clamp(17px,4.8vw,20px)] max-md:leading-6 md:text-heading min-[1200px]:text-display">
           <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
           <span className="hidden md:inline">
             SEJA DONO DO FUTURO
@@ -68,7 +68,7 @@ function HeroFrame({ children }: { children: React.ReactNode }) {
         HERO_BOX,
       )}
     >
-      <div className={cn('flex items-center justify-between gap-4 md:gap-8', HERO_BOX)}>{children}</div>
+      <div className={cn('flex items-center justify-between gap-2 md:gap-8', HERO_BOX)}>{children}</div>
     </section>
   )
 }
@@ -83,7 +83,7 @@ function HeroSkeleton() {
         </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">
-        <Skeleton className="size-[138px] rounded-[20px] md:size-[300px] md:rounded-[28px] min-[1200px]:size-[450px]" />
+        <Skeleton className="size-[clamp(104px,30vw,138px)] rounded-[20px] md:size-[300px] md:rounded-[28px] min-[1200px]:size-[450px]" />
       </div>
     </HeroFrame>
   )
@@ -93,7 +93,7 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
   const current = items[index]!
   const second = items.length > 1 ? items[(index + 1) % items.length]! : null
   return (
-    <div className="relative size-[138px] shrink-0 md:size-[300px] min-[1200px]:size-[450px]">
+    <div className="relative size-[clamp(104px,30vw,138px)] shrink-0 md:size-[300px] min-[1200px]:size-[450px]">
       <Link to="/nft/$id" params={{ id: current.id }} aria-label={`Ver ${current.name}`} className="block size-full">
         <img
           src={current.image.src}
@@ -111,7 +111,7 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
           alt=""
           width={58}
           height={58}
-          className="pointer-events-none absolute -bottom-2 -left-4 size-[58px] rounded-[14px] border-2 border-surface-dark object-cover md:hidden"
+          className="pointer-events-none absolute -bottom-2 left-3 size-[58px] rounded-[14px] border-2 border-surface-dark object-cover md:hidden"
         />
       )}
     </div>
@@ -147,7 +147,7 @@ export function Hero() {
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
           {items.length > 1 && (
-            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex min-[1200px]:ml-[519px]">
+            <div role="group" aria-label="Escolher destaque" className="flex max-md:absolute max-md:inset-x-0 max-md:bottom-0.5 max-md:justify-center md:-ml-1.5 min-[1200px]:ml-[519px]">
               {items.map((item, i) => (
                 <button
                   key={item.id}

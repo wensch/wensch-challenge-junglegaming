@@ -15,12 +15,10 @@ const TOLERANCE = 4
 const MIN_TEXT_WIDTH = 120
 
 /**
- * Known defects (390 px Hero, 390/768 Spotlight), reported to the orchestrator and NOT fixed here because the mobile baselines
- * must not change: the Hero artwork (138 px) is cut 16 px at the right of its 366 px card, and the
- * Spotlight image (max 168/288 px) is cut 5 px (390) / 33 px (768) inside a narrower box. Spotlight is
+ * Known defects, reported to the orchestrator and not owned by this slice part: the Spotlight image (max 168/288 px) is cut 5 px (390) / 33 px (768) inside a narrower box. Spotlight is
  * owned by another agent; remove its entry here once fixed.
  */
-const KNOWN = [/size-full rounded-\[20px\] object-cover md:rounded-\[28px\]">.*inside <section/, /h-auto w-auto rounded-\[20px\] object-contain.*inside <span class="relative grid/]
+const KNOWN = [/h-auto w-auto rounded-\[20px\] object-contain.*inside <span class="relative grid/]
 
 function findClipped(args: { tol: number; minText: number }): string[] {
   const { tol, minText } = args
@@ -143,6 +141,22 @@ test.describe('conteúdo cortado', () => {
       await expect(art).toBeVisible()
       const [dots, a] = [await hero.getByRole('group', { name: 'Escolher destaque' }).boundingBox(), await art.boundingBox()]
       expect(dots!.x + dots!.width, `pontos @${width}`).toBeLessThanOrEqual(a!.x - 24)
+    }
+  })
+
+  test('Hero mobile: arte inteira, pontos centralizados e título em 2 linhas', async ({ page, boot }) => {
+    await boot('/')
+    for (const width of [360, 390]) {
+      await page.setViewportSize({ width, height: 800 })
+      await expect(page.getByTestId('catalog-grid')).toBeVisible()
+      const hero = page.getByRole('region', { name: 'Destaques' })
+      const art = hero.getByRole('link').filter({ has: page.getByRole('img') }).first()
+      await expect(art).toBeVisible()
+      const [h, a, dots] = [await hero.boundingBox(), await art.boundingBox(), await hero.getByRole('group', { name: 'Escolher destaque' }).boundingBox()]
+      expect(a!.x + a!.width, `arte do Hero @${width}`).toBeLessThanOrEqual(h!.x + h!.width + 1)
+      expect(Math.abs(dots!.x + dots!.width / 2 - (h!.x + h!.width / 2)), `centro dos pontos @${width}`).toBeLessThanOrEqual(8)
+      const title = await hero.getByRole('heading', { level: 1 }).boundingBox()
+      expect(title!.height, `título em 2 linhas @${width}`).toBeLessThanOrEqual(24 * 2 + 2)
     }
   })
 })
