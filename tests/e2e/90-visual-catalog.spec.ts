@@ -3,11 +3,12 @@
  * (seed determinístico, cenário default). Comparadas ao Figma pelo revisor de fidelidade.
  */
 import type { Page } from '@playwright/test'
+import { settleFonts } from '../visual'
 import { expect, test } from '../fixtures'
 
 async function settle(page: Page, ready: () => Promise<void>) {
   await ready()
-  await page.evaluate(() => document.fonts.ready)
+  await settleFonts(page)
   // Lazy images below the fold: walk the page once, then wait for every image to finish decoding.
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 600) {

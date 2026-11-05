@@ -4,12 +4,12 @@
  */
 import type { Page } from '@playwright/test'
 import { loginAs } from '../account-helpers'
+import { settleFonts } from '../visual'
 import { expect, test, USERS } from '../fixtures'
 
 async function settle(page: Page) {
-  await page.evaluate(() => document.fonts.ready)
   // Sem o rodapé nem a tab bar: o recorte é a área de conteúdo.
-  await page.addStyleTag({ content: 'nav[aria-label="Navegação inferior"] { visibility: hidden !important; }' })
+  await settleFonts(page, 'nav[aria-label="Navegação inferior"]')
 }
 
 test.describe('@visual conta', () => {

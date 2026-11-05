@@ -3,12 +3,12 @@
  * (seed + fixed items); the fidelity reviewer compares them with design/ref.
  */
 import type { Page } from '@playwright/test'
+import { settleFonts } from '../visual'
 import { expect, test } from '../fixtures'
 import { addToCart, loginWithCart, pickEditions } from '../checkout-helpers'
 
 async function settle(page: Page) {
-  await page.evaluate(() => document.fonts.ready)
-  await page.addStyleTag({ content: 'nav[aria-label="Navegação inferior"], [data-testid="related"], section[aria-labelledby="related-title"] { visibility: hidden !important; }' })
+  await settleFonts(page, 'nav[aria-label="Navegação inferior"], [data-testid="related"], section[aria-labelledby="related-title"]')
 }
 
 test.describe('@visual checkout', () => {
