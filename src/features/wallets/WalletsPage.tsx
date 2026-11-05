@@ -70,7 +70,7 @@ function SecondarySection({ wallet, primary }: { wallet: Wallet | null; primary:
           {!showForm && <p className="mt-1 text-caption-sm text-text-secondary">Você ainda não adicionou uma carteira secundária.</p>}
         </div>
         {!showForm && (
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 max-lg:ml-auto">
             <label className="flex items-center gap-2 text-caption-sm text-text-primary">
               <input
                 type="checkbox"

@@ -27,7 +27,7 @@ function formatDiscount(discount: string): string {
 export function OrderTotals({ subtotal, discount, discountLabel, networkFee, total, feeEstimated, className, testIdPrefix }: OrderTotalsProps) {
   return (
     <dl className={cn('text-body-sm text-text-primary', className)}>
-      <div className="flex items-baseline justify-between gap-4 py-0.5">
+      <div className="flex items-baseline justify-between gap-4 py-0.5 max-lg:py-0">
         <dt>Subtotal</dt>
         <dd data-testid={`${testIdPrefix}-subtotal`} className="text-body-md">
           {formatEth(subtotal)}
@@ -43,10 +43,10 @@ export function OrderTotals({ subtotal, discount, discountLabel, networkFee, tot
           <span data-testid={`${testIdPrefix}-fee`} className="text-body-md">
             {formatEth(networkFee)}
           </span>
-          {feeEstimated && <span className="mt-2 block text-caption-sm text-text-accent">Taxa estimada</span>}
+          {feeEstimated && <span className="mt-2 block max-lg:mt-0 text-caption-sm text-text-accent">Taxa estimada</span>}
         </dd>
       </div>
-      <div className="mt-4 flex items-baseline justify-between gap-4 text-body-md font-bold">
+      <div className="mt-4 max-lg:mt-3 flex items-baseline justify-between gap-4 text-body-md font-bold">
         <dt>Total</dt>
         <dd data-testid={`${testIdPrefix}-total`} className="text-text-accent">
           {formatEth(total)}

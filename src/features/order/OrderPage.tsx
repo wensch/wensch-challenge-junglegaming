@@ -78,10 +78,10 @@ export function OrderPage({ orderId }: { orderId: string }) {
           </h1>
           <p className="text-body text-text-primary">{errorMessageOf(order.error)}</p>
           <div className="flex gap-3">
-            <Button onClick={() => void order.refetch()} className="h-10 rounded-control px-5 text-body-md font-bold">
+            <Button onClick={() => void order.refetch()} className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
               Tentar novamente
             </Button>
-            <Button asChild variant="outline" className="h-10 rounded-control px-5 text-body-md font-bold">
+            <Button asChild variant="outline" className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
               <Link to="/">Ir para o início</Link>
             </Button>
           </div>
@@ -111,10 +111,10 @@ export function OrderPage({ orderId }: { orderId: string }) {
           <ReceiptLines receipt={data.receipt} />
           <ReceiptTotals receipt={data.receipt} />
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button asChild className="h-11 rounded-control px-5 text-body-md font-bold">
+            <Button asChild className="h-11 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
               <Link to="/checkout">Tentar novamente</Link>
             </Button>
-            <Button asChild variant="outline" className="h-11 rounded-control px-5 text-body-md font-bold">
+            <Button asChild variant="outline" className="h-11 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
               <Link to="/cart">Voltar ao carrinho</Link>
             </Button>
           </div>

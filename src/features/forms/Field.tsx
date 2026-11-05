@@ -62,4 +62,4 @@ export function Field({
 
 /** Visual style of a text control of the account screens (Figma: 40 px, 1 px line, 4 px radius). */
 export const controlClass =
-  'h-10 w-full rounded-control border border-line-soft bg-transparent px-3 text-body-sm text-text-primary placeholder:text-text-secondary/70 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 aria-invalid:border-destructive aria-invalid:ring-0 disabled:opacity-60 md:text-body-sm'
+  'h-10 w-full rounded-control border border-line-soft bg-transparent px-3 text-body-sm text-text-primary placeholder:text-text-secondary/80 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40 aria-invalid:border-destructive aria-invalid:ring-0 disabled:opacity-60 md:text-body-sm'

@@ -77,7 +77,7 @@ export function AccountLayout({ title, children }: { title: string; children: Re
     if (hasClientNavigated()) headingRef.current?.focus({ preventScroll: true })
   }, [title])
   return (
-    <div className="mx-auto grid w-full max-w-page gap-6 px-gutter pt-6 pb-16 md:grid-cols-[minmax(0,310px)_minmax(0,1fr)] md:gap-7 md:pt-8 xl:px-0">
+    <div className="mx-auto grid w-full max-w-page gap-6 px-gutter pt-6 pb-24 md:pb-16 md:grid-cols-[minmax(0,310px)_minmax(0,1fr)] md:gap-7 md:pt-8 xl:px-0">
       <nav aria-label="Minha conta" className="self-start bg-surface-card pb-0 md:pb-1">
         <p className="px-[10px] py-3 text-body-lg font-bold text-text-primary max-md:hidden">Meu perfil</p>
         <CompactMenu logout={logout} isPending={isPending} />

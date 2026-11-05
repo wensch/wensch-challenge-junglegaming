@@ -111,10 +111,10 @@ export function ReviewDialog({ open, returnFocusRef, onOpenChange, values, walle
         </p>
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <Button type="button" variant="outline" disabled={submitting} onClick={() => onOpenChange(false)} className="h-11 rounded-control px-5 text-body-md font-bold">
+          <Button type="button" variant="outline" disabled={submitting} onClick={() => onOpenChange(false)} className="h-11 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
             Voltar e editar
           </Button>
-          <Button type="button" disabled={!canSend} onClick={onSubmit} data-testid="send-order" className="h-11 rounded-control px-5 text-body-md font-bold">
+          <Button type="button" disabled={!canSend} onClick={onSubmit} data-testid="send-order" className="h-11 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
             {submitting ? 'Enviando…' : 'Enviar pedido'}
           </Button>
         </div>

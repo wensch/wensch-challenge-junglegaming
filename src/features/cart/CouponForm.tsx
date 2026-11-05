@@ -53,7 +53,7 @@ export function CouponForm({ appliedCode, appliedLabel, onMessage }: { appliedCo
       {appliedCode ? (
         <p className="text-body-sm font-bold text-text-primary">Cupom aplicado</p>
       ) : (
-        <label htmlFor={`${id}-input`} className="text-body-sm font-bold text-text-primary">
+        <label htmlFor={`${id}-input`} className="text-body-sm font-bold text-text-primary max-lg:sr-only">
           Código promocional
         </label>
       )}
@@ -79,8 +79,8 @@ export function CouponForm({ appliedCode, appliedLabel, onMessage }: { appliedCo
           </button>
         </div>
       ) : (
-        <form onSubmit={(e) => void submit(e)} noValidate className="mt-2">
-          <div className={cn('flex h-10 overflow-hidden rounded-control border bg-transparent', message ? 'border-destructive' : 'border-line-soft')}>
+        <form onSubmit={(e) => void submit(e)} noValidate className="mt-2 max-lg:mt-0">
+          <div className={cn('flex h-10 overflow-hidden rounded-control border bg-transparent max-lg:h-[50px] max-lg:rounded-full', message ? 'border-destructive' : 'border-line-soft')}>
             <input
               id={`${id}-input`}
               type="text"
@@ -89,10 +89,10 @@ export function CouponForm({ appliedCode, appliedLabel, onMessage }: { appliedCo
               placeholder="Digite o código promocional..."
               aria-invalid={message ? true : undefined}
               aria-describedby={message ? errorId : undefined}
-              className="min-w-0 flex-1 bg-transparent px-2 text-caption-sm text-text-primary outline-none placeholder:text-text-secondary focus-visible:bg-surface-card"
+              className="min-w-0 flex-1 bg-transparent px-2 text-caption-sm text-text-primary outline-none max-lg:pl-4 placeholder:text-text-secondary focus-visible:bg-surface-card"
               {...register('code')}
             />
-            <Button type="submit" disabled={isSubmitting || apply.isPending} className="h-10 w-[102px] rounded-none px-0 text-body-md font-bold">
+            <Button type="submit" disabled={isSubmitting || apply.isPending} className="h-10 w-[102px] rounded-none px-0 text-body-md font-bold max-lg:h-[50px] max-lg:w-[97px] max-lg:rounded-full">
               Aplicar
             </Button>
           </div>

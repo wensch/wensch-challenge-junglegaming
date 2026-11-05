@@ -70,7 +70,7 @@ function EmptyCart() {
     <div data-testid="cart-empty" className="mt-10 flex flex-col items-start gap-4 rounded-card border border-line-soft bg-surface-card p-8">
       <p className="text-body-lg font-bold text-text-primary">Seu carrinho está vazio</p>
       <p className="text-body-sm text-text-secondary">Explore o mercado e adicione NFTs para continuar.</p>
-      <Button asChild className="h-10 rounded-control px-5 text-body-md font-bold">
+      <Button asChild className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
         <Link to="/" hash="mercado">
           Explorar o mercado
         </Link>
@@ -181,7 +181,7 @@ export function CartPage() {
       ) : cart.isError ? (
         <div role="alert" className="mt-10 flex flex-col items-start gap-3 rounded-card border border-line-soft bg-surface-card p-8">
           <p className="text-body text-text-primary">{errorMessageOf(cart.error)}</p>
-          <Button onClick={() => void cart.refetch()} className="h-10 rounded-control px-5 text-body-md font-bold">
+          <Button onClick={() => void cart.refetch()} className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
             Tentar novamente
           </Button>
         </div>
@@ -204,13 +204,13 @@ export function CartPage() {
             </ul>
           </div>
 
-          <aside aria-label="Resumo da carteira" data-testid="cart-summary" className="rounded-t-[40px] bg-surface-card p-6 lg:rounded-none lg:bg-transparent lg:p-0">
+          <aside aria-label="Resumo da carteira" data-testid="cart-summary" className="rounded-[32px] bg-surface-card p-6 max-lg:mb-4 lg:rounded-none lg:bg-transparent lg:p-0">
             <h2 className="hidden border-b border-line pb-2.5 text-body-md font-bold text-text-primary lg:block">Resumo da carteira</h2>
             <div className="lg:mt-6">
               <CouponForm appliedCode={cart.data?.couponCode ?? null} appliedLabel={quote.data?.coupon?.label ?? null} onMessage={setAnnouncement} />
             </div>
 
-            <div className="mt-6" style={{ minHeight: 168 }}>
+            <div className="mt-6 min-h-[168px] max-lg:mt-3 max-lg:min-h-[128px]">
               {quote.isPending && quote.fetchStatus !== 'idle' ? (
                 <div data-testid="quote-skeleton" aria-hidden="true" className="flex flex-col gap-3">
                   <Skeleton className="h-5 w-full" />
@@ -221,7 +221,7 @@ export function CartPage() {
               ) : quote.isError ? (
                 <div role="alert" className="flex flex-col items-start gap-3 text-body-sm text-text-primary">
                   <p>{errorMessageOf(quote.error)}</p>
-                  <Button variant="outline" onClick={() => void quote.refetch()} className="h-9 rounded-control px-4 text-body-sm font-bold">
+                  <Button variant="outline" onClick={() => void quote.refetch()} className="h-9 rounded-control px-4 text-body-sm font-bold max-lg:rounded-full">
                     Tentar novamente
                   </Button>
                 </div>
@@ -246,13 +246,13 @@ export function CartPage() {
               </ul>
             )}
 
-            <div className="mt-6 flex flex-col items-stretch gap-3">
+            <div className="mt-6 flex flex-col items-stretch gap-3 max-lg:mt-8">
               {orderable ? (
-                <Button asChild className="h-12 rounded-control text-body-md font-bold lg:h-10">
+                <Button asChild className="h-12 rounded-control text-body-md font-bold max-lg:h-[60px] max-lg:rounded-full lg:h-10">
                   <Link to="/checkout">Conectar e finalizar</Link>
                 </Button>
               ) : (
-                <Button disabled aria-describedby={blocking.length > 0 ? 'cart-blocking' : undefined} className="h-12 rounded-control text-body-md font-bold lg:h-10">
+                <Button disabled aria-describedby={blocking.length > 0 ? 'cart-blocking' : undefined} className="h-12 rounded-control text-body-md font-bold max-lg:h-[60px] max-lg:rounded-full lg:h-10">
                   Conectar e finalizar
                 </Button>
               )}

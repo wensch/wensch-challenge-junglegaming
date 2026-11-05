@@ -164,7 +164,7 @@ export function WalletForm({
       onSubmit={onSubmit}
       noValidate
       aria-label={title}
-      className="grid gap-x-7 gap-y-7 lg:grid-cols-2"
+      className="grid gap-x-7 gap-y-5 lg:grid-cols-2 lg:gap-y-7"
       onChange={() => setSaved(false)}
       data-testid={`wallet-form-${slot}`}
     >
@@ -204,13 +204,14 @@ export function WalletForm({
                 if (typeof firstFieldRef === 'function') firstFieldRef(el)
                 else if (firstFieldRef) (firstFieldRef as { current: HTMLInputElement | null }).current = el
               }}
+              placeholder="Ex.: Carteira principal"
               className={controlClass}
             />
           )
         }}
       </Field>
       <Field label="Apelido da carteira" required error={errors.label?.message}>
-        {(c) => <Input {...c} {...form.register('label')} className={controlClass} />}
+        {(c) => <Input {...c} {...form.register('label')} placeholder="Ex.: minha-carteira" className={controlClass} />}
       </Field>
       <Field label="Rede" required error={errors.network?.message}>
         {(c) => (
@@ -235,13 +236,13 @@ export function WalletForm({
         )}
       </Field>
       <Field label="Nome do perfil" required error={errors.profileName?.message}>
-        {(c) => <Input {...c} {...form.register('profileName')} autoCapitalize="none" spellCheck={false} className={controlClass} />}
+        {(c) => <Input {...c} {...form.register('profileName')} placeholder="Ex.: mateus-wensch" autoCapitalize="none" spellCheck={false} className={controlClass} />}
       </Field>
-      <Field label="Endereço da carteira" required error={errors.address?.message}>
-        {(c) => <Input {...c} {...form.register('address')} placeholder="Endereço 0x da carteira" spellCheck={false} className={controlClass} />}
+      <Field label="Endereço da carteira" required hint="0x seguido de 40 caracteres hexadecimais" error={errors.address?.message}>
+        {(c) => <Input {...c} {...form.register('address')} placeholder="Ex.: 0x71C7656EC7ab88b098defB751B7401B5f6d8976F" spellCheck={false} className={controlClass} />}
       </Field>
       <Field label="ENS ou carteira secundária (opcional)" error={errors.alternateAddress?.message}>
-        {(c) => <Input {...c} {...form.register('alternateAddress')} placeholder="ENS ou carteira secundária (opcional)" spellCheck={false} className={controlClass} />}
+        {(c) => <Input {...c} {...form.register('alternateAddress')} placeholder="Ex.: nova.kurio.eth" spellCheck={false} className={controlClass} />}
       </Field>
       <Field label="Tipo de carteira" required error={errors.type?.message}>
         {(c) => (
@@ -265,22 +266,22 @@ export function WalletForm({
           />
         )}
       </Field>
-      <Field label="Código de indicação" required error={errors.referralCode?.message}>
-        {(c) => <Input {...c} {...form.register('referralCode')} autoCapitalize="characters" spellCheck={false} className={cn(controlClass, 'uppercase')} />}
+      <Field label="Código de indicação" required hint="4 a 16 caracteres: letras, números ou hífen" error={errors.referralCode?.message}>
+        {(c) => <Input {...c} {...form.register('referralCode')} placeholder="Ex.: KURIO-2026" autoCapitalize="characters" spellCheck={false} className={cn(controlClass, 'uppercase')} />}
       </Field>
       <Field label="E-mail" required error={errors.email?.message}>
-        {(c) => <Input {...c} {...form.register('email')} type="email" autoComplete="email" className={controlClass} />}
+        {(c) => <Input {...c} {...form.register('email')} placeholder="Ex.: voce@exemplo.com" type="email" autoComplete="email" className={controlClass} />}
       </Field>
-      <Field label="Nome ENS" required error={errors.ensLabel?.message}>
+      <Field label="Nome ENS" required hint="Será salvo como mateus.eth" error={errors.ensLabel?.message}>
         {(c) => (
           <div className="flex gap-2">
             <EnsDomainSelect />
-            <Input {...c} {...form.register('ensLabel')} autoCapitalize="none" spellCheck={false} aria-label="Nome ENS (sem .eth)" className={controlClass} />
+            <Input {...c} {...form.register('ensLabel')} placeholder="Ex.: mateus" autoCapitalize="none" spellCheck={false} aria-label="Nome ENS (sem .eth)" className={controlClass} />
           </div>
         )}
       </Field>
       <div className="flex flex-wrap items-center gap-4 lg:col-span-2">
-        <Button type="submit" disabled={form.formState.isSubmitting} className="h-10 rounded-control px-6 text-body-sm font-bold">
+        <Button type="submit" disabled={form.formState.isSubmitting} className="h-10 rounded-control px-6 text-body-sm font-bold max-lg:h-12 max-lg:w-full max-lg:rounded-full">
           {form.formState.isSubmitting ? 'Salvando…' : conflict ? 'Confirmar e salvar' : 'Salvar carteira'}
         </Button>
         <p role="status" className="text-caption-sm text-text-accent">

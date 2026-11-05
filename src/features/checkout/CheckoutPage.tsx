@@ -63,7 +63,7 @@ export function CheckoutPage() {
           <ArrowLeft aria-hidden="true" className="size-5" />
         </button>
         <h1 ref={headingRef} tabIndex={-1} className="text-body-lg font-bold text-text-primary outline-none lg:sr-only">
-          Pagamento
+          Pagamento com carteira
         </h1>
       </div>
       <nav aria-label="Trilha de navegação" className="hidden text-body-sm font-bold text-text-primary lg:block">
@@ -96,7 +96,7 @@ export function CheckoutPage() {
               if (cart.isError) void cart.refetch()
               if (wallets.isError) void wallets.refetch()
             }}
-            className="h-10 rounded-control px-5 text-body-md font-bold"
+            className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full"
           >
             Tentar novamente
           </Button>
@@ -105,7 +105,7 @@ export function CheckoutPage() {
         <div data-testid="checkout-empty" className="mt-10 flex flex-col items-start gap-4 rounded-card border border-line-soft bg-surface-card p-8">
           <p className="text-body-lg font-bold text-text-primary">Seu carrinho está vazio</p>
           <p className="text-body-sm text-text-secondary">Adicione NFTs ao carrinho para concluir uma compra.</p>
-          <Button asChild className="h-10 rounded-control px-5 text-body-md font-bold">
+          <Button asChild className="h-10 rounded-control px-5 text-body-md font-bold max-lg:rounded-full">
             <Link to="/" hash="mercado">
               Explorar o mercado
             </Link>
