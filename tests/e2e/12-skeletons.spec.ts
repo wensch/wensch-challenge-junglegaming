@@ -2,8 +2,16 @@
  * E2E-12 (UI-3, CAT-4, DET-1): skeletons com shimmer durante carregamento lento (mesmas caixas do
  * conteúdo, sem CLS, parados sob reduced-motion), feedback de falha e recuperação por nova tentativa.
  */
+import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
 import { cards, gridReady } from './catalog-helpers'
+
+/** Fontes carregadas, imagens visíveis na viewport decodificadas (as lazy fora dela não carregam) e dois quadros pintados: os layout-shifts pendentes já foram reportados. */
+async function layoutSettled(page: Page) {
+  await page.evaluate(() => document.fonts.ready)
+  await expect.poll(() => page.evaluate(() => [...document.images].filter((i) => { const r = i.getBoundingClientRect(); return r.top < innerHeight && r.right > 0 && r.left < innerWidth }).every((i) => i.complete))).toBe(true)
+  await page.evaluate(() => new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r()))))
+}
 
 test.describe('skeletons e recuperação', () => {
   test('catálogo lento: skeleton com shimmer, mesma geometria do conteúdo e sem CLS', async ({ page }) => {
@@ -29,7 +37,7 @@ test.describe('skeletons e recuperação', () => {
     const after = await cards(page).first().locator('xpath=..').boundingBox()
     expect(Math.abs(before!.y - after!.y)).toBeLessThanOrEqual(1)
     expect(Math.abs(before!.height - after!.height)).toBeLessThanOrEqual(1)
-    await page.waitForTimeout(300)
+    await layoutSettled(page)
     const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls)
     expect(cls).toBeLessThan(0.05)
   })
@@ -68,7 +76,7 @@ test.describe('skeletons e recuperação', () => {
     await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible({ timeout: 20_000 })
     const after = await footer.boundingBox()
     expect(Math.abs(before!.y - after!.y)).toBeLessThan(40)
-    await page.waitForTimeout(300)
+    await layoutSettled(page)
     expect(await page.evaluate(() => (window as unknown as { __cls: number }).__cls)).toBeLessThan(0.05)
   })
 

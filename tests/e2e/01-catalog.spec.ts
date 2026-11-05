@@ -113,13 +113,16 @@ test.describe('catálogo', () => {
   })
 
   test('respostas fora de ordem: só vale o resultado da URL atual', async ({ page, boot }) => {
+    await page.clock.install()
     await boot('/', ['catalog.out-of-order'])
     // A 1ª requisição (URL "/") demora 2 s; a troca de aba responde em 100 ms e a antiga chega depois.
     await page.getByRole('link', { name: 'Em alta' }).click()
     await expect(page).toHaveURL(/tab=trending/)
     await gridReady(page)
     const trending = await cardNames(page)
-    await page.waitForTimeout(2600)
+    // Relógio da página avança além dos 2 s da resposta antiga: ela chega agora, e só então comparamos.
+    await page.clock.runFor(2600)
+    await page.clock.runFor(200)
     expect(await cardNames(page)).toEqual(trending)
     await expect(page.getByRole('link', { name: 'Em alta' })).toHaveAttribute('aria-current', 'page')
   })

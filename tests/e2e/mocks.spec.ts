@@ -432,10 +432,12 @@ const checks: Record<ScenarioName, (page: Page) => Promise<void>> = {
     await expect.poll(async () => (await api(page, 'GET', `/nfts/${NFT.id}`)).body.editions[0]!.available).toBe(stockBefore) // stock released
   },
   'payment.hold': async (page) => {
+    await page.clock.install()
     const c = await checkout(page, ['payment.hold'])
     await openSocket(page, 'p', c.token)
     const r = await postOrder(page, c)
-    await page.waitForTimeout(2500)
+    // Relógio da página avança além dos 1500 ms em que um pedido normal assentaria: 'hold' segue pendente.
+    await page.clock.runFor(2500)
     expect((await api(page, 'GET', `/orders/${r.body.id}`, { token: c.token })).body.status).toBe('pending')
     expect((await api(page, 'GET', '/orders?status=pending', { token: c.token })).body.items).toHaveLength(1)
     await page.evaluate((id) => window.__mock!.settleOrder(id, 'confirmed'), r.body.id as string)
@@ -680,18 +682,20 @@ test.describe('state and lifecycle', () => {
     const aliceOrderEvents = (await probeEvents(page, 'alice')).filter((e) => e.type === 'order.updated')
     expect(aliceOrderEvents.map((e) => e.data.status)).toEqual(['pending', 'confirmed'])
     expect(aliceOrderEvents.every((e) => e.userId === c.userId && e.resource.id === order.body.id)).toBe(true)
-    await page.waitForTimeout(300)
-    for (const who of ['bob', 'anon']) expect((await probeEvents(page, who)).filter((e) => e.type === 'order.updated')).toEqual([])
 
     // Test-driven emit targeted at one user.
     await page.evaluate((u) => window.__mock!.emit('order.updated', { id: 'evt_manual', type: 'order.updated', userId: u }, { userId: u }), bob.userId)
     await waitEvent(page, 'bob', (e) => e.id === 'evt_manual')
+    // Same socket, FIFO: with evt_manual delivered, any order.updated of alice's purchase would have arrived before it.
+    expect((await probeEvents(page, 'bob')).filter((e) => e.type === 'order.updated').map((e) => e.id)).toEqual(['evt_manual'])
     expect((await probeEvents(page, 'alice')).some((e) => e.id === 'evt_manual')).toBe(false)
 
     // updateNft keeps REST and events consistent.
     await page.evaluate(() => window.__mock!.updateNft('nft_001', { price: '9.99' }))
     const [pub] = await waitEvent(page, 'anon', (e) => e.type === 'nft.updated' && e.resource.id === 'nft_001')
     expect(pub!.data.price).toBe('9.99')
+    // The public event above arrived after everything alice's purchase emitted: the anonymous socket got no order.updated.
+    expect((await probeEvents(page, 'anon')).filter((e) => e.type === 'order.updated')).toEqual([])
     const rest = await api(page, 'GET', '/nfts/nft_001')
     expect(rest.body.price).toBe('9.99')
     expect(rest.body.version).toBe(pub!.version)

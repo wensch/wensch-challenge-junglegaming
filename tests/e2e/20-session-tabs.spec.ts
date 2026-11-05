@@ -111,6 +111,7 @@ test.describe('sessão entre abas', () => {
 test.describe('logout explícito', () => {
   test('com o token já vencido no servidor, Sair vai para o início (não para o fluxo de expiração)', async ({ page, boot, mock }, info) => {
     const mobile = isMobileProject(info.project.name)
+    await page.clock.install()
     await boot('/')
     const alice = await loginViaApi(page, USERS.alice)
     await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', alice.user.id)
@@ -122,7 +123,8 @@ test.describe('logout explícito', () => {
     // the menu before the click lands. The guarantee is the OUTCOME below, so a detached menu is fine.
     await sair.click({ timeout: 5_000 }).catch(() => undefined)
     await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
-    await page.waitForTimeout(800)
+    // Relógio da página avança 1 s: qualquer redirecionamento agendado (reason=expired) já teria disparado.
+    await page.clock.runFor(1000)
     const url = new URL(page.url())
     expect(url.pathname).toBe('/')
     expect(url.searchParams.get('reason')).toBeNull()
