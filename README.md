@@ -135,6 +135,16 @@ npx playwright show-report                        # relatório HTML
 - **Regressão visual**: testes `@visual` (início, detalhe, carrinho, pagamento, conta). Baselines por plataforma em `tests/__screenshots__/win32` e `tests/__screenshots__/linux`. No CI o Playwright usa `updateSnapshots: 'none'`: baseline ausente ou diferente reprova. As baselines Linux são geradas pelo workflow manual `visual-baselines` (`workflow_dispatch`, [.github/workflows/visual-baselines.yml](.github/workflows/visual-baselines.yml)), baixadas como artefato `visual-baselines-linux`, revisadas e commitadas. Para atualizar localmente: `npx playwright test --grep @visual --update-snapshots=all`.
 - **CI** ([.github/workflows/verify.yml](.github/workflows/verify.yml)): `npm ci`, `npx playwright install --with-deps chromium`, `npm run verify`.
 
+## Páginas editoriais (pós-entrega)
+
+| Rota | Conteúdo | API simulada |
+|---|---|---|
+| `/criadores` | Diretório de criadores: busca (`?q=`), ordem (`?ordem=nfts\|followers`), paginação (`?page=`) e "Ver coleção" para o catálogo | `GET /creators` |
+| `/aprenda` | Trilhas e artigos, categorias na URL (`?categoria=fundamentos\|arte\|seguranca\|mercado`) | `GET /articles` |
+| `/aprenda/<slug>` | Artigo com subtítulos e artigos relacionados | `GET /articles/:slug` |
+
+Os dados ficam em `src/mocks/content.ts` (estáticos, sem persistência). Vazio: `?scenario=catalog.empty`; erro: `?scenario=http.503`. Decisão e desvios: ARCHITECTURE D45; contratos v1.4.0.
+
 ## Estrutura
 
 ```
@@ -149,6 +159,7 @@ src/
   components/      layout e shadcn/ui
   lib/             utilitários (money.ts com decimal.js)
   mocks/           ÚNICO lugar com dados fictícios: MSW, banco em memória, cenários, window.__mock
+                   (content.ts: criadores e artigos estáticos, fora do banco persistido)
 tests/e2e/         Playwright (E2E, visual, axe)
 lighthouse/        configuração e relatórios da auditoria
 design/            referências do Figma (ref/ PNGs, assets/ artes, figma-meta.xml com posições e tamanhos)

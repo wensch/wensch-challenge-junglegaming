@@ -62,7 +62,7 @@ test.describe('@visual header tablet', () => {
     test(`header ${width}`, async ({ page, boot }, info) => {
       test.skip(isMobileProject(info.project.name))
       await page.setViewportSize({ width, height: 900 })
-      await boot('/em-breve?secao=aprenda')
+      await boot('/aprenda')
       await page.evaluate(() => document.fonts.ready)
       await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
       await expect(page.locator('header')).toHaveScreenshot(`header-${width}.png`)

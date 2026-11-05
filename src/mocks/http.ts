@@ -118,7 +118,7 @@ async function resolveAuth(mode: 'public' | 'guest' | 'session', request: Reques
 }
 
 function scenarioFailure(name: EndpointName): ApiErrorPayload | null {
-  if (name === 'listNfts' || name === 'getNft') {
+  if (name === 'listNfts' || name === 'getNft' || name === 'listCreators' || name === 'listArticles' || name === 'getArticle') {
     if (isActive('http.503')) return { code: 'TRANSIENT', message: 'Serviço indisponível.', reason: 'server', retryAfterMs: 1000 }
   }
   if ((name === 'addFavorite' || name === 'removeFavorite') && isActive('favorites.fail')) {

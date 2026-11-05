@@ -60,13 +60,13 @@ export default function MobileMenuSheet({ open, onOpenChange, returnFocusRef }: 
               </Link>
             </li>
             <li>
-              <Link to="/em-breve" search={{ secao: 'criadores' }} className={menuLink} onClick={close}>
-                Criadores <span className="text-caption text-text-secondary">(em breve)</span>
+              <Link to="/criadores" className={menuLink} onClick={close}>
+                Criadores
               </Link>
             </li>
             <li>
-              <Link to="/em-breve" search={{ secao: 'aprenda' }} className={menuLink} onClick={close}>
-                Aprenda <span className="text-caption text-text-secondary">(em breve)</span>
+              <Link to="/aprenda" className={menuLink} onClick={close}>
+                Aprenda
               </Link>
             </li>
           </ul>

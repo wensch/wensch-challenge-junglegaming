@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as CriadoresRouteImport } from './routes/criadores'
 import { Route as EmBreveRouteImport } from './routes/em-breve'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -19,6 +20,8 @@ import { Route as AuthedCheckoutRouteImport } from './routes/_authed/checkout'
 import { Route as AuthedFavoritesRouteImport } from './routes/_authed/favorites'
 import { Route as AuthedProfileRouteImport } from './routes/_authed/profile'
 import { Route as AuthedWalletsRouteImport } from './routes/_authed/wallets'
+import { Route as AprendaIndexRouteImport } from './routes/aprenda.index'
+import { Route as AprendaSlugRouteImport } from './routes/aprenda.$slug'
 import { Route as NftIdRouteImport } from './routes/nft.$id'
 import { Route as AuthedOrdersIdRouteImport } from './routes/_authed/orders.$id'
 
@@ -34,6 +37,11 @@ const AuthedRoute = AuthedRouteImport.update({
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CriadoresRoute = CriadoresRouteImport.update({
+  id: '/criadores',
+  path: '/criadores',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmBreveRoute = EmBreveRouteImport.update({
@@ -71,6 +79,16 @@ const AuthedWalletsRoute = AuthedWalletsRouteImport.update({
   path: '/wallets',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AprendaIndexRoute = AprendaIndexRouteImport.update({
+  id: '/aprenda/',
+  path: '/aprenda/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AprendaSlugRoute = AprendaSlugRouteImport.update({
+  id: '/aprenda/$slug',
+  path: '/aprenda/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NftIdRoute = NftIdRouteImport.update({
   id: '/nft/$id',
   path: '/nft/$id',
@@ -85,6 +103,7 @@ const AuthedOrdersIdRoute = AuthedOrdersIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/criadores': typeof CriadoresRoute
   '/em-breve': typeof EmBreveRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -92,12 +111,15 @@ export interface FileRoutesByFullPath {
   '/favorites': typeof AuthedFavoritesRoute
   '/profile': typeof AuthedProfileRoute
   '/wallets': typeof AuthedWalletsRoute
+  '/aprenda/$slug': typeof AprendaSlugRoute
   '/nft/$id': typeof NftIdRoute
+  '/aprenda/': typeof AprendaIndexRoute
   '/orders/$id': typeof AuthedOrdersIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/criadores': typeof CriadoresRoute
   '/em-breve': typeof EmBreveRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -105,7 +127,9 @@ export interface FileRoutesByTo {
   '/favorites': typeof AuthedFavoritesRoute
   '/profile': typeof AuthedProfileRoute
   '/wallets': typeof AuthedWalletsRoute
+  '/aprenda/$slug': typeof AprendaSlugRoute
   '/nft/$id': typeof NftIdRoute
+  '/aprenda': typeof AprendaIndexRoute
   '/orders/$id': typeof AuthedOrdersIdRoute
 }
 export interface FileRoutesById {
@@ -113,6 +137,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/cart': typeof CartRoute
+  '/criadores': typeof CriadoresRoute
   '/em-breve': typeof EmBreveRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -120,7 +145,9 @@ export interface FileRoutesById {
   '/_authed/favorites': typeof AuthedFavoritesRoute
   '/_authed/profile': typeof AuthedProfileRoute
   '/_authed/wallets': typeof AuthedWalletsRoute
+  '/aprenda/$slug': typeof AprendaSlugRoute
   '/nft/$id': typeof NftIdRoute
+  '/aprenda/': typeof AprendaIndexRoute
   '/_authed/orders/$id': typeof AuthedOrdersIdRoute
 }
 export interface FileRouteTypes {
@@ -128,6 +155,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cart'
+    | '/criadores'
     | '/em-breve'
     | '/login'
     | '/register'
@@ -135,12 +163,15 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/profile'
     | '/wallets'
+    | '/aprenda/$slug'
     | '/nft/$id'
+    | '/aprenda/'
     | '/orders/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cart'
+    | '/criadores'
     | '/em-breve'
     | '/login'
     | '/register'
@@ -148,13 +179,16 @@ export interface FileRouteTypes {
     | '/favorites'
     | '/profile'
     | '/wallets'
+    | '/aprenda/$slug'
     | '/nft/$id'
+    | '/aprenda'
     | '/orders/$id'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/cart'
+    | '/criadores'
     | '/em-breve'
     | '/login'
     | '/register'
@@ -162,7 +196,9 @@ export interface FileRouteTypes {
     | '/_authed/favorites'
     | '/_authed/profile'
     | '/_authed/wallets'
+    | '/aprenda/$slug'
     | '/nft/$id'
+    | '/aprenda/'
     | '/_authed/orders/$id'
   fileRoutesById: FileRoutesById
 }
@@ -170,10 +206,13 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
   CartRoute: typeof CartRoute
+  CriadoresRoute: typeof CriadoresRoute
   EmBreveRoute: typeof EmBreveRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  AprendaSlugRoute: typeof AprendaSlugRoute
   NftIdRoute: typeof NftIdRoute
+  AprendaIndexRoute: typeof AprendaIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -197,6 +236,13 @@ declare module '@tanstack/react-router' {
       path: '/cart'
       fullPath: '/cart'
       preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/criadores': {
+      id: '/criadores'
+      path: '/criadores'
+      fullPath: '/criadores'
+      preLoaderRoute: typeof CriadoresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/em-breve': {
@@ -248,6 +294,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedWalletsRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/aprenda/': {
+      id: '/aprenda/'
+      path: '/aprenda'
+      fullPath: '/aprenda/'
+      preLoaderRoute: typeof AprendaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aprenda/$slug': {
+      id: '/aprenda/$slug'
+      path: '/aprenda/$slug'
+      fullPath: '/aprenda/$slug'
+      preLoaderRoute: typeof AprendaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nft/$id': {
       id: '/nft/$id'
       path: '/nft/$id'
@@ -288,10 +348,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
   CartRoute: CartRoute,
+  CriadoresRoute: CriadoresRoute,
   EmBreveRoute: EmBreveRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  AprendaSlugRoute: AprendaSlugRoute,
   NftIdRoute: NftIdRoute,
+  AprendaIndexRoute: AprendaIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -103,12 +103,12 @@ export function SiteHeader() {
                 </Link>
               </li>
               <li>
-                <Link to="/em-breve" search={{ secao: 'criadores' }} className={navLink}>
+                <Link to="/criadores" className={navLink}>
                   Criadores
                 </Link>
               </li>
               <li>
-                <Link to="/em-breve" search={{ secao: 'aprenda' }} className={navLink}>
+                <Link to="/aprenda" className={navLink}>
                   Aprenda
                 </Link>
               </li>

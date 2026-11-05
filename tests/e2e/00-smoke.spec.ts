@@ -155,7 +155,7 @@ test.describe('menu mobile', () => {
 
     await trigger.click()
     await dialog.getByRole('link', { name: /Criadores/ }).click()
-    await expect(page).toHaveURL(/\/em-breve\?secao=criadores/)
+    await expect(page).toHaveURL(/\/criadores$/)
     await expect(page.getByRole('heading', { level: 1, name: 'Criadores' })).toBeVisible()
   })
 })

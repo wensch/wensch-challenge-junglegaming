@@ -95,6 +95,9 @@ test.describe('conteúdo cortado', () => {
         await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible()
       })
       for (const path of ['/login', '/register']) await scan(page, path, width, () => expect(page.getByRole('main')).toBeVisible())
+      await scan(page, '/criadores', width, () => expect(page.getByTestId('creators-grid')).toBeVisible())
+      await scan(page, '/aprenda', width, () => expect(page.getByTestId('articles-list')).toBeVisible())
+      await scan(page, '/aprenda/como-proteger-sua-carteira', width, () => expect(page.getByTestId('article')).toBeVisible())
     }
   })
 

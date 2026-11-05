@@ -4,12 +4,13 @@ import { API_BASE } from '../http'
 import { authHandlers } from './auth'
 import { cartHandlers } from './cart'
 import { catalogHandlers } from './catalog'
+import { contentHandlers } from './content'
 import { orderHandlers } from './orders'
 import { profileHandlers } from './profile'
 import { walletHandlers } from './wallets'
 
 // Order matters: `/nfts/featured` is declared before `/nfts/:nftId` in the endpoint table.
-const apiHandlers = [...authHandlers, ...catalogHandlers, ...cartHandlers, ...orderHandlers, ...profileHandlers, ...walletHandlers]
+const apiHandlers = [...authHandlers, ...catalogHandlers, ...contentHandlers, ...cartHandlers, ...orderHandlers, ...profileHandlers, ...walletHandlers]
 
 /** Probe used by `startMocks` to prove the service worker is really answering this document's requests. */
 export const PING_PATH = '/__mock/ping'
