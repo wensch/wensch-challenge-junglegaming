@@ -25,7 +25,7 @@ const PROMOS = [
 
 export function Promos() {
   return (
-    <section aria-label="Promoções" className="mt-24 hidden gap-7 md:grid md:grid-cols-2">
+    <section aria-label="Promoções" className="mt-24 hidden gap-7 md:grid md:grid-cols-1 min-[1200px]:grid-cols-2">
       {PROMOS.map((promo) => (
         <article key={promo.title} className="relative flex h-[250px] overflow-hidden rounded-control bg-surface-card">
           <img src={promo.image} alt="" width={292} height={250} loading="lazy" decoding="async" className="h-full w-[292px] shrink-0 rounded-control object-cover object-top" />

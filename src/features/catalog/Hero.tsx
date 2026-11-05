@@ -21,10 +21,10 @@ function HeroCopy({ children }: { children?: React.ReactNode }) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   useHeadingFocus(headingRef, 'home')
   return (
-    <div className="flex w-[188px] shrink-0 flex-col justify-between self-stretch md:w-[600px] md:justify-center md:gap-8 md:self-center">
+    <div className="flex w-[188px] shrink-0 flex-col justify-between self-stretch md:min-w-0 md:flex-1 md:justify-center min-[1200px]:w-[600px] min-[1200px]:flex-none md:gap-8 md:self-center">
       <div className="flex flex-col gap-1.5 md:gap-3">
         <p className="text-body-sm leading-4 text-text-primary">Bem-vindo à Kurio</p>
-        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none md:text-display">
+        <h1 ref={headingRef} tabIndex={-1} className="text-heading font-bold text-text-primary outline-none md:text-heading min-[1200px]:text-display">
           <span className="md:hidden">SEJA DONO DA CULTURA DIGITAL</span>
           <span className="hidden md:inline">
             SEJA DONO DO FUTURO
@@ -64,7 +64,7 @@ function HeroFrame({ children }: { children: React.ReactNode }) {
     <section
       aria-label="Destaques"
       className={cn(
-        'relative overflow-hidden rounded-card bg-gradient-to-br from-surface-dark to-surface-card px-4 py-[6px] md:rounded-none md:bg-none md:px-10 md:py-0',
+        'relative overflow-hidden rounded-card bg-gradient-to-br from-surface-dark to-surface-card px-4 py-[6px] md:rounded-none md:bg-none md:px-8 md:py-0 min-[1200px]:px-10',
         HERO_BOX,
       )}
     >
@@ -83,7 +83,7 @@ function HeroSkeleton() {
         </div>
       </HeroCopy>
       <div aria-hidden="true" className="shrink-0">
-        <Skeleton className="size-[138px] rounded-[20px] md:size-[450px] md:rounded-[28px]" />
+        <Skeleton className="size-[138px] rounded-[20px] md:size-[300px] md:rounded-[28px] min-[1200px]:size-[450px]" />
       </div>
     </HeroFrame>
   )
@@ -93,7 +93,7 @@ function HeroArtwork({ items, index }: { items: NftSummary[]; index: number }) {
   const current = items[index]!
   const second = items.length > 1 ? items[(index + 1) % items.length]! : null
   return (
-    <div className="relative size-[138px] shrink-0 md:size-[450px]">
+    <div className="relative size-[138px] shrink-0 md:size-[300px] min-[1200px]:size-[450px]">
       <Link to="/nft/$id" params={{ id: current.id }} aria-label={`Ver ${current.name}`} className="block size-full">
         <img
           src={current.image.src}
@@ -147,7 +147,7 @@ export function Hero() {
         <div className="flex flex-col gap-4 md:gap-6">
           <ExploreLink />
           {items.length > 1 && (
-            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex min-[1200px]:ml-[548px]">
+            <div role="group" aria-label="Escolher destaque" className="-ml-1.5 flex min-[1200px]:ml-[519px]">
               {items.map((item, i) => (
                 <button
                   key={item.id}
