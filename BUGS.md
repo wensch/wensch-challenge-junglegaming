@@ -76,3 +76,11 @@ Formato: id · severidade · slice · passos · esperado · obtido · evidência
 - Obtido: o app expõe só `data-connections` (connects do socket atual, zera no stop), `data-status`, `data-user` e `data-applied`; `window.__mock` não expõe a contagem de conexões abertas nem `socket.listeners`. O spec `17-liberacao-listeners.spec.ts` mede o que existe (assinantes do QueryCache, que incluem a assinatura do reconciler; observers; um único evento aplicado exatamente uma vez; evento do usuário anterior não aplicado), mas sockets zumbis só seriam detectados indiretamente.
 - Faltaria expor: `window.__mock.connectionCount()` (conexões abertas no `Set` de `src/mocks/realtime.ts`) e, no `realtime-probe`, `data-listeners` (soma de `socket.listeners` dos eventos de `EVENT_TYPES`) e `data-event-subscribers` (`eventListeners.size`).
 - Status: aberto (baixa, opcional).
+
+## BUG-QA-014 · média · a11y · Tablet 768 px: ponto do carrossel do Hero viola `target-size` (WCAG 2.5.8, axe "serious")
+- Passos: viewport 768x1024; abrir `/`; rodar axe (wcag2a/aa/21/22aa).
+- Esperado: nenhuma violação crítica/séria (alvos de toque >= 24 px sem sobreposição).
+- Obtido: `target-size` serious em `.size-6[type="button"]:nth-child(4)` (botões `Destaque N de M` de `src/features/catalog/Hero.tsx`, `size-6` = 24 px, `md:ml-[548px]`). A 1440 e 390 px não ocorre (`91-a11y-catalog`).
+- Correção sugerida: investigar a sobreposição do 4º ponto com a arte do Hero a 768 px (z-index/posição do grupo) ou garantir 24 px livres.
+- Evidência: `tests/e2e/tablet-768.spec.ts` (`test.fixme` "início", BUG-QA-014); 5/5 repetições falharam igual.
+- Status: aberto.
