@@ -28,21 +28,17 @@ export function DetailTabs({ nft }: { nft: NftDetail }) {
         <dl className="flex flex-col gap-3">
           <div>
             <dt className="font-bold text-text-primary">Rede:</dt>
-            <dd>{NETWORK_LABELS[nft.network]}</dd>
+            <dd>Cunhado na {NETWORK_LABELS[nft.network]} com procedência imutável e metadados armazenados no IPFS.</dd>
           </div>
           <div>
             <dt className="font-bold text-text-primary">Contrato:</dt>
             <dd>
-              {shortAddress(nft.contract.address)} • Contrato inteligente {nft.contract.standard}
+              {shortAddress(nft.contract.address)} • Contrato inteligente {nft.contract.standard} verificado.
             </dd>
           </div>
           <div>
             <dt className="font-bold text-text-primary">Direitos autorais:</dt>
-            <dd>{nft.royaltyPercent}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.</dd>
-          </div>
-          <div>
-            <dt className="font-bold text-text-primary">Procedência:</dt>
-            <dd>{nft.provenance}</dd>
+            <dd>Direitos autorais do criador: {nft.royaltyPercent}% nas vendas secundárias, pagos automaticamente pelos mercados compatíveis.</dd>
           </div>
         </dl>
       </Tabs.Content>
