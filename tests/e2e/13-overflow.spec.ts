@@ -5,7 +5,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 const WIDTHS = [390, 768, 1440] as const
 

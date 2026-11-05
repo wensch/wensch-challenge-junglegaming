@@ -1,7 +1,7 @@
 /** Helpers shared by the catalog/detail specs: the same actions work on the desktop sidebar and the mobile sheet. */
 import type { Locator, Page } from '@playwright/test'
-import { expect } from '../fixtures'
-import { compare } from '../../src/lib/money'
+import { expect } from './fixtures'
+import { compare } from '../src/lib/money'
 
 export const cards = (page: Page): Locator => page.getByTestId('nft-card')
 

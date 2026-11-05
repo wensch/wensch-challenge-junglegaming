@@ -2,7 +2,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import type { Page } from '@playwright/test'
 import { expect, isMobileProject, test } from '../fixtures'
-import { gridReady } from './catalog-helpers'
+import { gridReady } from '../catalog-helpers'
 import { settleAnimations } from '../settle-animations'
 
 async function seriousViolations(page: Page) {

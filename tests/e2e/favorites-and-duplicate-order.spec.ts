@@ -5,7 +5,7 @@
 import type { Page } from '@playwright/test'
 import { loginAs, logoutThroughUi } from '../account-helpers'
 import { expect, loginViaApi, test, USERS } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 const items = (page: Page) => page.getByTestId('favorite-item')
 

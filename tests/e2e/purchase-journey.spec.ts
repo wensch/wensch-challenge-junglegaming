@@ -4,7 +4,7 @@
  * reload por etapa. Estado da simulacao so por __mock (settleOrder/emit).
  */
 import { expect, test, USERS } from '../fixtures'
-import { connectWallet, sendOrder } from '../s3-helpers'
+import { connectWallet, sendOrder } from '../checkout-helpers'
 import { submitLogin, logoutThroughUi, loginAs } from '../account-helpers'
 
 test.describe('qa integrada', () => {

@@ -4,7 +4,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { addToCart, loginWithCart, pickEditions } from '../s3-helpers'
+import { addToCart, loginWithCart, pickEditions } from '../checkout-helpers'
 
 async function settle(page: Page) {
   await page.evaluate(() => document.fonts.ready)

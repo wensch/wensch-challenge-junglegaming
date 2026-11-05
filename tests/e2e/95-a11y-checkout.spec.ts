@@ -2,7 +2,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder, setGuestId, addToCart } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder, setGuestId, addToCart } from '../checkout-helpers'
 import { settleAnimations } from '../settle-animations'
 
 async function seriousViolations(page: Page) {

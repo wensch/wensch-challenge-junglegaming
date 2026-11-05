@@ -11,7 +11,7 @@
 import type { Page } from '@playwright/test'
 import { loginAs, logoutThroughUi } from '../account-helpers'
 import { expect, isMobileProject, test, USERS } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 interface Footprint {
   /** Assinantes do QueryCache (inclui a assinatura do reconciler). */

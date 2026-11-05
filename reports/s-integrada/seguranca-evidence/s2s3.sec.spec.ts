@@ -5,7 +5,7 @@
 import type { Page } from '@playwright/test'
 import { expect, test, USERS } from '../../../tests/fixtures'
 import { cacheKeys, loginAs, logoutThroughUi } from '../../../tests/account-helpers'
-import { addToCart, connectWallet, loginWithCart, pickEditions, sendOrder } from '../../../tests/s3-helpers'
+import { addToCart, connectWallet, loginWithCart, pickEditions, sendOrder } from '../../../tests/checkout-helpers'
 
 async function cacheBlob(page: Page): Promise<string> {
   return page.evaluate(() => {

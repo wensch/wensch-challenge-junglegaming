@@ -5,7 +5,7 @@
  */
 import type { Page, Request } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { loginWithCart, pickEditions, connectWallet, sendOrder, updateNft } from '../s3-helpers'
+import { loginWithCart, pickEditions, connectWallet, sendOrder, updateNft } from '../checkout-helpers'
 
 function trackOrderPosts(page: Page) {
   const posts: Request[] = []

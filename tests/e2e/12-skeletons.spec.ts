@@ -3,7 +3,7 @@
  * conteúdo, sem CLS, parados sob reduced-motion), feedback de falha e recuperação por nova tentativa.
  */
 import { expect, test } from '../fixtures'
-import { cards, gridReady } from './catalog-helpers'
+import { cards, gridReady } from '../catalog-helpers'
 
 test.describe('skeletons e recuperação', () => {
   test('catálogo lento: skeleton com shimmer, mesma geometria do conteúdo e sem CLS', async ({ page }) => {

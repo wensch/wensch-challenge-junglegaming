@@ -6,7 +6,7 @@
 import type { Locator, Page } from '@playwright/test'
 import { loginAs } from '../account-helpers'
 import { expect, isMobileProject, test, USERS } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions } from '../checkout-helpers'
 
 /** True while the focused element is inside `container`. */
 const focusInside = (container: Locator) => container.evaluate((el) => el.contains(document.activeElement))

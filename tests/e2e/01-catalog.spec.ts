@@ -4,7 +4,7 @@
  * de ordem; evento `nft.updated` entregue pelo socket.io-client e observado na grade.
  */
 import { expect, isMobileProject, test } from '../fixtures'
-import { cardNames, cardPrices, cards, closeFilters, gridReady, isAscending, openFilters, searchFor, sortBy } from './catalog-helpers'
+import { cardNames, cardPrices, cards, closeFilters, gridReady, isAscending, openFilters, searchFor, sortBy } from '../catalog-helpers'
 
 test.describe('catálogo', () => {
   test('destaques e grade 3x3 com paginação; navegar ao NFT', async ({ page, boot }) => {
