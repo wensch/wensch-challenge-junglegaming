@@ -1,6 +1,6 @@
 /**
  * Wallet access for the checkout (PAG-2): registered wallets + the simulated provider handshake
- * (connect -> `connected` | `rejected`, disconnect). The list uses the same private key the wallets slice
+ * (connect -> `connected` | `rejected`, disconnect). The list uses the same private key as the wallets feature
  * uses (`['u', userId, 'wallets']`) and `keepNewest` (versioned resources). Connection state is NOT cached:
  * it belongs to the checkout form (draft) and the server validates it again on `POST /orders`.
  */
@@ -39,7 +39,7 @@ export function useConnectWallet() {
       if (!user) throw ownerChangedError()
       return walletsApi.connectWallet(walletId, { network }, { as: { token: user.token } })
     },
-    // No cache writes: the caller applies the result after checking it is still the same user (F8).
+    // No cache writes: the caller applies the result after checking it is still the same user.
   })
 }
 

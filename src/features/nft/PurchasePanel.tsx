@@ -21,7 +21,7 @@ import { NftPrice } from './NftCard'
 import { toSummary } from '@/queries/favorites'
 
 /** Units a single order may take of an edition. */
-export const maxQuantityOf = (edition: Edition): number => Math.min(edition.available, edition.maxPerOrder)
+const maxQuantityOf = (edition: Edition): number => Math.min(edition.available, edition.maxPerOrder)
 
 function limitMessage(edition: Edition): string {
   if (edition.available === 0) return 'Esta edição está esgotada.'

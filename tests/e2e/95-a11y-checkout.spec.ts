@@ -1,17 +1,7 @@
 /** @a11y axe do carrinho, pagamento (com erros e revisão aberta) e pedido (pendente, confirmado, recusado). */
-import AxeBuilder from '@axe-core/playwright'
-import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder, setGuestId, addToCart } from '../s3-helpers'
-import { settleAnimations } from '../settle-animations'
-
-async function seriousViolations(page: Page) {
-  await settleAnimations(page)
-  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
-  return results.violations
-    .filter((v) => v.impact === 'critical' || v.impact === 'serious')
-    .map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.map((n) => n.target.join(' ')) }))
-}
+import { connectWallet, loginWithCart, pickEditions, sendOrder, setGuestId, addToCart } from '../checkout-helpers'
+import { seriousViolations } from '../axe'
 
 test.describe('@a11y checkout', () => {
   test('carrinho: vazio, com itens, cupom inválido', async ({ page, boot }) => {

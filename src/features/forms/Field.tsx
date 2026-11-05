@@ -6,7 +6,7 @@
 import { useId, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-export interface ControlProps {
+interface ControlProps {
   id: string
   'aria-invalid': true | undefined
   'aria-describedby': string | undefined

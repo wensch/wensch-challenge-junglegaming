@@ -6,7 +6,7 @@
  */
 import { expect, test } from '../fixtures'
 import { add, formatEth, mulQty } from '../../src/lib/money'
-import { connectWallet, loginWithCart, pickEditions, updateNft } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, updateNft } from '../checkout-helpers'
 
 const ETH_FEE = '0.0021'
 

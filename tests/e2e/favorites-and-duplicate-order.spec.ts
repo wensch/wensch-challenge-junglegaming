@@ -1,11 +1,11 @@
 /**
- * E2E-14 — reteste final de QA: favoritos de ponta a ponta pela UI, menu/rodapé, troca de usuário,
+ * E2E-14 — favoritos de ponta a ponta pela UI, menu/rodapé, troca de usuário,
  * compra após timeout com outro pedido aberto, geometria em 768 px e boot frio.
  */
 import type { Page } from '@playwright/test'
 import { loginAs, logoutThroughUi } from '../account-helpers'
 import { expect, loginViaApi, test, USERS } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 const items = (page: Page) => page.getByTestId('favorite-item')
 

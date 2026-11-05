@@ -20,7 +20,7 @@ const attemptSchema = z.object({
   key: uuidSchema,
   orderId: idSchema.optional(),
 })
-export type Attempt = z.infer<typeof attemptSchema>
+type Attempt = z.infer<typeof attemptSchema>
 
 const slot = (userId: string) => userDraftKey(userId, 'attempt')
 

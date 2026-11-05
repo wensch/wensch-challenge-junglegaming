@@ -5,7 +5,7 @@
  */
 import type { Locator, Page } from '@playwright/test'
 import { expect, loginViaApi, test, USERS } from '../fixtures'
-import { addToCart, loginWithCart, pickEditions, setGuestId } from '../s3-helpers'
+import { addToCart, loginWithCart, pickEditions, setGuestId } from '../checkout-helpers'
 
 const VIEWPORTS = [
   { name: 'zoom 200% (640px)', width: 640, height: 450 },

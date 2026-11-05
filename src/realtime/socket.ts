@@ -12,11 +12,12 @@ import { io, type Socket } from 'socket.io-client'
 import type { QueryClient } from '@tanstack/react-query'
 import { EVENT_TYPES, type ClientToServerEvents, type RealtimeEvent, type ServerToClientEvents } from '@/api/contracts'
 import { env } from '@/env'
+import { logger } from '@/lib/log'
 import { createReconciler, type ReconcileOutcome, type Reconciler } from './reconcile'
 
-export type RealtimeStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
+type RealtimeStatus = 'idle' | 'connecting' | 'connected' | 'reconnecting' | 'disconnected'
 
-export interface RealtimeState {
+interface RealtimeState {
   status: RealtimeStatus
   /** User the socket was opened for (`null` = visitor). */
   userId: string | null
@@ -25,7 +26,7 @@ export interface RealtimeState {
   applied: number
 }
 
-export interface StartOptions {
+interface StartOptions {
   token: string | null
   userId: string | null
   queryClient: QueryClient
@@ -33,7 +34,7 @@ export interface StartOptions {
 
 type EventListener = (event: RealtimeEvent) => void
 /** Typed with the contract maps; incoming payloads are still validated by the reconciler (zod). */
-export type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+type AppSocket = Socket<ServerToClientEvents, ClientToServerEvents>
 type Factory = (url: string, token: string | null) => AppSocket
 
 const defaultFactory: Factory = (url, token) =>
@@ -41,7 +42,7 @@ const defaultFactory: Factory = (url, token) =>
 
 const INITIAL: RealtimeState = { status: 'idle', userId: null, connections: 0, lastEvent: null, applied: 0 }
 
-export function createRealtimeManager(url: string, factory: Factory = defaultFactory) {
+function createRealtimeManager(url: string, factory: Factory = defaultFactory) {
   let socket: AppSocket | null = null
   let reconciler: Reconciler | null = null
   let state: RealtimeState = INITIAL
@@ -67,7 +68,7 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
 
   function start({ token, userId, queryClient }: StartOptions) {
     stop()
-    const rec = createReconciler({ queryClient, getUserId: () => userId, log: (m, d) => console.warn(m, d) })
+    const rec = createReconciler({ queryClient, getUserId: () => userId, log: (m, d) => logger.warn(m, d) })
     const s = factory(url, token)
     socket = s
     reconciler = rec
@@ -92,12 +93,12 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
         applied: state.applied + (outcome === 'applied' ? 1 : 0),
       })
       if (outcome !== 'applied' || !event) return
-      // One failing slice listener must not starve the others (nor break the socket handler).
+      // One failing listener must not starve the others (nor break the socket handler).
       for (const l of eventListeners) {
         try {
           l(event)
         } catch (err) {
-          console.error('[realtime] event listener failed', err)
+          logger.error('[realtime] event listener failed', err)
         }
       }
     }
@@ -118,14 +119,8 @@ export function createRealtimeManager(url: string, factory: Factory = defaultFac
       eventListeners.add(listener)
       return () => void eventListeners.delete(listener)
     },
-    /** Lets REST responses feed the version map (e.g. after GET /orders/:id). */
-    noteVersion(key: string, version: number) {
-      reconciler?.noteVersion(key, version)
-    },
   }
 }
-
-export type RealtimeManager = ReturnType<typeof createRealtimeManager>
 
 /** App-wide instance (one socket per session). */
 export const realtime = createRealtimeManager(env.socketUrl)

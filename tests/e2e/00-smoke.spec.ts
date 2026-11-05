@@ -1,5 +1,5 @@
 /**
- * Shell smoke (slice fundação): routing, guards, 404, layout landmarks and the real Socket.IO
+ * Shell smoke: routing, guards, 404, layout landmarks and the real Socket.IO
  * pipeline (MSW binding -> socket.io-client -> reconciler). Events are emitted server-side through
  * `window.__mock.emit`; the test only observes the hidden realtime probe rendered by the app.
  */

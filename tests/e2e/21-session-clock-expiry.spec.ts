@@ -7,7 +7,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, isMobileProject, loginViaApi, test, USERS } from '../fixtures'
-import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../s3-helpers'
+import { connectWallet, loginWithCart, pickEditions, sendOrder } from '../checkout-helpers'
 
 const PAST_TTL = '08:05:00'
 

@@ -1,6 +1,5 @@
 /**
- * Honest page states shared by routes: placeholder ("em construção"), 404 and route error.
- * Placeholders show only a title and a status line — no fake data or controls (TEL-11).
+ * Honest page states shared by routes: 404 and route error.
  */
 import { useEffect, useRef, type ReactNode } from 'react'
 import { useQueryErrorResetBoundary } from '@tanstack/react-query'
@@ -27,19 +26,6 @@ export function PageFrame({ title, children, eyebrow }: { title: string; childre
       </h1>
       {children}
     </section>
-  )
-}
-
-export function UnderConstruction({ title, slice }: { title: string; slice?: string }) {
-  return (
-    <PageFrame title={title} eyebrow="KURIO">
-      <p role="status" className="rounded-control border border-line-soft bg-card px-4 py-3 text-body text-text-secondary">
-        Em construção{slice ? ` — esta tela será entregue na etapa ${slice}` : ''}.
-      </p>
-      <Link to="/" className="text-body-md font-medium text-text-accent underline-offset-4 hover:underline">
-        Voltar para o início
-      </Link>
-    </PageFrame>
   )
 }
 

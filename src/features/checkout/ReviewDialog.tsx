@@ -14,7 +14,7 @@ import { ItemsSummary } from './ItemsSummary'
 import { NETWORK_LABELS, shortAddress, WALLET_TYPE_LABELS } from './labels'
 import { StaleChanges } from './StaleChanges'
 
-export interface ReviewDialogProps {
+interface ReviewDialogProps {
   open: boolean
   /** Button that opened the dialog; receives focus on close while it is still mounted and enabled. */
   returnFocusRef?: RefObject<HTMLElement | null>

@@ -14,7 +14,7 @@ import { useLogout } from '@/session/hooks'
 const menuLink =
   'flex min-h-11 items-center gap-3 rounded-control px-3 text-body-md text-text-primary hover:bg-secondary data-[status=active]:font-bold data-[status=active]:text-text-accent'
 
-export interface MobileMenuSheetProps {
+interface MobileMenuSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   /** The trigger lives outside Radix (it renders before this chunk loads): focus returns to it on close. */

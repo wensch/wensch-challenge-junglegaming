@@ -36,7 +36,7 @@ export function useLogout() {
 }
 
 /**
- * Login/register completion (S2): stores the session, merges the visitor cart into the user's cart
+ * Login/register completion: stores the session, merges the visitor cart into the user's cart
  * (`POST /cart/merge`), drops the guest id and `['guest']` queries, then `router.invalidate()` so
  * guards and loaders re-run with the new identity. The caller navigates (to the safe `redirect`).
  */

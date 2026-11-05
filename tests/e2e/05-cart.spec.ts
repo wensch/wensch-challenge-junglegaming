@@ -6,7 +6,7 @@
 import { expect, test, USERS } from '../fixtures'
 import { submitLogin } from '../account-helpers'
 import { formatEth, mulQty, sub, add } from '../../src/lib/money'
-import { addToCart, loginWithCart, pickEditions, setGuestId, updateNft, type Seeded } from '../s3-helpers'
+import { addToCart, loginWithCart, pickEditions, setGuestId, updateNft, type Seeded } from '../checkout-helpers'
 
 const ETH_FEE = '0.0021'
 

@@ -3,7 +3,7 @@
  * - Quantity and removal are OPTIMISTIC: `onMutate` snapshots the cart, writes the expected state and
  *   `onError` rolls back. All mutations of one cart share a `scope`, so they run one at a time (no
  *   out-of-order PATCHes) while the UI already shows the expected value.
- * - F8: every write after an `await` first checks `isCurrentOwner(owner)`. A mutation that finishes
+ * - Stale owner: every write after an `await` first checks `isCurrentOwner(owner)`. A mutation that finishes
  *   after a teardown (logout, expiry, user switch) must not write into the cache of an owner that
  *   is no longer current.
  * - Server state wins: after the LAST pending mutation of the cart settles, cart and quote are

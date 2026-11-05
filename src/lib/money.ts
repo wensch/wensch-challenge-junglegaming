@@ -14,7 +14,7 @@ import { ETH_PATTERN } from '@/api/contracts/common'
 const D = Decimal.clone({ precision: 40, rounding: Decimal.ROUND_HALF_UP, toExpNeg: -40, toExpPos: 40 })
 type D = InstanceType<typeof D>
 
-export const ETH_DECIMALS = 18
+const ETH_DECIMALS = 18
 const ETH_RE = ETH_PATTERN
 
 export class InvalidEthError extends Error {
@@ -79,11 +79,10 @@ export function compare(a: string, b: string): -1 | 0 | 1 {
 }
 
 export const eq = (a: string, b: string) => compare(a, b) === 0
-export const gt = (a: string, b: string) => compare(a, b) > 0
 export const lt = (a: string, b: string) => compare(a, b) < 0
 export const isZero = (a: string) => toD(a).isZero()
 
-export type FormatEthOptions = {
+type FormatEthOptions = {
   /** Minimum fractional digits (layout shows "1.19 ETH", "0.016 ETH"). Default 2. */
   minDecimals?: number
   /**

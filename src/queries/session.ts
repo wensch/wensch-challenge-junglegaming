@@ -92,7 +92,7 @@ export function currentUserId(queryClient: QueryClient): string | null {
  *   user re-logged); `syncSessionWithStorage` drops them once the new owner is known to be someone else.
  *   If storage is empty (logout elsewhere), every draft is removed.
  */
-export type TeardownReason = 'logout' | 'expired' | 'unauthenticated' | 'switch' | 'external'
+type TeardownReason = 'logout' | 'expired' | 'unauthenticated' | 'switch' | 'external'
 
 /**
  * Removes every trace of the current user (order matters):
@@ -202,7 +202,7 @@ export interface EstablishResult {
 }
 
 /**
- * Login/register completion, shared by both screens (S2):
+ * Login/register completion, shared by both screens:
  * establish the session -> `POST /cart/merge { guestId }` bound to the NEW token -> seed
  * `['u', userId, 'cart']` with the merged cart -> drop the guest id and every `['guest']` query.
  */
@@ -216,7 +216,7 @@ export async function establishSessionAndMergeCart(queryClient: QueryClient, ses
     // then neither the merged cart nor the guest cleanup belong to the current owner.
     if (getToken() !== session.token) return { session, adjusted: [], mergeError: null }
     const cartKey = queryKeys.owner({ kind: 'user', userId: session.user.id }).cart()
-    // R4: the header cart may already be fetching for the new user (the session was just stored).
+    // The header cart may already be fetching for the new user (the session was just stored).
     // Cancel that GET before writing the merged cart so its (older) response cannot overwrite it
     // (the cart query also uses `keepNewest`, which refuses a lower `version`).
     await queryClient.cancelQueries({ queryKey: cartKey })

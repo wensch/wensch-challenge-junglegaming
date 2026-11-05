@@ -43,8 +43,6 @@ export interface EndpointDef {
   headers?: readonly string[]
 }
 
-const SESSION_ERRORS = ['UNAUTHENTICATED', 'SESSION_EXPIRED'] as const satisfies readonly ApiErrorCode[]
-
 export const endpoints = {
   // --- Session & account (API-1) ---
   register: { method: 'POST', path: '/auth/register', auth: 'public', body: registerRequestSchema, response: sessionSchema, status: 201, errors: ['VALIDATION', 'EMAIL_TAKEN'] },
@@ -131,8 +129,3 @@ export function buildPath<P extends string>(path: P, ...[params]: ParamsArg<P>):
   })
 }
 
-/** Errors a caller must be prepared for (domain + auth + TRANSIENT). */
-export function possibleErrors(name: EndpointName): readonly ApiErrorCode[] {
-  const e: EndpointDef = endpoints[name]
-  return [...e.errors, ...(e.auth === 'session' ? SESSION_ERRORS : []), 'TRANSIENT']
-}

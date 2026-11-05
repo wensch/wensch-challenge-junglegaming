@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /** Pages to render: all when few, otherwise first, last and a window around the current one. */
-export function pageWindow(page: number, totalPages: number): (number | 'gap')[] {
+function pageWindow(page: number, totalPages: number): (number | 'gap')[] {
   if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1)
   const wanted = new Set([1, totalPages, page - 1, page, page + 1])
   const sorted = [...wanted].filter((p) => p >= 1 && p <= totalPages).sort((a, b) => a - b)

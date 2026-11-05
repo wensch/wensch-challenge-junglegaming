@@ -2,7 +2,7 @@
  * Favorites (FAV-1, INT-8): `['u', userId, 'favorites']`, authenticated only.
  * The toggle is optimistic: `onMutate` snapshots and writes the new membership, `onError` rolls back
  * and announces the failure (sonner region = `aria-live="polite"`), `onSettled` re-syncs with the
- * server. Every write checks that the owner is still the current identity (F8 of the foundation review).
+ * server. Every write checks that the owner is still the current identity.
  */
 import { queryOptions, skipToken, useMutation, type QueryKey, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -18,7 +18,7 @@ const NO_FAVORITES_KEY = ['favorites', 'none'] as const
 
 export type UserOwner =Extract<OwnerCredential, { kind: 'user' }>
 
-export const favoritesQueryOptions = (owner: UserOwner) =>
+const favoritesQueryOptions = (owner: UserOwner) =>
   queryOptions({
     queryKey: queryKeys.user(owner.userId).favorites(),
     queryFn: ownedQueryFn(owner, (as, signal) => favoritesApi.listFavorites({ signal, as })),
@@ -27,7 +27,7 @@ export const favoritesQueryOptions = (owner: UserOwner) =>
   })
 
 /** Logged user as a cache owner (`null` for visitors and while the session is resolving). */
-export function useUserOwner(): UserOwner | null {
+function useUserOwner(): UserOwner | null {
   const session = useSession()
   return session.data ? { kind: 'user', userId: session.data.user.id, token: session.data.token } : null
 }
@@ -62,7 +62,7 @@ function withMembership(data: FavoritesResponse, nft: NftSummary, favorited: boo
   return favorited ? { nftIds: [nft.id, ...nftIds], items: [toSummary(nft), ...items] } : { nftIds, items }
 }
 
-export interface ToggleFavoriteVars {
+interface ToggleFavoriteVars {
   nft: NftSummary
   /** Desired state after the click. */
   favorited: boolean

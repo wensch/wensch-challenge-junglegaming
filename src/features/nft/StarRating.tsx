@@ -2,7 +2,7 @@
 import { Star } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export function starsOf(average: string): number {
+function starsOf(average: string): number {
   const [whole = '0', fraction = '0'] = average.split('.')
   return Math.min(5, parseInt(whole, 10) + (parseInt(fraction.charAt(0) || '0', 10) >= 5 ? 1 : 0))
 }

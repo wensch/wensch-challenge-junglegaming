@@ -12,13 +12,13 @@ import { formatEth } from '@/lib/money'
 const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
 /** `29 Jul, 2026` (Figma), from an ISO instant, in UTC so it never depends on the machine zone. */
-export function formatReceiptDate(iso: string): string {
+function formatReceiptDate(iso: string): string {
   const d = new Date(iso)
   return `${String(d.getUTCDate()).padStart(2, '0')} ${MONTHS[d.getUTCMonth()] ?? ''}, ${d.getUTCFullYear()}`
 }
 
 /** `0xA91F…E82C` (Figma). */
-export function shortHash(hash: string): string {
+function shortHash(hash: string): string {
   return `0x${hash.slice(2, 6).toUpperCase()}…${hash.slice(-4).toUpperCase()}`
 }
 

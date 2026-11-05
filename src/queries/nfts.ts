@@ -9,7 +9,7 @@ import { STALE } from './client'
 import { normalizeNftListQuery, queryKeys } from './keys'
 import { keepNewest } from './versioned'
 
-export type NftListQueryInput = Partial<NftListQuery>
+type NftListQueryInput = Partial<NftListQuery>
 
 export { normalizeNftListQuery, type NormalizedNftListQuery } from './keys'
 

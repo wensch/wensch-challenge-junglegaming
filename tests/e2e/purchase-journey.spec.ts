@@ -1,10 +1,10 @@
 /**
- * QA integrada (rodada 1): fluxo ponta a ponta SOMENTE pela UI (catalogo -> detalhe -> carrinho do visitante ->
+ * Jornada de compra integrada: fluxo ponta a ponta SOMENTE pela UI (catalogo -> detalhe -> carrinho do visitante ->
  * login -> merge -> cupom -> pagamento -> pendente -> confirmado/recusado -> recibo), troca de usuario com carrinho,
  * reload por etapa. Estado da simulacao so por __mock (settleOrder/emit).
  */
 import { expect, test, USERS } from '../fixtures'
-import { connectWallet, sendOrder } from '../s3-helpers'
+import { connectWallet, sendOrder } from '../checkout-helpers'
 import { submitLogin, logoutThroughUi, loginAs } from '../account-helpers'
 
 test.describe('qa integrada', () => {

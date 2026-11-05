@@ -1,5 +1,5 @@
 /**
- * Public entry for all frozen contracts (REST, events, errors, scenarios).
+ * Public entry for all frozen contracts (REST, events, errors).
  * Version: 1.2.0 — see ARCHITECTURE.md "Changelog de contratos".
  */
 export const CONTRACTS_VERSION = '1.2.0'
@@ -16,4 +16,3 @@ export * from './profile'
 export * from './wallets'
 export * from './events'
 export * from './endpoints'
-export * from './scenarios'

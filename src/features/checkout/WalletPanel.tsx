@@ -14,7 +14,7 @@ import { NETWORK_LABELS, shortAddress, SLOT_LABELS, WALLET_TYPE_LABELS } from '.
 import { isSameUser, useConnectWallet, useDisconnectWallet } from './wallets'
 import { useUserCredential } from '@/queries/orders'
 
-export interface WalletPanelProps {
+interface WalletPanelProps {
   wallets: Wallet[]
   walletId: string
   network: Network
@@ -55,7 +55,7 @@ export function WalletPanel({ wallets, walletId, network, connection, error, onW
       { walletId, network },
       {
         onSuccess: (result) => {
-          if (!isSameUser(user)) return // F8: the session changed while the handshake was in flight
+          if (!isSameUser(user)) return // the session changed while the handshake was in flight: discard the result
           if (result.status === 'connected') {
             onConnection({ connectionId: result.connectionId, walletId: result.walletId, network: result.network, address: result.address })
             onMessage(`Carteira conectada na rede ${NETWORK_LABELS[result.network]}.`)

@@ -3,7 +3,7 @@
  * with the owner's token (`ownedQueryFn`). Writes go through `keepNewest`, so a late REST snapshot
  * never turns a confirmed/declined order back into pending.
  */
-import { queryOptions, skipToken, useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query'
+import { skipToken, useMutation, useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query'
 import { isApiError, isTerminalOrderStatus, type ApiError, type CreateOrderRequest, type Order, type OrderListResponse, type OrderStatus } from '@/api/contracts'
 import { ordersApi } from '@/api/endpoints'
 import { MAX_QUERY_RETRIES, retryDelay } from './client'
@@ -18,7 +18,7 @@ export interface UserCredential {
 }
 
 /** Fallback polling while an order is pending and the socket is down (ARCHITECTURE §7). */
-export const PENDING_ORDER_POLL_MS = 5_000
+const PENDING_ORDER_POLL_MS = 5_000
 
 /** Terminal orders never change: no refetch. Pending ones are always stale. */
 function orderStaleTime(query: { state: { data: Order | undefined } }): number {
@@ -31,26 +31,9 @@ const fetchOrders = (user: UserCredential, status?: OrderStatus) => ownedQueryFn
 const NO_ORDER_KEY = ['order', 'none'] as const
 const NO_ORDERS_KEY = ['orders', 'none'] as const
 
-export const orderQueries = {
-  detail: (user: UserCredential, orderId: string) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).order(orderId),
-      queryFn: fetchOrder(user, orderId),
-      staleTime: orderStaleTime,
-      structuralSharing: keepNewest,
-    }),
-  list: (user: UserCredential, status?: OrderStatus) =>
-    queryOptions({
-      queryKey: queryKeys.user(user.userId).orderList(status),
-      queryFn: fetchOrders(user, status),
-      staleTime: 0,
-      structuralSharing: keepNewest,
-    }),
-}
-
 // ---------------------------------------------------------------------------
-// Hooks (S3). Pending orders are ALWAYS stale (`staleTime: 0`) and `refetchOnWindowFocus` stays on
-// (R6): coming back to the tab or reconnecting re-reads the order from REST, which is the source of
+// Hooks. Pending orders are ALWAYS stale (`staleTime: 0`) and `refetchOnWindowFocus` stays on
+// so coming back to the tab or reconnecting re-reads the order from REST, which is the source of
 // truth after any gap in the event stream. Terminal orders are `Infinity` (never refetched).
 // ---------------------------------------------------------------------------
 
@@ -91,7 +74,7 @@ export function usePendingOrders() {
 /**
  * Creates the order. `retry`: only TRANSIENT failures (timeout, network, 5xx), up to 2x with backoff,
  * ALWAYS with the same `Idempotency-Key` (it travels in the variables), so a retry after a timeout
- * returns the SAME order (200). F8: nothing is written to the cache of an owner that is no longer current.
+ * returns the SAME order (200). Nothing is written to the cache of an owner that is no longer current.
  */
 export function useCreateOrder() {
   const qc = useQueryClient()

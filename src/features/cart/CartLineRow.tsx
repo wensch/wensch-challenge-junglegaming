@@ -9,7 +9,7 @@ import type { CartLine } from '@/api/contracts'
 import { formatEth } from '@/lib/money'
 import { cn } from '@/lib/utils'
 
-export interface CartLineRowProps {
+interface CartLineRowProps {
   line: CartLine
   onQuantity: (line: CartLine, quantity: number) => void
   onRemove: (line: CartLine) => void

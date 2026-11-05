@@ -34,7 +34,7 @@ import { useSaveWallet } from '@/queries/account'
 import { cn } from '@/lib/utils'
 
 const ENS_SUFFIX = '.eth'
-export const NETWORK_LABEL: Record<Network, string> = { ethereum: 'Ethereum', polygon: 'Polygon', solana: 'Solana' }
+const NETWORK_LABEL: Record<Network, string> = { ethereum: 'Ethereum', polygon: 'Polygon', solana: 'Solana' }
 const TYPE_LABEL: Record<(typeof WALLET_TYPES)[number], string> = { metamask: 'MetaMask', walletconnect: 'WalletConnect', coinbase: 'Coinbase Wallet' }
 
 const walletFormSchema = z
@@ -63,7 +63,7 @@ const walletFormSchema = z
       })
     }
   })
-export type WalletFormValues = z.infer<typeof walletFormSchema>
+type WalletFormValues = z.infer<typeof walletFormSchema>
 const FIELDS = ['displayName', 'label', 'network', 'profileName', 'address', 'alternateAddress', 'type', 'referralCode', 'email', 'ensLabel'] as const
 
 export const BLANK_WALLET: WalletFormValues = {

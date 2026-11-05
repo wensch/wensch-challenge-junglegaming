@@ -1,11 +1,11 @@
 /**
  * E2E-06 — Compra completa até o recibo confirmado (TEL-4, TEL-5, PAG-1, PAG-2, PAG-5..8, RT-2, MON-2).
- * The cart is prepared through the real REST handlers (the catalog screens belong to S1); everything else
+ * The cart is prepared through the real REST handlers (the catalog screens are not part of this flow); everything else
  * is driven through the UI. The receipt is observed only after the simulation answers `confirmed`.
  */
 import { expect, test } from '../fixtures'
 import { add, formatEth, mulQty, sum } from '../../src/lib/money'
-import { addToCart, connectWallet, loginWithCart, pickEditions, sendOrder, updateNft } from '../s3-helpers'
+import { addToCart, connectWallet, loginWithCart, pickEditions, sendOrder, updateNft } from '../checkout-helpers'
 
 const ETH_FEE = '0.0021'
 

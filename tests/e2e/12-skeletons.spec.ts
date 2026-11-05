@@ -4,7 +4,7 @@
  */
 import type { Page } from '@playwright/test'
 import { expect, test } from '../fixtures'
-import { cards, gridReady } from './catalog-helpers'
+import { cards, gridReady } from '../catalog-helpers'
 
 /** Fontes carregadas, imagens visíveis na viewport decodificadas (as lazy fora dela não carregam) e dois quadros pintados: os layout-shifts pendentes já foram reportados. */
 async function layoutSettled(page: Page) {

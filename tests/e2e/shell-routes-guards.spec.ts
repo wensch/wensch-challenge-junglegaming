@@ -1,5 +1,5 @@
 /**
- * QA fundacao: exploratory shell checks (deep links, guard + open redirect, keyboard, out-of-scope links).
+ * Shell checks (deep links, guard + open redirect, keyboard, out-of-scope links).
  */
 import { expect, isMobileProject, test, USERS } from '../fixtures'
 
@@ -56,7 +56,7 @@ test.describe('guard _authed', () => {
     }
   })
 
-  // BUG-QA-001: a tab-prefixed path passes safeRedirectSchema; URL parsers drop the tab and read '//evil.com'.
+  // A tab-prefixed path passes safeRedirectSchema; URL parsers drop the tab and read '//evil.com'.
   const evil = ['//evil.com', 'https://evil.com', '/\\evil.com', '/\t/evil.com', '///evil.com', 'javascript:alert(1)', '%2F%2Fevil.com', '/%2F/evil.com', '/%5Cevil.com']
   for (const v of evil) {
     test(`login redirect=${JSON.stringify(v)} nao vira destino externo`, async ({ page, boot }) => {
@@ -110,7 +110,7 @@ test.describe('links fora de escopo', () => {
 })
 
 test.describe('teclado', () => {
-  // BUG-QA-002 (fixed): on a full load the focus stays at the document start; only client-side
+  // On a full load the focus stays at the document start; only client-side
   // navigations move it to the <h1>.
   test('primeiro Tab apos carga completa alcanca o skip link', async ({ page, boot }) => {
     await boot('/login')

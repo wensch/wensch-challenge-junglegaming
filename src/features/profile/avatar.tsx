@@ -1,5 +1,5 @@
 /**
- * Avatar rendering (R7). The CSP only allows `img-src 'self' data: blob:`, while the contract also
+ * Avatar rendering. The CSP only allows `img-src 'self' data: blob:`, while the contract also
  * accepts `https:` avatars. The UI renders an image only for sources the CSP lets through (inline
  * raster `data:` or a same-origin path); anything else falls back to the initials, never a broken image.
  */

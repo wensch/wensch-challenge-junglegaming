@@ -28,7 +28,7 @@ import { useNftUpdateMessage } from './useNftUpdateMessage'
 const route = getRouteApi('/nft/$id')
 
 /** Edition shown: the requested one (even if sold out, so the page can explain it), else the default one, else the first in stock. */
-export function pickEdition(nft: NftDetail, requestedId: string | undefined): Edition {
+function pickEdition(nft: NftDetail, requestedId: string | undefined): Edition {
   const requested = requestedId ? nft.editions.find((e) => e.id === requestedId) : undefined
   if (requested) return requested
   const fallback = nft.editions.find((e) => e.id === nft.defaultEditionId) ?? nft.editions[0]!
