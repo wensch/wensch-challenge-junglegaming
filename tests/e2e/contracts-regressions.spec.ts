@@ -184,6 +184,8 @@ for (const logged of [false, true]) {
       // Wait for the session to settle before leaving the page: a GET /session still in flight when
       // the document unloads loses its MSW client and falls through to the preview server (404).
       await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', user)
+      // Requests still in flight when the document unloads lose their MSW client (404 in the console).
+      await page.waitForLoadState('networkidle')
       viol.push(...(await page.evaluate(() => (window as unknown as { __csp: string[] }).__csp)).map((v) => `${audience} ${p}: ${v}`))
     }
     expect(viol).toEqual([])

@@ -78,6 +78,12 @@ function issueTexts(quote: Quote | undefined): string[] {
   return [...new Set(out)]
 }
 
+/** What the ENS name will look like: what was typed (lowercase, trimmed) or a neutral example before typing. */
+function ensPreview(label: unknown): string {
+  const typed = typeof label === 'string' ? label.trim().toLowerCase() : ''
+  return typed === '' ? 'nome' : typed
+}
+
 export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce }: Props) {
   const qc = useQueryClient()
   const navigate = useNavigate()
@@ -93,6 +99,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
   const { errors } = formState
   const walletId = useWatch({ control: form.control, name: 'walletId' })
   const network: Network = useWatch({ control: form.control, name: 'network' })
+  const typedEnsLabel = useWatch({ control: form.control, name: 'ensLabel' })
   const wallet = wallets.find((w) => w.id === walletId)
 
   // Draft: written only on user edits (never on mount) and only while this user owns the session.
@@ -261,7 +268,7 @@ export function CheckoutForm({ user, credential, cartLines, wallets, onAnnounce 
               spellCheck={false}
               autoCapitalize="none"
               placeholder="Ex.: mateus"
-              hint={`Será salvo como mateus${ENS_SUFFIX}`}
+              hint={`Será salvo como ${ensPreview(typedEnsLabel)}${ENS_SUFFIX}`}
               error={errors.ensLabel?.message}
               {...register('ensLabel')}
             />

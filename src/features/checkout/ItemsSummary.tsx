@@ -16,8 +16,8 @@ export function ItemsSummary({ quote, cartLines, compact = false }: { quote: Quo
               <span aria-hidden="true" className="size-[70px] shrink-0 bg-muted" />
             )}
             <span className="flex min-w-0 flex-1 flex-col">
-              <span className="truncate text-body-sm font-bold text-text-primary">{line.name}</span>
-              <span className="truncate text-caption-sm text-text-secondary">ID do token: {line.tokenId}</span>
+              <span className="line-clamp-2 break-words text-body-sm font-bold text-text-primary">{line.name}</span>
+              <span className="text-caption-sm text-text-secondary">ID do token: <span className="whitespace-nowrap">{line.tokenId}</span></span>
             </span>
             <span className="text-caption-sm text-text-secondary">(x {line.quantity})</span>
             <span className={compact ? 'text-body-sm font-bold text-text-accent' : 'text-body-md font-bold text-text-accent'}>{formatEth(line.lineTotal)}</span>

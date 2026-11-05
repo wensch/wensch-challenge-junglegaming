@@ -6,7 +6,7 @@
  */
 import { useId, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 import {
   displayNameSchema,
@@ -133,6 +133,8 @@ export function WalletForm({
     resetOptions: { keepDirtyValues: true },
   })
   const { errors } = form.formState
+  const typedEns = useWatch({ control: form.control, name: 'ensLabel' })
+  const ensPreview = typeof typedEns === 'string' && typedEns.trim() !== '' ? typedEns.trim().toLowerCase() : 'nome'
 
   const onSubmit = form.handleSubmit(async (v) => {
     setSaved(false)
@@ -272,7 +274,7 @@ export function WalletForm({
       <Field label="E-mail" required error={errors.email?.message}>
         {(c) => <Input {...c} {...form.register('email')} placeholder="Ex.: voce@exemplo.com" type="email" autoComplete="email" className={controlClass} />}
       </Field>
-      <Field label="Nome ENS" required hint="Será salvo como mateus.eth" error={errors.ensLabel?.message}>
+      <Field label="Nome ENS" required hint={`Será salvo como ${ensPreview}.eth`} error={errors.ensLabel?.message}>
         {(c) => (
           <div className="flex gap-2">
             <EnsDomainSelect />

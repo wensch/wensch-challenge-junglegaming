@@ -64,10 +64,10 @@ export function CartLineRow({ line, onQuantity, onRemove, onAcknowledge }: CartL
       <div className="flex min-w-0 flex-1 items-center gap-4 lg:flex-none">
         <img src={line.image.src} alt={line.image.alt || nft} width={70} height={70} className="size-[100px] shrink-0 object-cover lg:size-[70px]" />
         <div className="flex min-w-0 flex-col gap-1 py-3 lg:py-0">
-          <Link to="/nft/$id" params={{ id: line.nftId }} search={{ edition: line.editionId }} className="truncate text-body-md font-bold text-text-primary underline-offset-4 outline-none hover:underline focus-visible:underline">
+          <Link to="/nft/$id" params={{ id: line.nftId }} search={{ edition: line.editionId }} className="line-clamp-2 break-words text-body-md font-bold text-text-primary underline-offset-4 outline-none hover:underline focus-visible:underline">
             {nft}
           </Link>
-          <p className="truncate text-caption-sm text-text-secondary">
+          <p className="break-words text-caption-sm text-text-secondary">
             <span className="lg:hidden">Edição: {line.editionLabel}</span>
             <span className="hidden lg:inline">ID do token: {line.tokenId}</span>
           </p>
