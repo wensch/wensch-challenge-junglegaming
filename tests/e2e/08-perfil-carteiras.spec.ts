@@ -3,7 +3,7 @@
  * persistência após refresh e conflito de versão. Requisitos: TEL-8, TEL-9, TEL-10 (mobile), CON-6, CON-7.
  */
 import type { Page } from '@playwright/test'
-import { loginAs, submitLogin } from '../account-helpers'
+import { accountNavSignOut, loginAs, submitLogin } from '../account-helpers'
 import { expect, isMobileProject, test, USERS } from '../fixtures'
 
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64')
@@ -78,6 +78,47 @@ test.describe('perfil', () => {
       await expect(await errorOf(page, label)).toBeVisible()
     }
     await expect(main(page).getByLabel('Nome de exibição')).toBeFocused()
+  })
+
+  test('nome de usuário aceita hífen, recusa maiúsculas/espaços/acentos; campo intocado sem erro; .eth é select', async ({ page, boot }) => {
+    await openAs(page, boot, USERS.alice, '/profile')
+    const user = main(page).getByLabel('Nome de usuário')
+    await expect(user).not.toHaveAttribute('aria-invalid', 'true')
+    await expect(main(page).getByLabel('Domínio ENS')).toHaveText('.eth')
+    await expect(main(page).getByLabel('Domínio ENS')).toHaveAttribute('role', 'combobox')
+
+    await user.fill('mateus-wensch')
+    await main(page).getByRole('button', { name: 'Salvar', exact: true }).click()
+    await expect(main(page).getByRole('status').filter({ hasText: 'Dados do perfil salvos.' })).toBeVisible()
+    await expect(user).not.toHaveAttribute('aria-invalid', 'true')
+
+    for (const bad of ['Mateus', 'mateus wensch', 'mateús']) {
+      await user.fill(bad)
+      await main(page).getByRole('button', { name: 'Salvar', exact: true }).click()
+      await expect(await errorOf(page, 'Nome de usuário')).toHaveText('Use letras minúsculas, números, "_", "." ou "-"')
+    }
+  })
+
+  test('menu da conta no mobile: uma linha (abas + Mais) e o formulário logo abaixo', async ({ page, boot }, info) => {
+    test.skip(!isMobileProject(info.project.name), 'só abaixo de md')
+    await openAs(page, boot, USERS.alice, '/profile')
+    const nav = page.getByRole('navigation', { name: 'Minha conta' })
+    const box = (await nav.boundingBox())!
+    expect(box.height).toBeLessThan(70)
+    await expect(nav.getByRole('link', { name: 'Dados do perfil' })).toHaveAttribute('aria-current', 'page')
+    const heading = (await main(page).getByRole('heading', { level: 1 }).boundingBox())!
+    expect(heading.y - (box.y + box.height)).toBeLessThan(40)
+
+    const mais = nav.getByRole('button', { name: 'Mais' })
+    await expect(mais).toHaveAttribute('aria-haspopup', 'menu')
+    await expect(mais).toHaveAttribute('aria-expanded', 'false')
+    await mais.click()
+    await expect(mais).toHaveAttribute('aria-expanded', 'true')
+    for (const n of ['Atividade', 'Lista de interesse', 'Ofertas', 'Arquivos baixados', 'Suporte', 'Sair']) {
+      await expect(page.getByRole('menuitem', { name: n })).toBeVisible()
+    }
+    await page.keyboard.press('Escape')
+    await expect(mais).toBeFocused()
   })
 
   test('erros da API vão para os campos (forms.server-validation e EMAIL_TAKEN)', async ({ page, boot, mock }) => {
@@ -169,7 +210,7 @@ test.describe('perfil', () => {
     await expect(atual).toHaveValue('')
 
     // A senha nova vale no próximo login; a antiga não.
-    await page.getByRole('navigation', { name: 'Minha conta' }).getByRole('button', { name: 'Sair' }).click()
+    await accountNavSignOut(page)
     await expect(page.getByTestId('realtime-probe')).toHaveAttribute('data-user', 'guest')
     await page.goto('/login')
     await submitLogin(page, USERS.alice)
