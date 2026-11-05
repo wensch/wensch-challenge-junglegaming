@@ -91,7 +91,7 @@ test.describe('conteúdo cortado', () => {
         await expect(page.getByRole('region', { name: 'Destaques' }).getByRole('img').first()).toBeVisible()
       })
       await scan(page, '/nft/nft_002', width, async () => {
-        await expect(page.getByRole('heading', { level: 1, name: 'Prisma Boreal' })).toBeVisible()
+        await expect(page.getByRole('heading', { level: 1, name: 'Sage Nomad' })).toBeVisible()
         await expect(page.getByRole('list', { name: 'NFTs da mesma coleção' })).toBeVisible()
       })
       for (const path of ['/login', '/register']) await scan(page, path, width, () => expect(page.getByRole('main')).toBeVisible())

@@ -31,6 +31,7 @@
  * Figma tokens (docs/figma.md, variables of frame 2:2). Raw brand palette + type scale.
  * ------------------------------------------------------------------------- */
 @theme {
+  --breakpoint-wide: 75rem;
   --color-ink: #140d0a;
   --color-surface-card: #241612;
   --color-surface-dark: #38220f;
