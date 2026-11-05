@@ -2,7 +2,7 @@
  * Deterministic seed (fixed PRNG seed + fixed base date). Everything fictitious lives here.
  * Credentials are documented in src/mocks/README.md.
  */
-import { CATEGORIES, type Category, type Coupon, type Edition, type Network, type Order, type ReceiptLine } from '@/api/contracts'
+import { CATEGORIES, type Category, type Image, type Coupon, type Edition, type Network, type Order, type ReceiptLine } from '@/api/contracts'
 import { add, mulQty, percentOf, sub, sum } from '@/lib/money'
 import { hashPassword } from './crypto'
 import { DB_VERSION, type CartRec, type DbState, type NftRec, type UserRec, type WalletRec } from './db'
@@ -94,9 +94,59 @@ function makeEditions(i: number, rng: Rng, basePrice: string, soldOut: boolean):
   return eds
 }
 
+type SeedImage = (typeof IMAGES)[number]
+
+/** Own artwork first, then 3 other artworks from `public/nft/` in a stable, index-based order (no PRNG draws). */
+function makeGallery(i: number, own: SeedImage, name: string): Image[] {
+  const others = IMAGES.filter((x) => x.file !== own.file)
+  const picks = [0, 1, 2].map((k) => others[(i + k * 2) % others.length]!)
+  return [own, ...picks].map((img, k) => ({
+    src: `/nft/${img.file}.png`,
+    alt: k === 0 ? `Arte do NFT ${name}` : `Arte do NFT ${name}, imagem ${k + 1} de 4`,
+    width: img.width,
+    height: img.height,
+  }))
+}
+
+/** nft_001 reproduces the Figma detail screen exactly (applied after the PRNG draws, so the other NFTs are unchanged). */
+function applyFigmaHero(nft: NftRec): NftRec {
+  const ed = (k: number, kind: Edition['kind'], price: string, available: number, maxPerOrder: number): Edition => ({
+    id: `ed_001_${k}`,
+    kind,
+    label: kind === 'open' ? 'ABERTA' : kind,
+    supply: kind === '1/1' ? 1 : kind === '1/10' ? 10 : kind === '1/50' ? 50 : null,
+    available,
+    maxPerOrder,
+    price,
+    compareAtPrice: null,
+  })
+  const name = 'Emerald Ape #042'
+  return {
+    ...nft,
+    name,
+    tokenId: '#0042',
+    collection: { id: nft.collection.id, name: 'Kurio Apes' },
+    network: 'ethereum',
+    defaultEditionId: 'ed_001_3',
+    editions: [ed(1, '1/1', '1.99', 1, 1), ed(2, '1/10', '1.69', 6, 3), ed(3, '1/50', '1.19', 32, 5), ed(4, 'open', '0.39', 480, 10)],
+    description: 'Um colecionável digital finalizado à mão da coleção Kurio Editions, verificado na Ethereum, com arte desbloqueável e acesso para colecionadores.',
+    longDescription: [
+      'Emerald Ape #042 é uma obra digital 1/50 finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na Ethereum. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.',
+      'A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência registrada na rede. Nova Sato recebe 5% de direitos autorais nas vendas secundárias, apoiando novos trabalhos e lançamentos da comunidade.',
+    ],
+    gallery: nft.gallery.map((g, k) => (k === 0 ? { ...g, alt: `Arte do NFT ${name}` } : { ...g, alt: `Arte do NFT ${name}, imagem ${k + 1} de 4` })),
+    image: { ...nft.image, alt: `Arte do NFT ${name}` },
+    attributes: ['Óculos', 'Esmeralda', 'Raro'],
+    contract: { address: '0x7A42...19E8', standard: 'ERC-721' },
+    royaltyPercent: '5',
+    rating: { average: '4.8', count: 19 },
+    provenance: 'Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.',
+  }
+}
+
 function makeNfts(rng: Rng): NftRec[] {
   const used = new Set<string>()
-  return Array.from({ length: 60 }, (_, i) => {
+  const list: NftRec[] = Array.from({ length: 60 }, (_, i): NftRec => {
     const pickName = () => `${rng.pick(WORDS_A)} ${rng.pick(WORDS_B)}`
     let name = pickName()
     while (used.has(name)) name = pickName()
@@ -129,7 +179,7 @@ function makeNfts(rng: Rng): NftRec[] {
         `${name} nasceu de um estudo sobre luz e memória, combinando camadas geradas à mão e processamento digital.`,
         `Cada edição é registrada na rede ${network === 'ethereum' ? 'Ethereum' : network === 'polygon' ? 'Polygon' : 'Solana'} e acompanha direitos de exibição pessoal.`,
       ],
-      gallery: [{ src: `/nft/${img.file}.png`, alt: `Arte do NFT ${name}`, width: img.width, height: img.height }],
+      gallery: makeGallery(i, img, name),
       attributes: [`Estilo: ${rng.pick(WORDS_B)}`, `Paleta: ${rng.pick(WORDS_B)}`, `Raridade: ${i % 6 === 0 ? 'Lendária' : i % 3 === 0 ? 'Rara' : 'Comum'}`],
       contract: { address: network === 'solana' ? `So${rng.hex(30)}`.replace(/0/g, 'a') : `0x${rng.hex(40)}`, standard: network === 'solana' ? 'SPL' : i % 4 === 0 ? 'ERC-1155' : 'ERC-721' },
       royaltyPercent: rng.pick(['5', '7.5', '10']),
@@ -145,6 +195,8 @@ function makeNfts(rng: Rng): NftRec[] {
       editions,
     }
   })
+  list[0] = applyFigmaHero(list[0]!)
+  return list
 }
 
 async function makeUser(u: (typeof SEED_USERS)[number]): Promise<UserRec> {

@@ -1,6 +1,6 @@
 /**
  * Gallery (Figma "Product Images": 100 px thumbnails column + 444 px main image with a zoom button).
- * Thumbnails are real buttons (`aria-pressed`); zoom opens a dialog (focus trap, Esc, focus return).
+ * Thumbnails are real buttons (`aria-current`); zoom opens a dialog (focus trap, Esc, focus return).
  */
 import { useState } from 'react'
 import { Search } from 'lucide-react'
@@ -14,24 +14,24 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
   const index = selected < images.length ? selected : 0
   const current = images[index]!
   return (
-    <div className="flex gap-4 md:gap-7">
-      {/* The Figma column is always there (the seed has one image per NFT, so one thumbnail). */}
-      <ul aria-label={`Imagens de ${name}`} className="hidden w-[100px] shrink-0 flex-col gap-4 md:flex">
+    <div className="flex flex-col gap-4 md:flex-row md:gap-7">
+      {/* Figma column of thumbnails (desktop); on mobile the same buttons become a row under the main image. */}
+      <ul aria-label={`Imagens de ${name}`} className="order-2 flex shrink-0 flex-row gap-3 md:order-1 md:w-[100px] md:flex-col md:gap-4">
         {images.map((image, i) => (
           <li key={`${image.src}-${i}`}>
             <button
               type="button"
-              aria-label={`Ver imagem ${i + 1} de ${images.length}`}
-              aria-pressed={i === index}
+              aria-label={`Imagem ${i + 1} de ${images.length}`}
+              aria-current={i === index ? 'true' : undefined}
               onClick={() => setSelected(i)}
-              className={cn('block size-[100px] overflow-hidden rounded-card border-2 bg-surface-card', i === index ? 'border-primary' : 'border-transparent')}
+              className={cn('block size-[64px] overflow-hidden md:size-[100px] rounded-card border-2 bg-surface-card', i === index ? 'border-primary' : 'border-transparent')}
             >
-              <img src={image.src} alt="" width={image.width} height={image.height} loading="lazy" className="size-full object-cover" />
+              <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" className="size-full object-cover" />
             </button>
           </li>
         ))}
       </ul>
-      <div className="relative w-full max-w-[444px] flex-1">
+      <div className="relative order-1 w-full max-w-[444px] flex-1 md:order-2">
         <div className="grid aspect-square place-items-center rounded-card bg-surface-card p-3 md:p-5">
           <img
             src={current.src}
@@ -40,7 +40,7 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
             height={current.height}
             fetchPriority="high"
             decoding="async"
-            className="size-full rounded-[24px] object-cover"
+            className="aspect-square w-full rounded-[24px] object-cover"
           />
         </div>
         <Dialog>
@@ -66,11 +66,13 @@ export function Gallery({ images, name }: { images: Image[]; name: string }) {
 
 export function GallerySkeleton() {
   return (
-    <div className="flex gap-4 md:gap-7" aria-hidden="true">
-      <div className="hidden shrink-0 flex-col gap-4 md:flex">
-        <Skeleton className="size-[100px] rounded-card" />
+    <div className="flex flex-col gap-4 md:flex-row md:gap-7" aria-hidden="true">
+      <div className="order-2 flex shrink-0 flex-row gap-3 md:order-1 md:flex-col md:gap-4">
+        {Array.from({ length: 4 }, (_, i) => (
+          <Skeleton key={i} className="size-[64px] rounded-card md:size-[100px]" />
+        ))}
       </div>
-      <Skeleton className="aspect-square w-full max-w-[444px] flex-1 rounded-card" />
+      <Skeleton className="order-1 aspect-square w-full max-w-[444px] flex-1 rounded-card md:order-2" />
     </div>
   )
 }
