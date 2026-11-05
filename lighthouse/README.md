@@ -1,29 +1,29 @@
 # Lighthouse
 
-Execucao: `npm run lighthouse` (build de producao + `vite preview` na porta 4191, cenario padrao dos mocks; `LH_SKIP_BUILD=1` pula o build, `LH_PORT`, `LH_RUNS` ajustam). 3 execucoes por pagina e perfil, mediana. Relatorios HTML/JSON em `lighthouse/reports/2026-11-04//`, resumo em `summary.md`/`summary.json`, ambiente em `environment.md`.
+Execucao: `npm run lighthouse` (build de producao + `vite preview` na porta 4191, cenario padrao dos mocks; `LH_SKIP_BUILD=1` pula o build, `LH_PORT`, `LH_RUNS` ajustam). 3 execucoes por pagina e perfil, mediana. Relatorios HTML/JSON em `lighthouse/reports/2026-11-05//`, resumo em `summary.md`/`summary.json`, ambiente em `environment.md`.
 Nota: a porta 4190 e bloqueada pelo Chrome/fetch (ERR_UNSAFE_PORT), por isso 4191.
 
-## Medianas (2026-11-04/)
+## Medianas (2026-11-05/)
 
 | Pagina | Perfil | Perf | A11y | BP | SEO | LCP ms | CLS | TBT ms | FCP ms | SI ms |
 |---|---|---|---|---|---|---|---|---|---|---|
-| inicio (/) | mobile | **70** | 100 | 100 | 100 | 5852 | 0.000 | 374 | 903 | 945 |
-| detalhe (/nft/nft_002) | mobile | **68** | 100 | 100 | 100 | 5600 | 0.000 | 475 | 905 | 1581 |
-| inicio (/) | desktop | 97 | 100 | 100 | 100 | 1242 | 0.000 | 8 | 244 | 329 |
-| detalhe (/nft/nft_002) | desktop | 98 | 100 | 100 | 100 | 1154 | 0.000 | 5 | 241 | 326 |
+| inicio (/) | mobile | **68** | 100 | 100 | 100 | 5800 | 0.000 | 446 | 915 | 1027 |
+| detalhe (/nft/nft_002) | mobile | **68** | 100 | 100 | 100 | 5463 | 0.000 | 459 | 901 | 1475 |
+| inicio (/) | desktop | 97 | 100 | 100 | 100 | 1256 | 0.000 | 1 | 247 | 314 |
+| detalhe (/nft/nft_002) | desktop | 98 | 100 | 100 | 100 | 1147 | 0.000 | 0 | 245 | 290 |
 
 Metas: Perf >= 90, A11y >= 95, BP >= 95, SEO >= 90. Atingidas, exceto Performance mobile (ver "Resultado final e justificativa").
 
 
 ## Resultado final e justificativa (LH-2)
 
-Medianas de 3 execucoes validas por celula (tabela acima), build de producao com os mocks ativos (cenario padrao), medidas sozinhas na maquina, sem outros processos. Atingidas em todas as celulas: A11y (100), Best Practices (100), SEO (100), CLS (0) e Performance desktop (97 / 98). **Nao atingida: Performance mobile (70 / 68 contra a meta de 90).**
+Medianas de 3 execucoes validas por celula (tabela acima), build de producao com os mocks ativos (cenario padrao), medidas sozinhas na maquina, sem outros processos. Atingidas em todas as celulas: A11y (100), Best Practices (100), SEO (100), CLS (0) e Performance desktop (97 / 98). **Nao atingida: Performance mobile (68 / 68 contra a meta de 90).**
 
 Por que a nota mobile fica abaixo, com os dados medidos:
 
-- A nota usa o LCP **simulado** (Slow 4G de 1,6 Mbps, RTT de 150 ms, CPU 4x mais lenta): 5,8 s. O LCP **observado** no mesmo carregamento e de ~0,65 s (TTFB 10 ms, espera pelo recurso 549 ms, download 48 ms, renderizacao 45 ms) e o FCP e de 0,9 s. A diferenca e custo de bytes e de CPU simulados, nao latencia real.
-- O carregamento inicial baixa **528 KB gzip de JavaScript** (56 scripts): **175 KB (um terco) sao a camada de mocks** (MSW, handlers e seed), que o enunciado exige no build de demonstracao, e 353 KB sao do app (React, TanStack Router e Query, zod, Axios, Socket.IO client, Radix e o codigo das telas). A 1,6 Mbps, so transferir isso custa ~2,6 s antes de executar; o `bootstrap` ainda gasta ~516 ms de script e o chunk dos mocks ~365 ms (CPU 4x).
-- O que foi feito sem alterar o comportamento: `modulepreload` do grafo de boot e das rotas de entrada, seed preguicoso em paralelo ao start do worker, skeletons com geometria final (CLS 0), `favicon.ico` e `robots.txt`, fonte com preload e `font-display`, cache imutavel dos assets. Ganho: BP e SEO de 96 / 92 para 100, CLS do detalhe de 0,143 para 0. A Performance mobile mudou pouco (67 / 66 para 70 / 68) porque os preloads reduzem espera de rede, nao os bytes nem a CPU.
+- A nota usa o LCP **simulado** (Slow 4G de 1,6 Mbps, RTT de 150 ms, CPU 4x mais lenta): 5,8 s. O LCP **observado** no mesmo carregamento e de ~0,78 s (TTFB 10 ms, espera pelo recurso 608 ms, download 128 ms, renderizacao 30 ms) e o FCP e de 0,9 s. A diferenca e custo de bytes e de CPU simulados, nao latencia real.
+- O carregamento inicial baixa **528 KB gzip de JavaScript** (56 scripts): **178 KB (um terco) sao a camada de mocks** (MSW, handlers e seed), que o enunciado exige no build de demonstracao, e 353 KB sao do app (React, TanStack Router e Query, zod, Axios, Socket.IO client, Radix e o codigo das telas). A 1,6 Mbps, so transferir isso custa ~2,6 s antes de executar; o `bootstrap` ainda gasta ~482 ms de script e o chunk dos mocks ~494 ms (CPU 4x).
+- O que foi feito sem alterar o comportamento: `modulepreload` do grafo de boot e das rotas de entrada, seed preguicoso em paralelo ao start do worker, skeletons com geometria final (CLS 0), `favicon.ico` e `robots.txt`, fonte com preload e `font-display`, cache imutavel dos assets. Ganho: BP e SEO de 96 / 92 para 100, CLS do detalhe de 0,143 para 0. A Performance mobile mudou pouco (67 / 66 para 68 / 68) porque os preloads reduzem espera de rede, nao os bytes nem a CPU.
 - O que ainda cortaria mais (adiar `socket.io-client`, dividir `createLucideIcon`, partir mais o `bootstrap`) renderia por estimativa ~5 pontos, nao 20. Chegar a 90 exigiria remover pecas da stack obrigatoria ou tirar o MSW do caminho do medidor, e o item LH-5 do enunciado proibe simplificacoes feitas so para a nota. Por isso a nota fica medida e justificada, sem esse tipo de atalho.
 - Fora do build de demonstracao (sem a camada de mocks, que e uma ferramenta de teste), o app entregaria ~33% menos JS no mesmo caminho.
 

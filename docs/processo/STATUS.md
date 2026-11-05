@@ -78,7 +78,7 @@ shadcn (shadcn-ui/ui), playwright-cli (microsoft), playwright-best-practices (cu
 | Push + CI | orquestrador | main em fd8f5b5 no GitHub; produção serve fd8f5b5 (READY); baselines Linux: 22 (a1e3bbf, local) |
 | Matriz de requisitos | auditor-requisitos | 121 OK · 18 parcial · 8 pendente ([rel](../../reports/s-integrada/auditor-requisitos.md)) |
 | README + ARCHITECTURE final | release | **OK** — 63fe476 (README com declaração de IA) |
-| Lighthouse | a11y-performance + orquestrador | **medido** (3×, mediana): A11y 100, BP 100, SEO 100, CLS 0 em todas; Perf desktop 97/98; **Perf mobile 70/68 (meta 90) — justificada** (528 KB gz de JS, 1/3 = mocks exigidos; LCP observado 0,65 s, simulado 5,8 s) · [lighthouse/](../../lighthouse/README.md) |
+| Lighthouse | a11y-performance + orquestrador | **medido** (3×, mediana): A11y 100, BP 100, SEO 100, CLS 0 em todas; Perf desktop 97/98; **Perf mobile 68/68 (meta 90) — justificada** (528 KB gz de JS, 1/3 = mocks exigidos; LCP observado ~0,8 s, simulado 5,8 s) · [lighthouse/](../../lighthouse/README.md) |
 | Correções de UI/perf (CLS Detalhe, favicon/robots, ícones, boot preload) + página Lista de interesse | implementador-catalogo, plataforma-mocks | **OK** — merges 9b18084 e d121337 |
 | Teste instável corrigido | orquestrador | `20-session-tabs` "token vencido" falhava 24/50 (corrida entre dois caminhos corretos); agora fixa o resultado: 50/50 |
 | Push | orquestrador | origin/main = 9b0f011 |
@@ -105,7 +105,7 @@ CI verde em main (23de732) com baselines Linux; produção em 3557ac2 com CSP.
 - BUG-QA-009 (5 `waitForTimeout`), baixas de segurança 1–5, tabela grupo→spec do §9 na matriz.
 
 ## Abertas de propósito (não bloqueiam a entrega)
-- **Lighthouse mobile:** Performance 70/68 contra a meta de 90, justificada com dados em `lighthouse/README.md` (LCP observado 0,65 s, simulado 5,8 s; 528 KB gz de JS, um terço é a camada de mocks exigida no build de demonstração; LH-5 proíbe simplificar para a nota). A11y, BP e SEO em 100; CLS 0; desktop 97/98.
+- **Lighthouse mobile:** Performance 68/68 contra a meta de 90, justificada com dados em `lighthouse/README.md` (LCP observado ~0,8 s, simulado 5,8 s; 528 KB gz de JS, um terço é a camada de mocks exigida no build de demonstração; LH-5 proíbe simplificar para a nota). A11y, BP e SEO em 100; CLS 0; desktop 97/98.
 - **Matriz:** 141 OK · 6 parciais (LH-2; UI-1/UI-2/TEL-10: imagem do Detalhe 404 px, leitura do gate esclarecida em D31, medição formal não refeita; TEL-11/TEL-12).
 - Deduplicação entre slices (dois `Field`, duas `useWallets`, hooks de credencial, mapeadores de erro); BUG-QA-009 (6 `waitForTimeout`); BUG-QA-010 (link "Lista de interesse" fora do menu do sheet mobile); BUG-QA-013; baixas de segurança 1–5; R2–R5 do revisor.
 - Testes que só passam no retry sob carga (aparecem como "flaky", nunca silenciosos): varrimento de CSP logado (`contracts-regressions`), `95-a11y-checkout` mobile (já corrigido pela espera de estado), rotas públicas contra a produção por latência de rede.

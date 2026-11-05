@@ -1,6 +1,6 @@
 # Ambiente da medicao
 
-- Data: 2026-11-04T21:22:31.047Z
+- Data: 2026-11-05T10:01:44.172Z
 - Node: v26.8.1
 - Chromium (Playwright): 156.0.8078.4
 - Lighthouse: 13.6.0
@@ -10,4 +10,4 @@
 - Comando: `npm run lighthouse` (build de producao + vite preview, cenario padrao dos mocks, 3 execucoes, mediana)
 - Execucoes com runtimeError (flake NO_NAVSTART) sao descartadas e repetidas; contagem em summary.json (`discarded`)
 - Throttling: padrao do Lighthouse (simulado)
-- Relatorios: lighthouse/reports/2026-11-04/
+- Relatorios: lighthouse/reports/2026-11-05/

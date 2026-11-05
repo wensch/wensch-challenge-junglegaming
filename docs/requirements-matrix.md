@@ -34,7 +34,7 @@ Apoio: `mocks.spec` (harness do mock), `05-unit-cache` e `money-unit` (unidade),
 **Nenhuma.** As cinco pendências da rodada anterior foram fechadas com evidência executada: Lighthouse (STK-9, LH-1..5, DEL-6), README (DEL-4, DEL-8), baselines Linux e CI verde (E2E-14, STK-8), checkout limpo (DEL-7) e deploy == HEAD com suíte em produção (DEL-2, DEL-3).
 
 Não bloqueia (abertas de propósito):
-- LH-2: Perf mobile 70 e 68 contra meta 90, justificada em `lighthouse/README.md` (enunciado aceita "ou justificado").
+- LH-2: Perf mobile 68 e 68 contra meta 90, justificada em `lighthouse/README.md` (enunciado aceita "ou justificado").
 - Deduplicação entre slices (revisor item 5); R2 a R5 do revisor (retestes de carga em ambiente).
 - BUG-QA-009: 5 `waitForTimeout` mais 1 em `12-skeletons:72`. BUG-QA-010: link "Lista de interesse" no menu do sheet mobile.
 - Baixas de segurança 1 a 5; avisos de CRLF.
@@ -250,7 +250,7 @@ Mapeamento grupo → spec na tabela do topo.
 | ID | Requisito | Status | Evidência |
 |---|---|---|---|
 | LH-1 | Início e detalhe, mobile e desktop, build otimizado, cenário padrão | OK | Início e detalhe, mobile e desktop, sobre o build de produção: 12 relatórios HTML/JSON em `lighthouse/reports/2026-11-04/` (`inicio|detalhe-desktop|mobile-1..3`) |
-| LH-2 | Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90 (ou justificado) | parcial | Medianas: A11y 100, BP 100, SEO 100 (meta ≥95/≥95/≥90, atingidas); Perf desktop 97 e 98 (atingida); **Perf mobile 70 e 68 (meta 90, não atingida), justificada** em `lighthouse/README.md` (LCP observado ~0,65 s, simulado 5,8 s; 528 KB gz de JS, 175 KB são os mocks exigidos; LH-5 proíbe simplificar para a nota). O enunciado aceita "ou justificado" |
+| LH-2 | Perf ≥90, A11y ≥95, BP ≥95, SEO ≥90 (ou justificado) | parcial | Medianas: A11y 100, BP 100, SEO 100 (meta ≥95/≥95/≥90, atingidas); Perf desktop 97 e 98 (atingida); **Perf mobile 68 e 68 (meta 90, não atingida), justificada** em `lighthouse/README.md` (LCP observado ~0,8 s, simulado 5,8 s; 528 KB gz de JS, 175 KB são os mocks exigidos; LH-5 proíbe simplificar para a nota). O enunciado aceita "ou justificado" |
 | LH-3 | 3 medições, mediana; LCP, CLS, TBT | OK | `lighthouse/run.mjs`: 3 execuções por página/formato e mediana; LCP, CLS (0 em todas) e TBT em `lighthouse/reports/2026-11-04/summary.md` e `summary.json` |
 | LH-4 | Config, relatórios HTML/JSON, versões, ambiente versionados | OK | `lighthouse/config/`, `lighthouse/environment.md` (versões e ambiente), `lighthouse/reports/2026-11-04/*.html|json` versionados |
 | LH-5 | Sem simplificações exclusivas para a nota | OK | `lighthouse/README.md` (seção de justificativa) recusa simplificar mocks/app para a nota; build medido é o mesmo da produção |

@@ -177,12 +177,12 @@ Medianas de 3 execuções por página e perfil, build de produção com os mocks
 
 | Página | Perfil | Perf | A11y | BP | SEO | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|---|---|
-| Início | mobile | 70 | 100 | 100 | 100 | 5,9 s | 0 | 374 ms |
-| Detalhe | mobile | 68 | 100 | 100 | 100 | 5,6 s | 0 | 475 ms |
-| Início | desktop | 97 | 100 | 100 | 100 | 1,2 s | 0 | 8 ms |
-| Detalhe | desktop | 98 | 100 | 100 | 100 | 1,2 s | 0 | 5 ms |
+| Início | mobile | 68 | 100 | 100 | 100 | 5,8 s | 0 | 446 ms |
+| Detalhe | mobile | 68 | 100 | 100 | 100 | 5,5 s | 0 | 459 ms |
+| Início | desktop | 97 | 100 | 100 | 100 | 1,3 s | 0 | 1 ms |
+| Detalhe | desktop | 98 | 100 | 100 | 100 | 1,1 s | 0 | 0 ms |
 
-A única meta não atingida é a Performance mobile (70 e 68 contra 90). O LCP observado é de ~0,65 s; a nota usa o LCP simulado (rede de 1,6 Mbps e CPU 4× mais lenta) sobre 528 KB gzip de JavaScript, dos quais um terço é a camada de mocks exigida no build de demonstração. A justificativa completa, com os números e o que foi otimizado, está em [lighthouse/README.md](lighthouse/README.md#resultado-final-e-justificativa-lh-2).
+A única meta não atingida é a Performance mobile (68 e 68 contra 90). O LCP observado é de ~0,8 s; a nota usa o LCP simulado (rede de 1,6 Mbps e CPU 4× mais lenta) sobre 528 KB gzip de JavaScript, dos quais um terço (178 KB) é a camada de mocks exigida no build de demonstração. A justificativa completa, com os números e o que foi otimizado, está em [lighthouse/README.md](lighthouse/README.md#resultado-final-e-justificativa-lh-2).
 
 ## Limitações conhecidas e desvios do Figma
 
